@@ -1,4 +1,5 @@
 <?php
+namespace TaskForce\models;
 
 // Класс, представляющий сущность "Задание"
 class Task

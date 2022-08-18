@@ -1,8 +1,9 @@
 <?php
 // Тестовый сценарий для задания "1.20. Камень судьбы"
 
-// Подключение класса "Task"
-require_once 'classes/Task.php';
+require_once 'vendor/autoload.php';
+
+use TaskForce\models\Task;
 
 // Создание объектов класса "Task"
 $task1 = new Task(1, 2);
