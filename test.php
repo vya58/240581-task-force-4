@@ -4,46 +4,46 @@
 // Подключение класса "Task"
 require_once 'classes/Task.php';
 
-// Создание объекта класса "Task"
-$task = new Task(1);
+// Создание объектов класса "Task"
+$task1 = new Task(1, 2);
+$task2 = new Task(1);
 
 // "Добавился" исполнитель
-$task->setExecutorId(2);
+$task2->setExecutorId(2);
 
 // Вызов и проверка метода возврата «карты» статусов и действий
 echo 'Массив с «картой» статусов и действий:' . '<br>' . '<br>';
-$tasks = $task->getStatusMap();
-var_dump($tasks);
+$tasks1 = $task1->getStatusMap();
+$tasks2 = $task2->getStatusMap();
+var_dump($tasks1);
 
 echo '<br>' . '<br>';
 
 // Вызов и проверка метода получения статуса, в которой он перейдёт после выполнения указанного действия
-echo assert($task->getNextStatus('action_cancel') === Task::STATUS_CANCELED, 'Проверьте: action_cancel -> status_canceled') . '<br>';
-echo assert($task->getNextStatus('action_respond') === Task::STATUS_IN_WORK, 'Проверьте: action_respond -> status_in_work') . '<br>';
-echo assert($task->getNextStatus('action_execute') === Task::STATUS_PERFORMED, 'Проверьте: action_execute -> status_performed') . '<br>';
-echo assert($task->getNextStatus('action_refuse') === Task::STATUS_FAILED, 'Проверьте: action_refuse -> status_failed') . '<br>';
+echo assert($task1->getNextStatus('actionCancel') === array_search('Отменено', $task1->getStatusMap()), 'Проверьте: action_cancel -> status_canceled') . '<br>';
+echo assert($task1->getNextStatus('actionRespond') === array_search('В работе', $task1->getStatusMap()), 'Проверьте: action_respond -> status_in_work') . '<br>';
+echo assert($task1->getNextStatus('actionExecute') === array_search('Выполнено', $task1->getStatusMap()), 'Проверьте: action_execute -> status_performed') . '<br>';
+echo assert($task1->getNextStatus('actionRefuse') === array_search('Провалено', $task1->getStatusMap()), 'Проверьте: action_refuse -> status_failed') . '<br>';
 
 // Вызов и проверка метода получения доступных действий для указанного статуса:
 // Статус задания - "Новое", возможное действие заказчика: "Отменить", переход в статус "Отменено"
-$task->setCurrentStatus();
-$action = $task->getAvailableActions(1);
-$task_status = $task->getNextStatus($action);
-
-echo  '<br>' . 'Новый статус задания: ' . $tasks[$task_status] . '<br>';
+$action2 = $task2->getAvailableActions(1);
+$task_status2 = $task2->getNextStatus($action2);
+echo  '<br>' . 'Новый статус задания: ' . $tasks2[$task_status2] . '<br>';
 
 // Статус задания - "Новое", возможное действие исполнителя: "Откликнуться", переход в статус "В работе"
-$action = $task->getAvailableActions(2);
-$task_status = $task->getNextStatus($action);
-echo 'Новый статус задания: ' . $tasks[$task_status] . '<br>';
+$action2 = $task2->getAvailableActions(2);
+$task_status2 = $task2->getNextStatus($action2);
+echo 'Новый статус задания: ' . $tasks2[$task_status2] . '<br>';
 
 // Статус задания - "В работе", возможное действие заказчика: "Завершено", переход в статус "Выполнено"
-$task->setCurrentStatus('action_respond');
-$action = $task->getAvailableActions(1);
-$task_status = $task->getNextStatus($action);
-echo 'Новый статус задания: ' . $tasks[$task_status] . '<br>';
+$task2-> setCurrentStatusByAction('actionRespond');
+$action2 = $task2->getAvailableActions(1);
+$task_status2 = $task2->getNextStatus($action2);
+echo 'Новый статус задания: ' . $tasks2[$task_status2] . '<br>';
 
 // Статус задания - "В работе", возможное действие исполнителя: "Отказаться", переход в статус "Провалено"
-$task->setCurrentStatus('action_respond');
-$action = $task->getAvailableActions(2);
-$task_status = $task->getNextStatus($action);
-echo 'Новый статус задания: ' . $tasks[$task_status];
+$task2-> setCurrentStatusByAction('actionRespond');
+$action2 = $task2->getAvailableActions(2);
+$task_status2 = $task2->getNextStatus($action2);
+echo 'Новый статус задания: ' . $tasks2[$task_status2];
