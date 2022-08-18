@@ -3,38 +3,53 @@
 // Класс, представляющий сущность "Задание"
 class Task
 {
-    private int $customer_id;
-    private ?int $executor_id;
-    private string $current_status = self::STATUS_NEW;
+    private const STATUS_NEW = 'statusNew';
+    private const STATUS_CANCELED = 'statusCanceled';
+    private const STATUS_IN_WORK = 'statusInWork';
+    private const STATUS_PERFORMED = 'statusPerformed';
+    private const STATUS_FAILED = 'statusFailed';
+    private const ACTION_CANCEL = 'actionCancel';
+    private const ACTION_RESPOND = 'actionRespond';
+    private const ACTION_EXECUTE = 'actionExecute';
+    private const ACTION_REFUSE = 'actionRefuse';
 
-    const STATUS_NEW = 'status_new';
-    const STATUS_CANCELED = 'status_canceled';
-    const STATUS_IN_WORK = 'status_in_work';
-    const STATUS_PERFORMED = 'status_performed';
-    const STATUS_FAILED = 'status_failed';
-    const ACTION_CANCEL = 'action_cancel';
-    const ACTION_RESPOND = 'action_respond';
-    const ACTION_EXECUTE = 'action_execute';
-    const ACTION_REFUSE = 'action_refuse';
+    private string $currentStatus = self::STATUS_NEW;
 
-    public function __construct(int $customer_id, int $executor_id = null)
-    {
-        $this->executor_id = $executor_id;
-        $this->customer_id = $customer_id;
+    public function __construct(
+        private readonly int $customerId,
+        private $executorId = null
+    ) {
     }
 
-    // Объект класса создаёт заказчик, исполнитель, скорее всего, подключится позже
-    // Функция установки id исполнителя задания
-    public function setExecutorId(int $executor_id)
+    /**
+     * Объект класса создаёт заказчик, исполнитель, скорее всего, подключится позже
+     * Функция установки id исполнителя задания
+     * @param int $executorId - id исполнителя задания
+     * 
+     * @return int - id исполнителя задания
+     */
+    public function setExecutorId(int $executorId): self
     {
-        $this->executor_id = $executor_id;
+        $this->executorId = $executorId;
+
+        return $this;
     }
 
+    /**
+     * Функция возвращения текущего статуса задания
+     * 
+     * @return string - текущий статус задания
+     */
     public function getCurrentStatus(): string
     {
         return $this->current_status;
     }
 
+    /**
+     * Функция возвращения "карты" статусов задания
+     * 
+     * @return array - массив со статусами заданий
+     */
     public function getStatusMap(): array
     {
         return [
@@ -46,6 +61,11 @@ class Task
         ];
     }
 
+    /**
+     * Функция возвращения "карты" действий с заданиями
+     * 
+     * @return array - массив со статусами заданий
+     */
     public function getActionMap(): array
     {
         return [
@@ -56,37 +76,52 @@ class Task
         ];
     }
 
-    public function getNextStatus(string $action): string
+    /**
+     * Функция возвращения  статуса, в которой перейдёт задание после выполнения указанного действия
+     * @param string $action - применяемое к заданию действие
+     * 
+     * @return ?string - следующй статус задания либо null
+     */
+    public function getNextStatus(string $action): ?string
     {
-        if (!$action) {
-            return false;
-        }
-        return match ($action) {
+        $map = [
             self::ACTION_CANCEL => self::STATUS_CANCELED,
             self::ACTION_RESPOND => self::STATUS_IN_WORK,
             self::ACTION_EXECUTE => self::STATUS_PERFORMED,
             self::ACTION_REFUSE => self::STATUS_FAILED,
-        };
+        ];
+
+        return $map[$action] ?? null;
     }
 
+    /**
+     * Функция возвращениядоступных действий для задания в зависимости от каегории актора
+     * @param int $id - id исполнителя задания или заказчика
+     * 
+     * @return string - доступное действие с заданием
+     */
     public function getAvailableActions(int $id): string
     {
-        if (!($id === $this->customer_id || $id === $this->executor_id)) {
+        if ($this->customerId !== $id && $this->executorId !== $id) {
             return false;
-        }
-        return match ($this->current_status) {
-            self::STATUS_NEW => $id === $this->customer_id ? self::ACTION_CANCEL : self::ACTION_RESPOND,
-            self::STATUS_IN_WORK => $id === $this->customer_id ? self::ACTION_EXECUTE : self::ACTION_REFUSE,
+        };
+        return match ($this->currentStatus) {
+            self::STATUS_NEW => $id === $this->customerId ? self::ACTION_CANCEL : self::ACTION_RESPOND,
+            self::STATUS_IN_WORK => $id === $this->customerId ? self::ACTION_EXECUTE : self::ACTION_REFUSE,
         };
     }
 
-    // Функция для тестового сценария проверки класса
-    public function setCurrentStatus(string $action = null): void
+    /**
+     * Функция для тестового сценария проверки класса
+     * @param string $action - применяемое к заданию действие
+     * 
+     */
+
+    public function setCurrentStatusByAction(string $action): void
     {
-        if ($action) {
-            $this->current_status = $this->getNextStatus($action);
-        } else {
-            $this->current_status = self::STATUS_NEW;
+        if (!array_key_exists($action, $this->getActionMap())) {
+            throw new Exception("Action {$action} is invalid");
         }
+        $this->current_status = $this->getNextStatus($action);
     }
 }
