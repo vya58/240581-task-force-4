@@ -1,0 +1,15 @@
+{
+    "name": "vya58/240581-task-force-4",
+    "description": "website - task exchange",
+    "autoload": {
+        "psr-4": {
+            "TaskForce\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vyatheclav Korzun"
+        }
+    ],
+    "require": {}
+}
