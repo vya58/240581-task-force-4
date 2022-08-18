@@ -42,7 +42,7 @@ class Task
      */
     public function getCurrentStatus(): string
     {
-        return $this->current_status;
+        return $this->currentStatus;
     }
 
     /**
@@ -100,10 +100,10 @@ class Task
      * 
      * @return string - доступное действие с заданием
      */
-    public function getAvailableActions(int $id): string
+    public function getAvailableActions(int $id): ?string
     {
         if ($this->customerId !== $id && $this->executorId !== $id) {
-            return false;
+            return null;
         };
         return match ($this->currentStatus) {
             self::STATUS_NEW => $id === $this->customerId ? self::ACTION_CANCEL : self::ACTION_RESPOND,
@@ -116,10 +116,9 @@ class Task
      * @param string $action - применяемое к заданию действие
      * 
      */
-
     public function setCurrentStatusByAction(string $action): void
     {
-        if (!array_key_exists($action, $this->getActionMap())) {
+        if (!isset($this->getActionMap()[$action])) {
             throw new Exception("Action {$action} is invalid");
         }
         $this->current_status = $this->getNextStatus($action);
