@@ -1,7 +1,13 @@
 <?php
+// Класс, представляющий сущность "Задание"
+
 namespace TaskForce\models;
 
-// Класс, представляющий сущность "Задание"
+use TaskForce\action\ActionCancel;
+use TaskForce\action\ActionRespond;
+use TaskForce\action\ActionExecute;
+use TaskForce\action\ActionRefuse;
+
 class Task
 {
     private const STATUS_NEW = 'statusNew';
@@ -18,7 +24,7 @@ class Task
 
     public function __construct(
         private readonly int $customerId,
-        private $executorId = null
+        private ?int $executorId = null
     ) {
     }
 
@@ -81,7 +87,7 @@ class Task
      * Функция возвращения  статуса, в которой перейдёт задание после выполнения указанного действия
      * @param string $action - применяемое к заданию действие
      * 
-     * @return ?string - следующй статус задания либо null
+     * @return string|null - следующй статус задания либо null
      */
     public function getNextStatus(string $action): ?string
     {
@@ -96,20 +102,21 @@ class Task
     }
 
     /**
-     * Функция возвращениядоступных действий для задания в зависимости от каегории актора
-     * @param int $id - id исполнителя задания или заказчика
+     * Функция возвращения доступных действий для задания в зависимости от каегории актора
+     * @param int $id - id пользователя
      * 
-     * @return string - доступное действие с заданием
+     * @return object|null - доступное пользователю действие с заданием или null
      */
-    public function getAvailableActions(int $id): ?string
+    public function getAvailableActions(int $id): ?object
     {
-        if ($this->customerId !== $id && $this->executorId !== $id) {
+        if ($id !== $this->customerId && $id !== $this->executorId) {
             return null;
-        };
-        return match ($this->currentStatus) {
-            self::STATUS_NEW => $id === $this->customerId ? self::ACTION_CANCEL : self::ACTION_RESPOND,
-            self::STATUS_IN_WORK => $id === $this->customerId ? self::ACTION_EXECUTE : self::ACTION_REFUSE,
-        };
+        }
+
+        if ($this->currentStatus === self::STATUS_NEW && ActionCancel::checkRights($id, $this->customerId)) return new ActionCancel();
+        if ($this->currentStatus === self::STATUS_NEW && ActionRespond::checkRights($id, $this->customerId, $this->executorId)) return new ActionRespond();
+        if ($this->currentStatus === self::STATUS_IN_WORK && ActionExecute::checkRights($id, $this->customerId, $this->executorId)) return new ActionExecute();
+        if ($this->currentStatus === self::STATUS_IN_WORK && ActionRefuse::checkRights($id, $this->customerId, $this->executorId)) return new ActionRefuse();
     }
 
     /**
@@ -122,6 +129,6 @@ class Task
         if (!isset($this->getActionMap()[$action])) {
             throw new Exception("Action {$action} is invalid");
         }
-        $this->current_status = $this->getNextStatus($action);
+        $this->currentStatus = $this->getNextStatus($action);
     }
 }
