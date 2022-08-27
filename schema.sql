@@ -14,20 +14,21 @@ CREATE TABLE categories (
 
 CREATE TABLE customers (
     customer_id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_name VARCHAR(50) NOT NULL,
     customer_email VARCHAR(255) NOT NULL UNIQUE,
     customer_password CHAR(255) NOT NULL,
-    customer_name VARCHAR(50) NOT NULL,
     customer_avatar VARCHAR(255) UNIQUE,
     customer_date_add DATETIME NOT NULL
 );
 
 CREATE TABLE executors (
     executor_id INT PRIMARY KEY AUTO_INCREMENT,
-    city_id INT,
     executor_name VARCHAR(50) NOT NULL,
     executor_email VARCHAR(255) NOT NULL UNIQUE,
     executor_password CHAR(255) NOT NULL,
     executor_avatar VARCHAR(255) UNIQUE,
+    executor_date_add DATETIME NOT NULL,
+    city_id INT,
     executor_phone VARCHAR(11) UNIQUE,
     executor_telegram VARCHAR(64) UNIQUE,
     personal_information VARCHAR(255),
@@ -35,7 +36,6 @@ CREATE TABLE executors (
     executor_rating FLOAT (2,1) UNSIGNED,
     executor_status TINYINT DEFAULT 0 check (executor_status in (0, 1)),
     executor_birthday DATETIME,
-    executor_date_add DATETIME NOT NULL,
     FOREIGN KEY (city_id) REFERENCES cities (city_id)
 );
 
