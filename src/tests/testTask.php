@@ -11,7 +11,6 @@ $task2 = new Task(1);
 echo '<strong>' . 'Массив с «картой» статусов и действий:' . '</strong>' . '<br>' . '<br>';
 $tasks1 = $task1->getStatusMap();
 $tasks2 = $task2->getStatusMap();
-$tasks3 = $task2->getStatusMap();
 var_dump($tasks1);
 
 echo '<br>' . '<br>';
