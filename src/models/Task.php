@@ -113,7 +113,7 @@ class Task
             return null;
         }
 
-        if ($this->currentStatus === self::STATUS_NEW && ActionCancel::checkRights($id, $this->customerId, $this->executorId)) return new ActionCancel();
+        if ($this->currentStatus === self::STATUS_NEW && ActionCancel::checkRights($id, $this->customerId)) return new ActionCancel();
         if ($this->currentStatus === self::STATUS_NEW && ActionRespond::checkRights($id, $this->customerId, $this->executorId)) return new ActionRespond();
         if ($this->currentStatus === self::STATUS_IN_WORK && ActionExecute::checkRights($id, $this->customerId, $this->executorId)) return new ActionExecute();
         if ($this->currentStatus === self::STATUS_IN_WORK && ActionRefuse::checkRights($id, $this->customerId, $this->executorId)) return new ActionRefuse();
