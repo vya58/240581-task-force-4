@@ -7,8 +7,6 @@ use TaskForce\models\Task;
 $task1 = new Task(1, 2);
 $task2 = new Task(1);
 
-//
-
 // Вызов и проверка метода возврата «карты» статусов и действий
 echo '<strong>' . 'Массив с «картой» статусов и действий:' . '</strong>' . '<br>' . '<br>';
 $tasks1 = $task1->getStatusMap();

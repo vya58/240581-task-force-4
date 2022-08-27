@@ -109,10 +109,10 @@ class Task
      */
     public function getAvailableActions(int $id): ?object
     {
-        if($id !== $this->customerId && $id !== $this->executorId ) {
+        if ($id !== $this->customerId && $id !== $this->executorId) {
             return null;
         }
-        
+
         if ($this->currentStatus === self::STATUS_NEW && ActionCancel::checkRights($id, $this->customerId, $this->executorId)) return new ActionCancel();
         if ($this->currentStatus === self::STATUS_NEW && ActionRespond::checkRights($id, $this->customerId, $this->executorId)) return new ActionRespond();
         if ($this->currentStatus === self::STATUS_IN_WORK && ActionExecute::checkRights($id, $this->customerId, $this->executorId)) return new ActionExecute();

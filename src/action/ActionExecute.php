@@ -2,12 +2,15 @@
 
 namespace TaskForce\action;
 
-class ActionExecute extends Action {
-    public function getActionName(): string {
+class ActionExecute extends Action
+{
+    public function getActionName(): string
+    {
         return 'Завершено';
     }
 
-    public function getInternalName(): string {
+    public function getInternalName(): string
+    {
         return 'actionExecute';
     }
 

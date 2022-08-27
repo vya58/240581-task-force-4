@@ -2,12 +2,15 @@
 
 namespace TaskForce\action;
 
-class ActionRefuse extends Action {
-    public function getActionName(): string {
+class ActionRefuse extends Action
+{
+    public function getActionName(): string
+    {
         return 'Отказаться';
     }
 
-    public function getInternalName(): string {
+    public function getInternalName(): string
+    {
         return 'actionRefuse';
     }
 
