@@ -7,6 +7,8 @@ use TaskForce\action\ActionCancel;
 use TaskForce\action\ActionRespond;
 use TaskForce\action\ActionExecute;
 use TaskForce\action\ActionRefuse;
+use TaskForce\exceptions\TaskException;
+
 
 class Task
 {
@@ -87,9 +89,9 @@ class Task
      * Функция возвращения  статуса, в которой перейдёт задание после выполнения указанного действия
      * @param string $action - применяемое к заданию действие
      * 
-     * @return string|null - следующй статус задания либо null
+     * @return string - следующй статус задания либо null
      */
-    public function getNextStatus(string $action): ?string
+    public function getNextStatus(string $action): string
     {
         $map = [
             self::ACTION_CANCEL => self::STATUS_CANCELED,
@@ -98,6 +100,10 @@ class Task
             self::ACTION_REFUSE => self::STATUS_FAILED,
         ];
 
+        if (!isset($map[$action])) {
+            throw new TaskException("'{$action}' - Неверное имя действия!");
+        }
+
         return $map[$action] ?? null;
     }
 
@@ -105,12 +111,12 @@ class Task
      * Функция возвращения доступных действий для задания в зависимости от каегории актора
      * @param int $id - id пользователя
      * 
-     * @return object|null - доступное пользователю действие с заданием или null
+     * @return object - доступное пользователю действие с заданием или null
      */
-    public function getAvailableActions(int $id): ?object
+    public function getAvailableActions(int $id): object
     {
         if ($id !== $this->customerId && $id !== $this->executorId) {
-            return null;
+            throw new TaskException('Вам не доступны действия с этим заданием!');
         }
 
         if ($this->currentStatus === self::STATUS_NEW && ActionCancel::checkRights($id, $this->customerId)) return new ActionCancel();
@@ -127,7 +133,7 @@ class Task
     public function setCurrentStatusByAction(string $action): void
     {
         if (!isset($this->getActionMap()[$action])) {
-            throw new Exception("Action {$action} is invalid");
+            throw new TaskException("'{$action}' - Неверное имя действия!");
         }
         $this->currentStatus = $this->getNextStatus($action);
     }
