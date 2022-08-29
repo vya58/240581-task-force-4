@@ -69,7 +69,7 @@ function outputNewTaskStatus(array $tasks, object $task, object $actionTask): vo
         $taskStatus = $task->getNextStatus($actionTask->getInternalName());
         echo "Новый статус задания: '{$tasks[$taskStatus]}'" . '<br>' . '<br>';
     } catch (TaskException $e) {
-        echo $e;
+        echo $e->getMessage();
     }
 }
 
@@ -119,7 +119,7 @@ function testObjectTask(object $task, array $usersId, int $customerId): void
             chekObjectAvailableReturn($actionTask);
             outputNewTaskStatus($tasks, $task, $actionTask);
         } catch (TaskException $e) {
-            echo $e . '<br>' . '<br>';
+            echo $e->getMessage() . '<br>' . '<br>';
             outputCurrentTaskStatus($tasks, $task);
         }
     }
@@ -147,5 +147,5 @@ try {
     $task2->setCurrentStatusByAction('actionRespond');
     testObjectTask($task2, $usersId, $customerId);
 } catch (TaskException $e) {
-    echo $e;
+    echo $e->getMessage();
 }
