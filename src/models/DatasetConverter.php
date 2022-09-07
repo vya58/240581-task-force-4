@@ -5,7 +5,7 @@ namespace TaskForce\models;
 use SplFileObject;
 use TaskForce\db\Table;
 use TaskForce\exceptions\FileExistException;
-use TaskForce\exceptions\TableExistException;
+use TaskForce\exceptions\TableException;
 
 class DatasetConverter
 {
@@ -25,7 +25,7 @@ class DatasetConverter
         }
 
         if (!isset($table)) {
-            throw new TableExistException('Такой таблицы не существует');
+            throw new TableException('Такой таблицы не существует');
         }
 
         $this->csv = $csv;
@@ -38,7 +38,7 @@ class DatasetConverter
     private function createHeader()
     {
         if (!isset($this->tableColums)) {
-            throw new TableExistException('Отсутствуют имена столбцов таблицы');
+            throw new TableException('Отсутствуют имена столбцов таблицы');
         }
         $colums = implode(', ', $this->tableColums);
         return $colums;

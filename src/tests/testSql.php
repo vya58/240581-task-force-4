@@ -2,7 +2,7 @@
 
 use TaskForce\models\DatasetConverter;
 use TaskForce\exceptions\FileExistException;
-use TaskForce\exceptions\TableExistException;
+use TaskForce\exceptions\TableException;
 use TaskForce\db\Table;
 
 $fileNameCities = 'data/cities.csv';
@@ -31,7 +31,7 @@ try {
     $sqlFile = $sql->createSqlFile();
 } catch (FileExistException $e) {
     echo $e->getMessage() . '<br>' . '<br>';
-} catch (TableExistException $e) {
+} catch (TableException $e) {
     echo $e->getMessage() . '<br>' . '<br>';
 };
 
@@ -41,6 +41,6 @@ try {
     $sqlFile = $sql->createSqlFile();
 } catch (FileExistException $e) {
     echo $e->getMessage() . '<br>' . '<br>';
-} catch (TableExistException $e) {
+} catch (TableException $e) {
     echo $e->getMessage() . '<br>' . '<br>';
 };
