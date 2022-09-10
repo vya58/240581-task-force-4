@@ -1,46 +1,20 @@
 <?php
 
-use TaskForce\models\DatasetConverter;
+use TaskForce\models\CsvToSqlConverter;
 use TaskForce\exceptions\FileExistException;
-use TaskForce\exceptions\TableException;
-use TaskForce\db\Table;
 
-$fileNameCities = 'data/cities.csv';
-$directoryCities = 'data/cities.sql';
-$fileNameCategories = 'data/categories.csv';
-$directoryCategories = 'data/categories.sql';
-
-$tableCities = [
-    'cities',
-    'city_name',
-    'city_latitude',
-    'city_longitude'
-];
-$tableCategories = [
-    'categories',
-    'category_name',
-    'icon'
-];
-
-$fileTableCities = new Table($tableCities);
-$fileTableCategories = new Table($tableCategories);
-
-$sql = new DatasetConverter($fileNameCities, $directoryCities, $fileTableCities);
+$csvFilesDirectory = 'data';
+$sqlFilesDirectory = 'data';
+$fileExtension = 'csv';
 
 try {
-    $sqlFile = $sql->createSqlFile();
+    $csvFilesPaths = getFilesPaths($csvFilesDirectory, $fileExtension);
+    try {
+        $sql = new CsvToSqlConverter($csvFilesPaths, $sqlFilesDirectory);
+        $sqlFile = $sql->createSqlFile();
+    } catch (FileExistException $e) {
+        echo $e->getMessage() . '<br>' . '<br>';
+    };
 } catch (FileExistException $e) {
     echo $e->getMessage() . '<br>' . '<br>';
-} catch (TableException $e) {
-    echo $e->getMessage() . '<br>' . '<br>';
-};
-
-$sql = new DatasetConverter($fileNameCategories, $directoryCategories, $fileTableCategories);
-
-try {
-    $sqlFile = $sql->createSqlFile();
-} catch (FileExistException $e) {
-    echo $e->getMessage() . '<br>' . '<br>';
-} catch (TableException $e) {
-    echo $e->getMessage() . '<br>' . '<br>';
-};
+}

@@ -8,3 +8,4 @@ error_reporting(E_ALL);
 setlocale(LC_ALL, "russian");
 
 require_once('vendor/autoload.php');
+require_once('helpers.php');
