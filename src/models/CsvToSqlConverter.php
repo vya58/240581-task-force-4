@@ -1,4 +1,5 @@
 <?php
+// Класс конвертации csv-файлов
 
 namespace TaskForce\models;
 
@@ -22,6 +23,12 @@ class CsvToSqlConverter
         $this->sqlFilesDirectory = $sqlFilesDirectory;
     }
 
+    /**
+     * Функция создания sql-файлов из переданного массива с путями к ним
+     * Если необходимо конвертировать один sql-файл, то передаётся массив с длиной 1
+     * 
+     * @return array $sql - массив с sql-запросами
+     */
     public function createSqlFile(): void
     {
         foreach ($this->csvFilesPaths as $csvFilePath) {
@@ -29,11 +36,17 @@ class CsvToSqlConverter
             $sqlFileName = $directoryInfo['filename'];
             $sqlFilePath = "{$this->sqlFilesDirectory}/{$sqlFileName}.sql";
             $this->tableName = pathinfo($csvFilePath)['filename'];
-           
+
             file_put_contents($sqlFilePath, implode($this->convertCsvToSql($csvFilePath)));
         }
     }
 
+    /**
+     * Функция конвертации строк csv-файла в строки sql-запросов
+     * @param string $csvFilePath - строка с путем к csv-файлу
+     * 
+     * @return array $sql - массив с sql-запросами
+     */
     private function convertCsvToSql(string $csvFilePath): array
     {
         $file = new SplFileObject($csvFilePath);
