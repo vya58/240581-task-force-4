@@ -30,11 +30,11 @@ class CsvToSqlConverter
             $sqlFilePath = "{$this->sqlFilesDirectory}/{$sqlFileName}.sql";
             $this->tableName = pathinfo($csvFilePath)['filename'];
            
-            file_put_contents($sqlFilePath, implode($this->convertCsv($csvFilePath)));
+            file_put_contents($sqlFilePath, implode($this->convertCsvToSql($csvFilePath)));
         }
     }
 
-    private function convertCsv(string $csvFilePath): array
+    private function convertCsvToSql(string $csvFilePath): array
     {
         $file = new SplFileObject($csvFilePath);
         $file->setFlags(SplFileObject::READ_CSV);
