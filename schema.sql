@@ -4,7 +4,9 @@ CREATE DATABASE task_force
 
 CREATE TABLE cities (
     city_id INT PRIMARY KEY AUTO_INCREMENT,
-    city_name VARCHAR(50) NOT NULL
+    city_name VARCHAR(50) NOT NULL,
+    city_latitude VARCHAR(255),
+    city_longitude VARCHAR(255)
 );
 
 CREATE TABLE categories (
