@@ -5,6 +5,11 @@
     "homepage": "http://www.yiiframework.com/",
     "type": "project",
     "license": "BSD-3-Clause",
+    "autoload": {
+        "psr-4": {
+            "TaskForce\\": "src/"
+        }
+    },
     "support": {
         "issues": "https://github.com/yiisoft/yii2/issues?state=open",
         "forum": "http://www.yiiframework.com/forum/",
@@ -71,10 +76,5 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ],
-    "autoload": {
-        "psr-4": {
-            "TaskForce\\": "src/"
-        }
-    }
+    ]
 }
