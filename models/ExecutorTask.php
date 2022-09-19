@@ -45,8 +45,8 @@ class ExecutorTask extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'executor_id' => 'Executor ID',
-            'task_id' => 'Task ID',
+            'executor_id' => 'ID исполнителя',
+            'task_id' => 'ID задания',
         ];
     }
 

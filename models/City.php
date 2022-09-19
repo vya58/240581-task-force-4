@@ -43,10 +43,10 @@ class City extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'city_id' => 'City ID',
-            'city_name' => 'City Name',
-            'city_latitude' => 'City Latitude',
-            'city_longitude' => 'City Longitude',
+            'city_id' => 'ID города',
+            'city_name' => 'Город',
+            'city_latitude' => 'Географическая широта города',
+            'city_longitude' => 'Географическая долгота города',
         ];
     }
 

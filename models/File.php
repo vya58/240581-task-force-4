@@ -43,9 +43,9 @@ class File extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'file_id' => 'File ID',
-            'task_id' => 'Task ID',
-            'task_file_name' => 'Task File Name',
+            'file_id' => 'ID файла',
+            'task_id' => 'ID задания',
+            'task_file_name' => 'Файл задания',
         ];
     }
 

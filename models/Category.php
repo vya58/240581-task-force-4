@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $category_id
  * @property string $category_name
- * @property string $category_icon
+ * @property string $icon
  *
  * @property Executors[] $executors
  * @property ExecutorsCategories[] $executorsCategories
@@ -31,9 +31,9 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_name', 'category_icon'], 'required'],
+            [['category_name', 'icon'], 'required'],
             [['category_name'], 'string', 'max' => 30],
-            [['category_icon'], 'string', 'max' => 10],
+            [['icon'], 'string', 'max' => 10],
         ];
     }
 
@@ -43,9 +43,9 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'category_id' => 'Category ID',
-            'category_name' => 'Category Name',
-            'category_icon' => 'Category Icon',
+            'category_id' => 'ID категории задания',
+            'category_name' => 'Категория задания',
+            'icon' => 'Иконка категории',
         ];
     }
 

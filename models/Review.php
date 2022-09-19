@@ -46,11 +46,11 @@ class Review extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'review_id' => 'Review ID',
-            'customer_id' => 'Customer ID',
-            'executor_id' => 'Executor ID',
-            'grade' => 'Grade',
-            'review' => 'Review',
+            'review_id' => 'ID отзыва',
+            'customer_id' => 'ID заказчика',
+            'executor_id' => 'ID исполнителя',
+            'grade' => 'Оценка',
+            'review' => 'Отзыв',
         ];
     }
 

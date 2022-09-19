@@ -48,12 +48,12 @@ class Customer extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'customer_id' => 'Customer ID',
-            'customer_email' => 'Customer Email',
-            'customer_password' => 'Customer Password',
-            'customer_name' => 'Customer Name',
-            'customer_avatar' => 'Customer Avatar',
-            'customer_date_add' => 'Customer Date Add',
+            'customer_id' => 'ID заказчика',
+            'customer_email' => 'Email заказчика',
+            'customer_password' => 'Пароль аккаунта заказчика',
+            'customer_name' => 'Имя заказчика',
+            'customer_avatar' => 'Аватар заказчика',
+            'customer_date_add' => 'Дата регистрации заказчика',
         ];
     }
 
