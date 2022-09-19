@@ -19,7 +19,7 @@ $this->title = 'Новое'; ?>
                     <!-- Добавить ссылку на страницу задачи-->
                     <a href="#" class="link link--block link--big">
                         <?= Html::encode($task->task_name) ?>
-                        <p class="price price--task"> ₽</p>
+                        <p class="price price--task"><?= Html::encode($task->task_budget) ?> ₽</p>
                     </a>
                 </div>
                 <p class="info-text">

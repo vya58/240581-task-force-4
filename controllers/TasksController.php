@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use app\models\Task;
-use app\models\Category;
 
 class TasksController extends \yii\web\Controller
 {
