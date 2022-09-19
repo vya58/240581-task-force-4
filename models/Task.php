@@ -32,6 +32,12 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    private const STATUS_NEW = 'statusNew';
+    private const STATUS_CANCELED = 'statusCanceled';
+    private const STATUS_IN_WORK = 'statusInWork';
+    private const STATUS_PERFORMED = 'statusPerformed';
+    private const STATUS_FAILED = 'statusFailed';
+
     /**
      * {@inheritdoc}
      */
@@ -79,6 +85,22 @@ class Task extends \yii\db\ActiveRecord
             'task_date_create' => 'Дата размещения задания',
             'task_status' => 'Статус задания',
             'task_deadline' => 'Срок исполнения задания',
+        ];
+    }
+
+    /**
+     * Функция возвращения "карты" статусов задания
+     *
+     * @return array - массив со статусами заданий
+     */
+    public static function getStatusMap(): array
+    {
+        return [
+            self::STATUS_NEW => 'Новое',
+            self::STATUS_CANCELED => 'Отменено',
+            self::STATUS_IN_WORK => 'В работе',
+            self::STATUS_PERFORMED => 'Выполнено',
+            self::STATUS_FAILED => 'Провалено',
         ];
     }
 
