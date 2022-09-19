@@ -19,7 +19,7 @@ use Yii;
  * @property string|null $task_latitude
  * @property string|null $task_longitude
  * @property string $task_date_create
- * @property int|null $task_status
+ * @property string|null $task_status
  * @property string|null $task_deadline
  *
  * @property Categories $category
