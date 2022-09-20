@@ -9,7 +9,7 @@ class TasksController extends \yii\web\Controller
     public function actionIndex()
     {
         $tasks = Task::find()
-            ->where(['task_status' => Task::getStatusMap()['statusNew']])
+            ->where(['task_status' => Task::STATUS_NEW])
             ->orderBy(['task_date_create' => SORT_DESC])
             ->all();
 

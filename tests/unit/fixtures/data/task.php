@@ -8,7 +8,7 @@ return [
         'task_name' => 'Ut ea eius rerum expedita.',
         'task_essence' => 'Consequuntur consequatur quasi qui nam.',
         'task_details' => 'Et accusamus qui porro facilis perspiciatis quidem. Blanditiis fugit facere saepe molestiae. Ut et et et.',
-        'task_status' => 0,
+        'task_status' => 'New',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-06-29 16:23:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task1' => [
@@ -18,7 +18,7 @@ return [
         'task_name' => 'Consequatur quisquam sunt nemo quis ipsum.',
         'task_essence' => 'Recusandae nihil aut architecto aut.',
         'task_details' => 'Debitis voluptates sint molestiae blanditiis sint. Doloremque ut voluptates dolor voluptate sapiente. Temporibus earum debitis sint ut. Numquam a at saepe quia qui.',
-        'task_status' => 1,
+        'task_status' => 'InWork',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-07-10 16:01:14.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task2' => [
@@ -28,7 +28,7 @@ return [
         'task_name' => 'Reprehenderit sapiente nihil at.',
         'task_essence' => 'Dolorem ut eum fuga et hic enim.',
         'task_details' => 'In placeat debitis cumque. Nisi exercitationem inventore quod ut debitis necessitatibus. Ea ipsam sed excepturi quia aut tempora. Consectetur ut dolorum et adipisci ut.',
-        'task_status' => 1,
+        'task_status' => 'New',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-05-08 23:52:04.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task3' => [
@@ -38,7 +38,7 @@ return [
         'task_name' => 'Dolorem ea et.',
         'task_essence' => 'Veniam rerum vel ea assumenda eligendi.',
         'task_details' => 'Rerum alias culpa quibusdam repudiandae sit enim ut. Consequatur deserunt aut atque quis corrupti eos. Distinctio delectus dolore aspernatur quia nostrum unde. Rerum odio qui voluptatem neque.',
-        'task_status' => 1,
+        'task_status' => 'Canceled',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-03-20 09:12:20.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task4' => [
@@ -48,7 +48,7 @@ return [
         'task_name' => 'Autem nesciunt ea a aut.',
         'task_essence' => 'Id labore qui alias quia.',
         'task_details' => 'Voluptatem aliquam eaque beatae modi velit. Eos quia voluptas ut qui. Quia eos pariatur quos repellendus sed et corrupti.',
-        'task_status' => 1,
+        'task_status' => 'New',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-07-23 01:05:00.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task5' => [
@@ -58,7 +58,7 @@ return [
         'task_name' => 'Provident porro in.',
         'task_essence' => 'Qui aspernatur debitis corporis quia.',
         'task_details' => 'Praesentium fugit nihil est quae officiis necessitatibus autem. Omnis exercitationem sed alias impedit a. Et non sed omnis unde qui nihil voluptas. Cumque id id nobis velit quis.',
-        'task_status' => 1,
+        'task_status' => 'New',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-04-01 05:51:21.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task6' => [
@@ -68,7 +68,7 @@ return [
         'task_name' => 'Nam rerum nemo dolores.',
         'task_essence' => 'Et laboriosam corporis et sed vero.',
         'task_details' => 'Nostrum repellat corporis ut asperiores. Amet explicabo repellendus voluptate voluptatem. Nam praesentium voluptates ipsam.',
-        'task_status' => 1,
+        'task_status' => 'Performed',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-08-01 16:02:50.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task7' => [
@@ -78,7 +78,7 @@ return [
         'task_name' => 'Voluptate vero harum.',
         'task_essence' => 'Dolore illo quia incidunt et ea nemo et necessitatibus.',
         'task_details' => 'Eum nulla est aut quae molestiae. Rem nisi fugit voluptas sint nam ut quae. Sequi itaque quia libero earum.',
-        'task_status' => 1,
+        'task_status' => 'Failed',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-02-11 02:09:35.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task8' => [
@@ -88,7 +88,7 @@ return [
         'task_name' => 'Tempore vitae et.',
         'task_essence' => 'Rerum eum rerum est laudantium enim perspiciatis.',
         'task_details' => 'Est qui ea harum consequatur molestias. Voluptas libero nihil voluptatibus sint. Et dignissimos similique voluptate at cum nobis provident et.',
-        'task_status' => 1,
+        'task_status' => 'Performed',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-03-29 09:49:52.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
     'task9' => [
@@ -98,7 +98,7 @@ return [
         'task_name' => 'Autem rerum aut illo qui sint.',
         'task_essence' => 'Et dolorem inventore voluptas voluptate eius.',
         'task_details' => 'Vel repellat animi fuga provident nesciunt sunt autem. Et quia aut rerum aut optio aliquid. Iste magnam quaerat nostrum vel sint sit.',
-        'task_status' => 1,
+        'task_status' => 'InWork',
         'task_date_create' => unserialize('O:8:"DateTime":3:{s:4:"date";s:26:"2022-07-31 05:01:49.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:13:"Europe/Moscow";}'),
     ],
 ];
