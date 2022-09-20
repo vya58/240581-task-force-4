@@ -68,20 +68,20 @@ class Executor extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'executor_id' => 'Executor ID',
-            'city_id' => 'City ID',
-            'executor_name' => 'Executor Name',
-            'executor_email' => 'Executor Email',
-            'executor_password' => 'Executor Password',
-            'executor_avatar' => 'Executor Avatar',
-            'executor_phone' => 'Executor Phone',
-            'executor_telegram' => 'Executor Telegram',
-            'personal_information' => 'Personal Information',
-            'count_tasks' => 'Count Tasks',
-            'executor_rating' => 'Executor Rating',
-            'executor_status' => 'Executor Status',
-            'executor_birthday' => 'Executor Birthday',
-            'executor_date_add' => 'Executor Date Add',
+            'executor_id' => 'ID исполнителя',
+            'city_id' => 'ID города',
+            'executor_name' => 'Имя исполнителя',
+            'executor_email' => 'Email исполнителя',
+            'executor_password' => 'Пароль аккаунта исполнителя',
+            'executor_avatar' => 'Аватар исполнителя',
+            'executor_phone' => 'Телефон исполнителя',
+            'executor_telegram' => 'Телеграм исполнителя',
+            'personal_information' => 'Персональная информация об исполнителе',
+            'count_tasks' => 'Количество выполненных заданий',
+            'executor_rating' => 'Рейтинг исполнителя',
+            'executor_status' => 'Статус исполнителя',
+            'executor_birthday' => 'День рождения исполнителя',
+            'executor_date_add' => 'Дата регистрации исполнителя',
         ];
     }
 

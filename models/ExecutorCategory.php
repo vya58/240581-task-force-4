@@ -45,8 +45,8 @@ class ExecutorCategory extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'executor_id' => 'Executor ID',
-            'category_id' => 'Category ID',
+            'executor_id' => 'ID исполнителя',
+            'category_id' => 'ID категории',
         ];
     }
 

@@ -19,7 +19,7 @@ use Yii;
  * @property string|null $task_latitude
  * @property string|null $task_longitude
  * @property string $task_date_create
- * @property int|null $task_status
+ * @property string|null $task_status
  * @property string|null $task_deadline
  *
  * @property Categories $category
@@ -32,6 +32,12 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    public const STATUS_NEW = 'New';
+    public const STATUS_CANCELED = 'Canceled';
+    public const STATUS_IN_WORK = 'InWork';
+    public const STATUS_PERFORMED = 'Performed';
+    public const STATUS_FAILED = 'Failed';
+
     /**
      * {@inheritdoc}
      */
@@ -65,20 +71,20 @@ class Task extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'task_id' => 'Task ID',
-            'customer_id' => 'Customer ID',
-            'executor_id' => 'Executor ID',
-            'category_id' => 'Category ID',
-            'city_id' => 'City ID',
-            'task_name' => 'Task Name',
-            'task_essence' => 'Task Essence',
-            'task_details' => 'Task Details',
-            'task_budget' => 'Task Budget',
-            'task_latitude' => 'Task Latitude',
-            'task_longitude' => 'Task Longitude',
-            'task_date_create' => 'Task Date Create',
-            'task_status' => 'Task Status',
-            'task_deadline' => 'Task Deadline',
+            'task_id' => 'ID задания',
+            'customer_id' => 'ID заказчика',
+            'executor_id' => 'ID исполнителя',
+            'category_id' => 'ID категории задания',
+            'city_id' => 'ID города',
+            'task_name' => 'Задание',
+            'task_essence' => 'Требования задания',
+            'task_details' => 'Подробности задания',
+            'task_budget' => 'Бюджет задания',
+            'task_latitude' => 'Широта локации задания',
+            'task_longitude' => 'Долгота локации задания',
+            'task_date_create' => 'Дата размещения задания',
+            'task_status' => 'Статус задания',
+            'task_deadline' => 'Срок исполнения задания',
         ];
     }
 
@@ -153,11 +159,13 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
-     * @return TaskQuery the active query used by this AR class.
+     //* {@inheritdoc}
+    // * @return TaskQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new TaskQuery(get_called_class());
     }
+    */
 }
