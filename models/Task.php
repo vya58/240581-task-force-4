@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "tasks".
+ * This is the model class for table "task".
  *
  * @property int $task_id
  * @property int $customer_id
@@ -22,13 +22,13 @@ use Yii;
  * @property string|null $task_status
  * @property string|null $task_deadline
  *
- * @property Categories $category
- * @property Cities $city
- * @property Customers $customer
- * @property Executors $executor
- * @property Executors[] $executors
- * @property ExecutorsTasks[] $executorsTasks
- * @property Files[] $files
+ * @property Category $category
+ * @property City $city
+ * @property Customer $customer
+ * @property Executor $executor
+ * @property ExecutorTask[] $executorTasks
+ * @property Executor[] $executors
+ * @property File[] $files
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -43,7 +43,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tasks';
+        return 'task';
     }
 
     /**
@@ -53,15 +53,16 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [['customer_id', 'category_id', 'task_name', 'task_essence', 'task_details', 'task_date_create'], 'required'],
-            [['customer_id', 'executor_id', 'category_id', 'city_id', 'task_budget', 'task_status'], 'integer'],
+            [['customer_id', 'executor_id', 'category_id', 'city_id', 'task_budget'], 'integer'],
             [['task_date_create', 'task_deadline'], 'safe'],
             [['task_name'], 'string', 'max' => 50],
             [['task_essence'], 'string', 'max' => 80],
             [['task_details', 'task_latitude', 'task_longitude'], 'string', 'max' => 255],
-            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customers::class, 'targetAttribute' => ['customer_id' => 'customer_id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executors::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::class, 'targetAttribute' => ['city_id' => 'city_id']],
+            [['task_status'], 'string', 'max' => 10],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::class, 'targetAttribute' => ['customer_id' => 'customer_id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'category_id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'city_id', 'city_id' => null]],
         ];
     }
 
@@ -91,81 +92,80 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Category]].
      *
-     * @return \yii\db\ActiveQuery|CategoriesQuery
+     * @return \yii\db\ActiveQuery|CategoryQuery
      */
     public function getCategory()
     {
-        return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
+        return $this->hasOne(Category::class, ['category_id' => 'category_id']);
     }
 
     /**
      * Gets query for [[City]].
      *
-     * @return \yii\db\ActiveQuery|CitiesQuery
+     * @return \yii\db\ActiveQuery|CityQuery
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::class, ['city_id' => 'city_id']);
+        return $this->hasOne(City::class, ['city_id' => 'city_id']);
     }
 
     /**
      * Gets query for [[Customer]].
      *
-     * @return \yii\db\ActiveQuery|CustomersQuery
+     * @return \yii\db\ActiveQuery|CustomerQuery
      */
     public function getCustomer()
     {
-        return $this->hasOne(Customers::class, ['customer_id' => 'customer_id']);
+        return $this->hasOne(Customer::class, ['customer_id' => 'customer_id']);
     }
 
     /**
      * Gets query for [[Executor]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
     public function getExecutor()
     {
-        return $this->hasOne(Executors::class, ['executor_id' => 'executor_id']);
+        return $this->hasOne(Executor::class, ['executor_id' => 'executor_id']);
+    }
+
+    /**
+     * Gets query for [[ExecutorTasks]].
+     *
+     * @return \yii\db\ActiveQuery|ExecutorTaskQuery
+     */
+    public function getExecutorTasks()
+    {
+        return $this->hasMany(ExecutorTask::class, ['task_id' => 'task_id']);
     }
 
     /**
      * Gets query for [[Executors]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
     public function getExecutors()
     {
-        return $this->hasMany(Executors::class, ['executor_id' => 'executor_id'])->viaTable('executors_tasks', ['task_id' => 'task_id']);
-    }
-
-    /**
-     * Gets query for [[ExecutorsTasks]].
-     *
-     * @return \yii\db\ActiveQuery|ExecutorsTasksQuery
-     */
-    public function getExecutorsTasks()
-    {
-        return $this->hasMany(ExecutorsTasks::class, ['task_id' => 'task_id']);
+        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])
+            ->viaTable('executor_task', ['task_id' => 'task_id']);
     }
 
     /**
      * Gets query for [[Files]].
      *
-     * @return \yii\db\ActiveQuery|FilesQuery
+     * @return \yii\db\ActiveQuery|FileQuery
      */
     public function getFiles()
     {
-        return $this->hasMany(Files::class, ['task_id' => 'task_id']);
+        return $this->hasMany(File::class, ['task_id' => 'task_id']);
     }
 
     /**
-     //* {@inheritdoc}
-    // * @return TaskQuery the active query used by this AR class.
+     * {@inheritdoc}
+     * @return TaskQuery the active query used by this AR class.
      */
-    /*
     public static function find()
     {
         return new TaskQuery(get_called_class());
     }
-    */
 }

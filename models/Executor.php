@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "executors".
+ * This is the model class for table "executor".
  *
  * @property int $executor_id
  * @property int|null $city_id
@@ -22,13 +22,13 @@ use Yii;
  * @property string|null $executor_birthday
  * @property string $executor_date_add
  *
- * @property Categories[] $categories
- * @property Cities $city
- * @property ExecutorsCategories[] $executorsCategories
- * @property ExecutorsTasks[] $executorsTasks
- * @property Reviews[] $reviews
- * @property Tasks[] $tasks
- * @property Tasks[] $tasks0
+ * @property Category[] $categories
+ * @property City $city
+ * @property ExecutorCategory[] $executorCategories
+ * @property ExecutorTask[] $executorTasks
+ * @property Review[] $reviews
+ * @property Task[] $tasks
+ * @property Task[] $tasks0
  */
 class Executor extends \yii\db\ActiveRecord
 {
@@ -37,7 +37,7 @@ class Executor extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'executors';
+        return 'executor';
     }
 
     /**
@@ -58,7 +58,7 @@ class Executor extends \yii\db\ActiveRecord
             [['executor_avatar'], 'unique'],
             [['executor_phone'], 'unique'],
             [['executor_telegram'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::class, 'targetAttribute' => ['city_id' => 'city_id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'city_id']],
         ];
     }
 
@@ -72,87 +72,89 @@ class Executor extends \yii\db\ActiveRecord
             'city_id' => 'ID города',
             'executor_name' => 'Имя исполнителя',
             'executor_email' => 'Email исполнителя',
-            'executor_password' => 'Пароль аккаунта исполнителя',
+            'executor_password' => 'Пароль исполнителя',
             'executor_avatar' => 'Аватар исполнителя',
             'executor_phone' => 'Телефон исполнителя',
-            'executor_telegram' => 'Телеграм исполнителя',
-            'personal_information' => 'Персональная информация об исполнителе',
-            'count_tasks' => 'Количество выполненных заданий',
+            'executor_telegram' => 'Telegram исполнителя',
+            'personal_information' => 'Персональная информация',
+            'count_tasks' => 'Количество выполненных здач',
             'executor_rating' => 'Рейтинг исполнителя',
             'executor_status' => 'Статус исполнителя',
             'executor_birthday' => 'День рождения исполнителя',
-            'executor_date_add' => 'Дата регистрации исполнителя',
+            'executor_date_add' => 'Дата регистрации',
         ];
     }
 
     /**
      * Gets query for [[Categories]].
      *
-     * @return \yii\db\ActiveQuery|CategoriesQuery
+     * @return \yii\db\ActiveQuery|CategoryQuery
      */
     public function getCategories()
     {
-        return $this->hasMany(Categories::class, ['category_id' => 'category_id'])->viaTable('executors_categories', ['executor_id' => 'executor_id']);
+        return $this->hasMany(Category::class, ['category_id' => 'category_id'])
+            ->viaTable('executor_category', ['executor_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[City]].
      *
-     * @return \yii\db\ActiveQuery|CitiesQuery
+     * @return \yii\db\ActiveQuery|CityQuery
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::class, ['city_id' => 'city_id']);
+        return $this->hasOne(City::class, ['city_id' => 'city_id']);
     }
 
     /**
-     * Gets query for [[ExecutorsCategories]].
+     * Gets query for [[ExecutorCategories]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsCategoriesQuery
+     * @return \yii\db\ActiveQuery|ExecutorCategoryQuery
      */
-    public function getExecutorsCategories()
+    public function getExecutorCategories()
     {
-        return $this->hasMany(ExecutorsCategories::class, ['executor_id' => 'executor_id']);
+        return $this->hasMany(ExecutorCategory::class, ['executor_id' => 'executor_id']);
     }
 
     /**
-     * Gets query for [[ExecutorsTasks]].
+     * Gets query for [[ExecutorTasks]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsTasksQuery
+     * @return \yii\db\ActiveQuery|ExecutorTaskQuery
      */
-    public function getExecutorsTasks()
+    public function getExecutorTasks()
     {
-        return $this->hasMany(ExecutorsTasks::class, ['executor_id' => 'executor_id']);
+        return $this->hasMany(ExecutorTask::class, ['executor_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[Reviews]].
      *
-     * @return \yii\db\ActiveQuery|ReviewsQuery
+     * @return \yii\db\ActiveQuery|ReviewQuery
      */
     public function getReviews()
     {
-        return $this->hasMany(Reviews::class, ['executor_id' => 'executor_id']);
+        return $this->hasMany(Review::class, ['executor_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::class, ['executor_id' => 'executor_id']);
+        return $this->hasMany(Task::class, ['executor_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[Tasks0]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks0()
     {
-        return $this->hasMany(Tasks::class, ['task_id' => 'task_id'])->viaTable('executors_tasks', ['executor_id' => 'executor_id']);
+        return $this->hasMany(Task::class, ['task_id' => 'task_id'])
+            ->viaTable('executor_task', ['executor_id' => 'executor_id']);
     }
 
     /**
