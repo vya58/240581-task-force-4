@@ -77,7 +77,7 @@ class Executor extends \yii\db\ActiveRecord
             'executor_phone' => 'Телефон исполнителя',
             'executor_telegram' => 'Telegram исполнителя',
             'personal_information' => 'Персональная информация',
-            'count_tasks' => 'Количество выполненных здач',
+            'count_tasks' => 'Количество выполненных заданий',
             'executor_rating' => 'Рейтинг исполнителя',
             'executor_status' => 'Статус исполнителя',
             'executor_birthday' => 'День рождения исполнителя',
