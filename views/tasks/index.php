@@ -148,7 +148,10 @@ $this->title = 'Новое'; ?>
 
             <?= Html::tag('input', 'Искать', [
                 'type' => 'submit',
-                'class' => 'button button--blue',
+                'class' => [
+                    'button',
+                    'button--blue'
+                ],
                 'value' => 'Искать'
             ])
             ?>
