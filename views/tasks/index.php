@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\TaskfilterForm;
 
 $this->title = 'Новое'; ?>
 
@@ -142,14 +143,7 @@ $this->title = 'Новое'; ?>
                         'options' => ['class' => 'form-group'],
                     ]
                 )
-                ->dropDownList(
-                    [
-                        '1' => '1 час',
-                        '12' => '12 часов',
-                        '24' => '24 часа',
-                        '' => 'Все задания',
-                    ]
-                );
+                ->dropDownList(TaskFilterForm::TASK_PERIOD);
             ?>
 
             <input type="submit" class="button button--blue" value="Искать">
