@@ -146,8 +146,12 @@ $this->title = 'Новое'; ?>
                 ->dropDownList(TaskFilterForm::TASK_PERIOD);
             ?>
 
-            <input type="submit" class="button button--blue" value="Искать">
-
+            <?= Html::tag('input', 'Искать', [
+                'type' => 'submit',
+                'class' => 'button button--blue',
+                'value' => 'Искать'
+            ])
+            ?>
             <?php
             ActiveForm::end(); ?>
         </div>
