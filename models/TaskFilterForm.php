@@ -61,7 +61,7 @@ class TaskFilterForm extends Model
                     'categories',
                     'distantWork',
                     'noResponse',
-                    'period'
+                    'period',
                 ],
                 'safe'
             ]
@@ -69,46 +69,39 @@ class TaskFilterForm extends Model
     }
 
     /**
-     * @param object TaskFilterForm - экземпляр класса TaskFilterForm
      * 
-     * @return array $tasks - результат выборки
+     * @return array - результат выборки
      */
-    public function selectTasks(TaskFilterForm $tasksFilter): array
+    public function selectTasks(): array
     {
-        if (Yii::$app->request->getIsPost()) {
-            $tasksFilter->load(Yii::$app->request->post());
-        }
-
         $query = Task::find()
             ->filterWhere([
                 'task_status' => Task::STATUS_NEW,
-                'category_id' => $tasksFilter->categories,
+                'category_id' => $this->categories,
             ]);
 
-        if ($tasksFilter->distantWork) {
+        if ($this->distantWork) {
             $query->andWhere(
-                ['task_latitude' => null]
+                ['task_latitude' => null],
             );
         }
 
-        if ($tasksFilter->noResponse) {
+        if ($this->noResponse) {
             $query->andWhere(
-                ['executor_id' => null]
+                ['executor_id' => null],
             );
         }
 
-        if ($tasksFilter->period) {
+        if ($this->period) {
             $query->andWhere(
                 'task_date_create >= NOW() - INTERVAL :period  HOUR',
-                [':period' => $tasksFilter->period]
+                [':period' => $this->period],
             );
         }
 
-        $tasks = $query->orderBy(
-            ['task_date_create' => SORT_DESC]
+        return $query->orderBy(
+            ['task_date_create' => SORT_DESC],
         )
             ->all();
-
-        return $tasks;
     }
 }

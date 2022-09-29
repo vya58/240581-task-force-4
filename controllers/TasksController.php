@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\TaskfilterForm;
 use app\models\CategoryQuery;
 
@@ -11,10 +12,12 @@ class TasksController extends \yii\web\Controller
     {
         $tasksFilter = new TaskFilterForm();
 
-        $tasks =  $tasksFilter->selectTasks($tasksFilter);
+        $tasksFilter->load(Yii::$app->request->get());
+
+        $tasks =  $tasksFilter->selectTasks();
 
         $categories = CategoryQuery::selectCategories();
-        
+
         return $this->render(
             'index',
             [

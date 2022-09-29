@@ -78,7 +78,7 @@ $this->title = 'Новое'; ?>
             <?php
             $form = ActiveForm::begin(
                 [
-                    'method' => 'post',
+                    'method' => 'get',
                     'action' => ['tasks/index'],
                 ]
             ); ?>
