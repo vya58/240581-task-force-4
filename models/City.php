@@ -5,15 +5,15 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "cities".
+ * This is the model class for table "city".
  *
  * @property int $city_id
  * @property string $city_name
  * @property string|null $city_latitude
  * @property string|null $city_longitude
  *
- * @property Executors[] $executors
- * @property Tasks[] $tasks
+ * @property Executor[] $executors
+ * @property Task[] $tasks
  */
 class City extends \yii\db\ActiveRecord
 {
@@ -22,7 +22,7 @@ class City extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'cities';
+        return 'city';
     }
 
     /**
@@ -45,29 +45,29 @@ class City extends \yii\db\ActiveRecord
         return [
             'city_id' => 'ID города',
             'city_name' => 'Город',
-            'city_latitude' => 'Географическая широта города',
-            'city_longitude' => 'Географическая долгота города',
+            'city_latitude' => 'Географическая широта',
+            'city_longitude' => 'Географическая долгота',
         ];
     }
 
     /**
      * Gets query for [[Executors]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
     public function getExecutors()
     {
-        return $this->hasMany(Executors::class, ['city_id' => 'city_id']);
+        return $this->hasMany(Executor::class, ['city_id' => 'city_id']);
     }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::class, ['city_id' => 'city_id']);
+        return $this->hasMany(Task::class, ['city_id' => 'city_id']);
     }
 
     /**

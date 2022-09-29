@@ -5,14 +5,14 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "executors_categories".
+ * This is the model class for table "executor_category".
  *
  * @property int $id
  * @property int $executor_id
  * @property int $category_id
  *
- * @property Categories $category
- * @property Executors $executor
+ * @property Category $category
+ * @property Executor $executor
  */
 class ExecutorCategory extends \yii\db\ActiveRecord
 {
@@ -21,7 +21,7 @@ class ExecutorCategory extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'executors_categories';
+        return 'executor_category';
     }
 
     /**
@@ -33,8 +33,8 @@ class ExecutorCategory extends \yii\db\ActiveRecord
             [['executor_id', 'category_id'], 'required'],
             [['executor_id', 'category_id'], 'integer'],
             [['category_id', 'executor_id'], 'unique', 'targetAttribute' => ['category_id', 'executor_id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executors::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::class, 'targetAttribute' => ['category_id' => 'category_id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'category_id']],
         ];
     }
 
@@ -53,21 +53,21 @@ class ExecutorCategory extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Category]].
      *
-     * @return \yii\db\ActiveQuery|CategoriesQuery
+     * @return \yii\db\ActiveQuery|CategoryQuery
      */
     public function getCategory()
     {
-        return $this->hasOne(Categories::class, ['category_id' => 'category_id']);
+        return $this->hasOne(Category::class, ['category_id' => 'category_id']);
     }
 
     /**
      * Gets query for [[Executor]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
     public function getExecutor()
     {
-        return $this->hasOne(Executors::class, ['executor_id' => 'executor_id']);
+        return $this->hasOne(Executor::class, ['executor_id' => 'executor_id']);
     }
 
     /**

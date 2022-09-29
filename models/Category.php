@@ -5,15 +5,15 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "categories".
+ * This is the model class for table "category".
  *
  * @property int $category_id
  * @property string $category_name
  * @property string $icon
  *
- * @property Executors[] $executors
- * @property ExecutorsCategories[] $executorsCategories
- * @property Tasks[] $tasks
+ * @property ExecutorCategory[] $executorCategories
+ * @property Executor[] $executors
+ * @property Task[] $tasks
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -22,7 +22,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'categories';
+        return 'category';
     }
 
     /**
@@ -43,40 +43,41 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'category_id' => 'ID категории задания',
-            'category_name' => 'Категория задания',
+            'category_id' => 'ID категории',
+            'category_name' => 'Категория',
             'icon' => 'Иконка категории',
         ];
     }
 
     /**
-     * Gets query for [[Executors]].
+     * Gets query for [[ExecutorCategories]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorCategoryQuery
      */
-    public function getExecutors()
+    public function getExecutorCategories()
     {
-        return $this->hasMany(Executors::class, ['executor_id' => 'executor_id'])->viaTable('executors_categories', ['category_id' => 'category_id']);
+        return $this->hasMany(ExecutorCategory::class, ['category_id' => 'category_id']);
     }
 
     /**
-     * Gets query for [[ExecutorsCategories]].
+     * Gets query for [[Executors]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsCategoriesQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
-    public function getExecutorsCategories()
+    public function getExecutors()
     {
-        return $this->hasMany(ExecutorsCategories::class, ['category_id' => 'category_id']);
+        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])
+            ->viaTable('executor_category', ['category_id' => 'category_id']);
     }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::class, ['category_id' => 'category_id']);
+        return $this->hasMany(Task::class, ['category_id' => 'category_id']);
     }
 
     /**

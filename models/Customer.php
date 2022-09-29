@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "customers".
+ * This is the model class for table "customer".
  *
  * @property int $customer_id
  * @property string $customer_email
@@ -14,8 +14,8 @@ use Yii;
  * @property string|null $customer_avatar
  * @property string $customer_date_add
  *
- * @property Reviews[] $reviews
- * @property Tasks[] $tasks
+ * @property Review[] $reviews
+ * @property Task[] $tasks
  */
 class Customer extends \yii\db\ActiveRecord
 {
@@ -24,7 +24,7 @@ class Customer extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'customers';
+        return 'customer';
     }
 
     /**
@@ -50,31 +50,31 @@ class Customer extends \yii\db\ActiveRecord
         return [
             'customer_id' => 'ID заказчика',
             'customer_email' => 'Email заказчика',
-            'customer_password' => 'Пароль аккаунта заказчика',
+            'customer_password' => 'Пароль заказчика',
             'customer_name' => 'Имя заказчика',
             'customer_avatar' => 'Аватар заказчика',
-            'customer_date_add' => 'Дата регистрации заказчика',
+            'customer_date_add' => 'Дата регитрации заказчика',
         ];
     }
 
     /**
      * Gets query for [[Reviews]].
      *
-     * @return \yii\db\ActiveQuery|ReviewsQuery
+     * @return \yii\db\ActiveQuery|ReviewQuery
      */
     public function getReviews()
     {
-        return $this->hasMany(Reviews::class, ['customer_id' => 'customer_id']);
+        return $this->hasMany(Review::class, ['customer_id' => 'customer_id']);
     }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::class, ['customer_id' => 'customer_id']);
+        return $this->hasMany(Task::class, ['customer_id' => 'customer_id']);
     }
 
     /**

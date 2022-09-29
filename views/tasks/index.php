@@ -4,9 +4,9 @@
  * @var Task[] $tasks
  */
 
-use app\models\Task;
-use app\controllers\TasksController;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use app\models\TaskfilterForm;
 
 $this->title = 'Новое'; ?>
 
@@ -14,6 +14,7 @@ $this->title = 'Новое'; ?>
     <h3 class="head-main head-task">Новые задания</h3>
     <?php if (count($tasks)) : ?>
         <?php foreach ($tasks as $task) : ?>
+            <?php $category = $task->category; ?>
             <div class="task-card">
                 <div class="header-task">
                     <!-- Добавить ссылку на страницу задачи-->
@@ -35,7 +36,7 @@ $this->title = 'Новое'; ?>
                         <?= Html::encode($task->task_details) ?>
                     </p>
                     <p class="info-text category-text">
-
+                        <?= Html::encode($category->category_name) ?>
                     </p>
                     <!-- Добавить ссылку на страницу задачи-->
                     <a href="#" class="button button--black">Смотреть Задание</a>
@@ -46,63 +47,117 @@ $this->title = 'Новое'; ?>
         <div class="pagination-wrapper">
             <ul class="pagination-list">
                 <li class="pagination-item mark">
+                    <!-- Добавить ссылку -->
                     <a href="#" class="link link--page"></a>
                 </li>
                 <li class="pagination-item">
+                    <!-- Добавить ссылку -->
                     <a href="#" class="link link--page">1</a>
                 </li>
                 <li class="pagination-item pagination-item--active">
+                    <!-- Добавить ссылку -->
                     <a href="#" class="link link--page">2</a>
                 </li>
                 <li class="pagination-item">
+                    <!-- Добавить ссылку -->
                     <a href="#" class="link link--page">3</a>
                 </li>
                 <li class="pagination-item mark">
+                    <!-- Добавить ссылку -->
                     <a href="#" class="link link--page"></a>
                 </li>
             </ul>
         </div>
-
-    <?php else : ?>
-        <p>Новых заданий нет</p>
     <?php endif; ?>
 </div>
 
+</div>
 <div class="right-column">
     <div class="right-card black">
         <div class="search-form">
-            <form>
-                <h4 class="head-card">Категории</h4>
-                <div class="form-group">
-                    <div class="checkbox-wrapper">
-                        <label class="control-label" for="сourier-services">
-                            <input type="checkbox" id="сourier-services" checked>
-                            Курьерские услуги</label>
-                        <label class="control-label" for="cargo-transportation">
-                            <input id="cargo-transportation" type="checkbox">
-                            Грузоперевозки</label>
-                        <label class="control-label" for="translations">
-                            <input id="translations" type="checkbox">
-                            Переводы</label>
-                    </div>
-                </div>
-                <h4 class="head-card">Дополнительно</h4>
-                <div class="form-group">
-                    <label class="control-label" for="without-performer">
-                        <input id="without-performer" type="checkbox" checked>
-                        Без исполнителя</label>
-                </div>
-                <h4 class="head-card">Период</h4>
-                <div class="form-group">
-                    <label for="period-value"></label>
-                    <select id="period-value">
-                        <option>1 час</option>
-                        <option>12 часов</option>
-                        <option>24 часа</option>
-                    </select>
-                </div>
-                <input type="submit" class="button button--blue" value="Искать">
-            </form>
+            <?php
+            $form = ActiveForm::begin(
+                [
+                    'method' => 'get',
+                    'action' => ['tasks/index'],
+                ]
+            ); ?>
+
+            <h4 class="head-card">Категории</h4>
+            <?= $form
+                ->field(
+                    $tasksFilter,
+                    'categories',
+                    [
+                        'template' => '{input}',
+                        'options' => ['class' => 'form-group'],
+                    ]
+                )
+                ->checkboxList(
+                    $categories,
+                    [
+                        'class' => 'checkbox-wrapper',
+                        'itemOptions' => [
+                            'labelOptions' => ['class' => 'control-label'],
+                        ],
+                    ]
+                );
+            ?>
+
+            <h4 class="head-card">Дополнительно</h4>
+            <?= $form
+                ->field(
+                    $tasksFilter,
+                    'distantWork',
+                    [
+                        'template' => '{input}',
+                        'options' => ['class' => 'form-group'],
+                    ]
+                )
+                ->checkbox(
+                    ['labelOptions' => ['class' => 'control-label']],
+                );
+            ?>
+
+            <?= $form
+                ->field(
+                    $tasksFilter,
+                    'noResponse',
+                    [
+                        'template' => '{input}',
+                        'options' => ['class' => 'form-group'],
+                    ]
+                )
+                ->checkbox(
+                    ['labelOptions' => ['class' => 'control-label']],
+                );
+            ?>
+
+            <h4 class="head-card">Период</h4>
+            <?= $form
+                ->field(
+                    $tasksFilter,
+                    'period',
+                    [
+                        'template' => '{input}',
+                        'options' => ['class' => 'form-group'],
+                    ]
+                )
+                ->dropDownList(TaskFilterForm::TASK_PERIOD);
+            ?>
+
+            <?= Html::tag('input', 'Искать', [
+                'type' => 'submit',
+                'class' => [
+                    'button',
+                    'button--blue'
+                ],
+                'value' => 'Искать'
+            ])
+            ?>
+            <?php
+            ActiveForm::end(); ?>
         </div>
     </div>
+</div>
 </div>

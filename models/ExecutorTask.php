@@ -5,14 +5,14 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "executors_tasks".
+ * This is the model class for table "executor_task".
  *
  * @property int $id
  * @property int $executor_id
  * @property int $task_id
  *
- * @property Executors $executor
- * @property Tasks $task
+ * @property Executor $executor
+ * @property Task $task
  */
 class ExecutorTask extends \yii\db\ActiveRecord
 {
@@ -21,7 +21,7 @@ class ExecutorTask extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'executors_tasks';
+        return 'executor_task';
     }
 
     /**
@@ -33,8 +33,8 @@ class ExecutorTask extends \yii\db\ActiveRecord
             [['executor_id', 'task_id'], 'required'],
             [['executor_id', 'task_id'], 'integer'],
             [['task_id', 'executor_id'], 'unique', 'targetAttribute' => ['task_id', 'executor_id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executors::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['task_id' => 'task_id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
+            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
         ];
     }
 
@@ -53,21 +53,21 @@ class ExecutorTask extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Executor]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
     public function getExecutor()
     {
-        return $this->hasOne(Executors::class, ['executor_id' => 'executor_id']);
+        return $this->hasOne(Executor::class, ['executor_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[Task]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTask()
     {
-        return $this->hasOne(Tasks::class, ['task_id' => 'task_id']);
+        return $this->hasOne(Task::class, ['task_id' => 'task_id']);
     }
 
     /**

@@ -5,13 +5,13 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "files".
+ * This is the model class for table "file".
  *
  * @property int $file_id
  * @property int|null $task_id
  * @property string $task_file_name
  *
- * @property Tasks $task
+ * @property Task $task
  */
 class File extends \yii\db\ActiveRecord
 {
@@ -20,7 +20,7 @@ class File extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'files';
+        return 'file';
     }
 
     /**
@@ -33,7 +33,7 @@ class File extends \yii\db\ActiveRecord
             [['task_file_name'], 'required'],
             [['task_file_name'], 'string', 'max' => 255],
             [['task_file_name'], 'unique'],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['task_id' => 'task_id']],
+            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
         ];
     }
 
@@ -52,11 +52,11 @@ class File extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Task]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTask()
     {
-        return $this->hasOne(Tasks::class, ['task_id' => 'task_id']);
+        return $this->hasOne(Task::class, ['task_id' => 'task_id']);
     }
 
     /**

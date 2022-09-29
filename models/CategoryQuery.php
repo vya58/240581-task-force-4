@@ -18,6 +18,18 @@ class CategoryQuery extends \yii\db\ActiveQuery
      * {@inheritdoc}
      * @return Category[]|array
      */
+    public static function selectCategories()
+    {
+        return Category::find()
+        ->select('category_name')
+        ->indexBy('category_id')
+        ->column();
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return Category[]|array
+     */
     public function all($db = null)
     {
         return parent::all($db);

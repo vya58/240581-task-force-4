@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "reviews".
+ * This is the model class for table "review".
  *
  * @property int $review_id
  * @property int $customer_id
@@ -13,8 +13,8 @@ use Yii;
  * @property int $grade
  * @property string|null $review
  *
- * @property Customers $customer
- * @property Executors $executor
+ * @property Customer $customer
+ * @property Executor $executor
  */
 class Review extends \yii\db\ActiveRecord
 {
@@ -23,7 +23,7 @@ class Review extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'reviews';
+        return 'review';
     }
 
     /**
@@ -35,8 +35,8 @@ class Review extends \yii\db\ActiveRecord
             [['customer_id', 'executor_id', 'grade'], 'required'],
             [['customer_id', 'executor_id', 'grade'], 'integer'],
             [['review'], 'string', 'max' => 255],
-            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customers::class, 'targetAttribute' => ['customer_id' => 'customer_id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executors::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::class, 'targetAttribute' => ['customer_id' => 'customer_id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
         ];
     }
 
@@ -57,21 +57,21 @@ class Review extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Customer]].
      *
-     * @return \yii\db\ActiveQuery|CustomersQuery
+     * @return \yii\db\ActiveQuery|CustomerQuery
      */
     public function getCustomer()
     {
-        return $this->hasOne(Customers::class, ['customer_id' => 'customer_id']);
+        return $this->hasOne(Customer::class, ['customer_id' => 'customer_id']);
     }
 
     /**
      * Gets query for [[Executor]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorsQuery
+     * @return \yii\db\ActiveQuery|ExecutorQuery
      */
     public function getExecutor()
     {
-        return $this->hasOne(Executors::class, ['executor_id' => 'executor_id']);
+        return $this->hasOne(Executor::class, ['executor_id' => 'executor_id']);
     }
 
     /**

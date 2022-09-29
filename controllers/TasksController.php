@@ -2,17 +2,29 @@
 
 namespace app\controllers;
 
-use app\models\Task;
+use Yii;
+use app\models\TaskfilterForm;
+use app\models\CategoryQuery;
 
 class TasksController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $tasks = Task::find()
-            ->where(['task_status' => Task::STATUS_NEW])
-            ->orderBy(['task_date_create' => SORT_DESC])
-            ->all();
+        $tasksFilter = new TaskFilterForm();
 
-        return $this->render('index', ['tasks' => $tasks]);
+        $tasksFilter->load(Yii::$app->request->get());
+
+        $tasks =  $tasksFilter->selectTasks();
+
+        $categories = CategoryQuery::selectCategories();
+
+        return $this->render(
+            'index',
+            [
+                'tasks' => $tasks,
+                'categories' => $categories,
+                'tasksFilter' => $tasksFilter
+            ]
+        );
     }
 }
