@@ -66,8 +66,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getExecutors()
     {
-        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])
-            ->viaTable('executor_category', ['category_id' => 'category_id']);
+        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])->viaTable('executor_category', ['category_id' => 'category_id']);
     }
 
     /**

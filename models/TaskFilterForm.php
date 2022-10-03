@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 
 /**
@@ -69,10 +68,11 @@ class TaskFilterForm extends Model
     }
 
     /**
+     * Функция выборки параметров нового задания
      * 
      * @return array - результат выборки
      */
-    public function selectTasks(): array
+    public function selectNewTasks(): array
     {
         $query = Task::find()
             ->filterWhere([

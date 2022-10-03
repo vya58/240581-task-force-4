@@ -8,13 +8,12 @@ use Yii;
  * This is the model class for table "customer".
  *
  * @property int $customer_id
+ * @property string $customer_name
  * @property string $customer_email
  * @property string $customer_password
- * @property string $customer_name
  * @property string|null $customer_avatar
  * @property string $customer_date_add
  *
- * @property Review[] $reviews
  * @property Task[] $tasks
  */
 class Customer extends \yii\db\ActiveRecord
@@ -33,11 +32,12 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_email', 'customer_password', 'customer_name', 'customer_date_add'], 'required'],
+            [['customer_name', 'customer_email', 'customer_password', 'customer_date_add'], 'required'],
             [['customer_date_add'], 'safe'],
-            [['customer_email', 'customer_password', 'customer_avatar'], 'string', 'max' => 255],
             [['customer_name'], 'string', 'max' => 50],
+            [['customer_email', 'customer_password', 'customer_avatar'], 'string', 'max' => 255],
             [['customer_email'], 'unique'],
+            ['customer_email', 'email'],
             [['customer_avatar'], 'unique'],
         ];
     }
@@ -55,16 +55,6 @@ class Customer extends \yii\db\ActiveRecord
             'customer_avatar' => 'Аватар заказчика',
             'customer_date_add' => 'Дата регитрации заказчика',
         ];
-    }
-
-    /**
-     * Gets query for [[Reviews]].
-     *
-     * @return \yii\db\ActiveQuery|ReviewQuery
-     */
-    public function getReviews()
-    {
-        return $this->hasMany(Review::class, ['customer_id' => 'customer_id']);
     }
 
     /**

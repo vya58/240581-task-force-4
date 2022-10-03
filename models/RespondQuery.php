@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[ExecutorTask]].
+ * This is the ActiveQuery class for [[Respond]].
  *
- * @see ExecutorTask
+ * @see Respond
  */
-class ExecutorTaskQuery extends \yii\db\ActiveQuery
+class RespondQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -18,6 +18,17 @@ class ExecutorTaskQuery extends \yii\db\ActiveQuery
      * {@inheritdoc}
      * @return ExecutorTask[]|array
      */
+    public static function selectChallengers(int $id): array
+    {
+        return Respond::find()
+            ->where(['task_id' => $id])
+            ->all();
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return Respond[]|array
+     */
     public function all($db = null)
     {
         return parent::all($db);
@@ -25,7 +36,7 @@ class ExecutorTaskQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return ExecutorTask|array|null
+     * @return Respond|array|null
      */
     public function one($db = null)
     {

@@ -14,6 +14,14 @@ class ExecutorCategoryQuery extends \yii\db\ActiveQuery
         return $this->andWhere('[[status]]=1');
     }*/
 
+    public static function selectExecutorCategoriesId(int $id)
+    {
+        return ExecutorCategory::find()
+            ->select('category_id')
+            ->where(['executor_id' => $id])
+            ->column();
+    }
+
     /**
      * {@inheritdoc}
      * @return ExecutorCategory[]|array

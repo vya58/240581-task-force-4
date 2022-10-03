@@ -14,6 +14,13 @@ class CustomerQuery extends \yii\db\ActiveQuery
         return $this->andWhere('[[status]]=1');
     }*/
 
+    public static function selectCustomer($id)
+    {
+        return Customer::find()
+            ->where(['customer_id' => $id])
+            ->all();
+    }
+
     /**
      * {@inheritdoc}
      * @return Customer[]|array

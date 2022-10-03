@@ -5,6 +5,7 @@
  */
 
 use yii\helpers\Html;
+use \yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\TaskfilterForm;
 
@@ -18,10 +19,13 @@ $this->title = 'Новое'; ?>
             <div class="task-card">
                 <div class="header-task">
                     <!-- Добавить ссылку на страницу задачи-->
-                    <a href="#" class="link link--block link--big">
-                        <?= Html::encode($task->task_name) ?>
-                        <p class="price price--task"><?= Html::encode($task->task_budget) ?> ₽</p>
-                    </a>
+                    <a href="<?= Url::to(
+                            ['/tasks/view', 'id' => $task->task_id]
+                        ) ?>"
+                           class="link link--block link--big">
+                            <?= Html::encode($task->task_name) ?>
+                        </a>
+                    <p class="price price--task"><?= Html::encode($task->task_budget) ?> ₽</p>
                 </div>
                 <p class="info-text">
                     <span class="current-time">

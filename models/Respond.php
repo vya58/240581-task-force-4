@@ -5,23 +5,27 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "executor_task".
+ * This is the model class for table "respond".
  *
- * @property int $id
+ * @property int $respond_id
  * @property int $executor_id
  * @property int $task_id
+ * @property int|null $accepted
+ * @property int|null $challenger_price
+ * @property string $date_add
+ * @property string|null $promising_message
  *
  * @property Executor $executor
  * @property Task $task
  */
-class ExecutorTask extends \yii\db\ActiveRecord
+class Respond extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'executor_task';
+        return 'respond';
     }
 
     /**
@@ -30,8 +34,10 @@ class ExecutorTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['executor_id', 'task_id'], 'required'],
-            [['executor_id', 'task_id'], 'integer'],
+            [['executor_id', 'task_id', 'date_add'], 'required'],
+            [['executor_id', 'task_id', 'accepted', 'challenger_price'], 'integer'],
+            [['date_add'], 'safe'],
+            [['promising_message'], 'string', 'max' => 255],
             [['task_id', 'executor_id'], 'unique', 'targetAttribute' => ['task_id', 'executor_id']],
             [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
@@ -44,9 +50,13 @@ class ExecutorTask extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'respond_id' => 'ID отклика',
             'executor_id' => 'ID исполнителя',
             'task_id' => 'ID задания',
+            'accepted' => 'Принято к исполнению',
+            'challenger_price' => 'Цена исполнителя',
+            'date_add' => 'Дата отклика',
+            'promising_message' => 'Сообщение исполнителя',
         ];
     }
 
@@ -72,10 +82,10 @@ class ExecutorTask extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return ExecutorTaskQuery the active query used by this AR class.
+     * @return RespondQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ExecutorTaskQuery(get_called_class());
+        return new RespondQuery(get_called_class());
     }
 }

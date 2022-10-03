@@ -13,6 +13,7 @@ use Yii;
  * @property string $executor_email
  * @property string $executor_password
  * @property string|null $executor_avatar
+ * @property string $executor_date_add
  * @property string|null $executor_phone
  * @property string|null $executor_telegram
  * @property string|null $personal_information
@@ -20,18 +21,45 @@ use Yii;
  * @property float|null $executor_rating
  * @property int|null $executor_status
  * @property string|null $executor_birthday
- * @property string $executor_date_add
  *
  * @property Category[] $categories
  * @property City $city
  * @property ExecutorCategory[] $executorCategories
- * @property ExecutorTask[] $executorTasks
- * @property Review[] $reviews
+ * @property Respond[] $responds
  * @property Task[] $tasks
  * @property Task[] $tasks0
  */
 class Executor extends \yii\db\ActiveRecord
 {
+    public const STATUS_FREE = 'Открыт для новых заказов';
+    public const STATUS_BUSY = 'Занят';
+
+    private int $age;
+
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    public function setAge(int $age = 0): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    public function getReviw()
+    {
+        return $this->review;
+    }
+
+    public function setReviw(array $review = []): self
+    {
+        $this->age = $review;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,15 +74,18 @@ class Executor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['city_id', 'count_tasks', 'executor_status'], 'integer'],
+            [['city_id', 'count_tasks'], 'integer'],
             [['executor_name', 'executor_email', 'executor_password', 'executor_date_add'], 'required'],
+            [['executor_date_add', 'executor_birthday'], 'safe'],
+            [['personal_information'], 'string'],
+            [['executor_status'], 'string'],
             [['executor_rating'], 'number'],
-            [['executor_birthday', 'executor_date_add'], 'safe'],
             [['executor_name'], 'string', 'max' => 50],
-            [['executor_email', 'executor_password', 'executor_avatar', 'personal_information'], 'string', 'max' => 255],
+            [['executor_email', 'executor_password', 'executor_avatar'], 'string', 'max' => 255],
             [['executor_phone'], 'string', 'max' => 11],
             [['executor_telegram'], 'string', 'max' => 64],
             [['executor_email'], 'unique'],
+            ['executor_email', 'email'],
             [['executor_avatar'], 'unique'],
             [['executor_phone'], 'unique'],
             [['executor_telegram'], 'unique'],
@@ -92,8 +123,7 @@ class Executor extends \yii\db\ActiveRecord
      */
     public function getCategories()
     {
-        return $this->hasMany(Category::class, ['category_id' => 'category_id'])
-            ->viaTable('executor_category', ['executor_id' => 'executor_id']);
+        return $this->hasMany(Category::class, ['category_id' => 'category_id'])->viaTable('executor_category', ['executor_id' => 'executor_id']);
     }
 
     /**
@@ -117,23 +147,13 @@ class Executor extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[ExecutorTasks]].
+     * Gets query for [[Responds]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorTaskQuery
+     * @return \yii\db\ActiveQuery|RespondQuery
      */
-    public function getExecutorTasks()
+    public function getResponds()
     {
-        return $this->hasMany(ExecutorTask::class, ['executor_id' => 'executor_id']);
-    }
-
-    /**
-     * Gets query for [[Reviews]].
-     *
-     * @return \yii\db\ActiveQuery|ReviewQuery
-     */
-    public function getReviews()
-    {
-        return $this->hasMany(Review::class, ['executor_id' => 'executor_id']);
+        return $this->hasMany(Respond::class, ['executor_id' => 'executor_id']);
     }
 
     /**
@@ -153,8 +173,7 @@ class Executor extends \yii\db\ActiveRecord
      */
     public function getTasks0()
     {
-        return $this->hasMany(Task::class, ['task_id' => 'task_id'])
-            ->viaTable('executor_task', ['executor_id' => 'executor_id']);
+        return $this->hasMany(Task::class, ['task_id' => 'task_id'])->viaTable('respond', ['executor_id' => 'executor_id']);
     }
 
     /**
