@@ -2,14 +2,10 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Executor;
-use app\models\ExecutorCategoryQuery;
-use app\models\ExecutorQuery;
-use app\models\CustomerQuery;
-use app\models\CategoryQuery;
 use app\models\Task;
-use app\models\TaskQuery;
+use app\models\helpers\FormatDataHelper;
+use yii\web\NotFoundHttpException;
 
 class UserController extends \yii\web\Controller
 {
@@ -19,63 +15,38 @@ class UserController extends \yii\web\Controller
      * @return string - код страницы просмотра задания
      */
 
-    public function actionView()
+    public function actionView(int $id)
     {
+        $executor = Executor::find()
+            ->with('city', 'categories', 'tasks')
+            ->where(['executor_id' => $id])
+            ->one();
 
-        $executor = new Executor();
-
-        $request = Yii::$app->request;
-
-        $executorId = $request->get('id');
-
-        $executorCategoriesId = ExecutorCategoryQuery::selectExecutorCategoriesId($executorId);
-
-        $executor = ExecutorQuery::selectExecutor($executorId);
+        if (!$executor) {
+            throw new NotFoundHttpException();
+        }
 
         $city = $executor->city;
 
-        $executorCategories = CategoryQuery::selectCategories($executorCategoriesId);
+        $executorCategories = $executor->categories;
 
-        $age = calculateAge($executor->executor_birthday);
-        $executor =  $executor->setAge($age);
+        $executorTasks = $executor->tasks;
 
-        $registationData = formatData($executor->executor_date_add);
+        $taskCustomers = Task::find()
+            ->with('customer')
+            ->where(['executor_id' => $id])
+            ->all();
 
-        $executorTasks = TaskQuery::selectExecutorTasks($executorId);
+        $executorAge = FormatDataHelper::calculateAge($executor->executor_birthday);
 
-        $phone = phone_format($executor->executor_phone);
+        $executorRating = FormatDataHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
 
-        $executorInformation = [
-            'countGrade' => 0,
-            'sumGrade' => 0,
-            'countFail' => 0,
-            'registretionDate' => $registationData,
-            'status' => $executor->executor_status,
-            'phone' => $phone,
-            'email' => $executor->executor_email,
-            'telegram' => $executor->executor_telegram,
-        ];
+        $executor->executor_date_add = FormatDataHelper::formatData($executor->executor_date_add);
 
+        $executor->executor_status = Executor::getStatusMap()[$executor->executor_status];
 
-        $status = [];
-
-        foreach ($executorTasks as  $executorTask) {
-            $customer = CustomerQuery::selectCustomer($executorTask->customer_id);
-
-            $customersInformation[$customer[0]['customer_id']]['customer_avatar'] = $customer[0]['customer_avatar'];
-            
-            if (Task::STATUS_FAILED === $executorTask->task_status) {
-                $status[] = $executorTask->task_status;
-            }
-
-            if (0 !== $executorTask->grade) {
-                $executorInformation['countGrade'] = $executorInformation['countGrade'] + 1;
-            }
-            $executorInformation['sumGrade'] = $executorInformation['sumGrade'] + $executorTask->grade;
-        }
-
-        $executorInformation['countFail'] = count($status);
-
+        $executor->executor_phone = FormatDataHelper::formatPhone($executor->executor_phone);
+        
         return $this->render(
             'view',
             [
@@ -83,8 +54,9 @@ class UserController extends \yii\web\Controller
                 'executorCategories' => $executorCategories,
                 'city' => $city,
                 'executorTasks' => $executorTasks,
-                'executorInformation' => $executorInformation,
-                'customersInformation' => $customersInformation,
+                'taskCustomers' => $taskCustomers,
+                'executorAge' => $executorAge,
+                'executorRating' => $executorRating,
             ]
         );
     }

@@ -71,8 +71,10 @@ class Customer extends \yii\db\ActiveRecord
      * {@inheritdoc}
      * @return CustomerQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new CustomerQuery(get_called_class());
     }
+    */
 }

@@ -35,9 +35,8 @@ CREATE TABLE executor (
     executor_phone VARCHAR(11) UNIQUE,
     executor_telegram VARCHAR(64) UNIQUE,
     personal_information TEXT,
-    count_tasks INT UNSIGNED,
-    executor_rating FLOAT (2,1) UNSIGNED,
-    executor_status TINYINT DEFAULT 0 check (executor_status in (0, 1)),
+    executor_rating INT UNSIGNED,
+    executor_status VARCHAR(10),
     executor_birthday DATE,
     FOREIGN KEY (city_id) REFERENCES city (city_id)
 );
@@ -66,6 +65,9 @@ CREATE TABLE task (
     task_date_create DATETIME NOT NULL,
     task_status VARCHAR(10),
     task_deadline DATETIME,
+    grade INT,
+    review VARCHAR(255),
+    review_data_create DATETIME NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
     FOREIGN KEY (executor_id) REFERENCES executor (executor_id),
     FOREIGN KEY (category_id) REFERENCES category (category_id),

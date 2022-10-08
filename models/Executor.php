@@ -28,37 +28,14 @@ use Yii;
  * @property Respond[] $responds
  * @property Task[] $tasks
  * @property Task[] $tasks0
+ * @property int tasksCount
+ * @property int sumGrade
+ * @property int countGrade
  */
 class Executor extends \yii\db\ActiveRecord
 {
-    public const STATUS_FREE = 'Открыт для новых заказов';
-    public const STATUS_BUSY = 'Занят';
-
-    private int $age;
-
-    public function getAge()
-    {
-        return $this->age;
-    }
-
-    public function setAge(int $age = 0): self
-    {
-        $this->age = $age;
-
-        return $this;
-    }
-
-    public function getReviw()
-    {
-        return $this->review;
-    }
-
-    public function setReviw(array $review = []): self
-    {
-        $this->age = $review;
-
-        return $this;
-    }
+    public const STATUS_FREE = 'Free';
+    public const STATUS_BUSY = 'Busy';
 
     /**
      * {@inheritdoc}
@@ -113,6 +90,19 @@ class Executor extends \yii\db\ActiveRecord
             'executor_status' => 'Статус исполнителя',
             'executor_birthday' => 'День рождения исполнителя',
             'executor_date_add' => 'Дата регистрации',
+        ];
+    }
+
+    /**
+     * Функция возвращения "карты" статусов исполнителя
+     * 
+     * @return array - массив со статусами исполнителя
+     */
+    public static function getStatusMap(): array
+    {
+        return [
+            self::STATUS_FREE => 'Открыт для новых заказов',
+            self::STATUS_BUSY => 'Занят',
         ];
     }
 
@@ -176,12 +166,34 @@ class Executor extends \yii\db\ActiveRecord
         return $this->hasMany(Task::class, ['task_id' => 'task_id'])->viaTable('respond', ['executor_id' => 'executor_id']);
     }
 
+    public function getTasksCount(): int
+    {
+        return $this->getTasks()->count();
+    }
+
+    public function getFailTasksCount(): int
+    {
+        return $this->getTasks()->where(['task_status' => Task::STATUS_FAILED])->count();
+    }
+
+    public function getSumGrade(): ?int
+    {
+        return $this->getTasks()->sum('grade');
+    }
+
+    public function getCountGrade(): int
+    {
+        return $this->getTasks()->where(['not in', 'grade', [null]])->count();
+    }
+
     /**
      * {@inheritdoc}
      * @return ExecutorQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new ExecutorQuery(get_called_class());
     }
+    */
 }

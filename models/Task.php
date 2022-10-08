@@ -30,9 +30,11 @@ use yii\web\NotFoundHttpException;
  * @property City $city
  * @property Customer $customer
  * @property Executor $executor
+ * @property ExecutorRanking $executorRanking
  * @property Executor[] $executors
  * @property File[] $files
  * @property Respond[] $responds
+ * @property StatusMap[] $statusMap
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -93,6 +95,22 @@ class Task extends \yii\db\ActiveRecord
             'grade' => 'Оценка задания',
             'review' => 'Отзыв',
             'review_date_create' => 'Дата создания отзыва',
+        ];
+    }
+
+    /**
+     * Функция возвращения "карты" статусов задания
+     * 
+     * @return array - массив со статусами заданий
+     */
+    public static function getStatusMap(): array
+    {
+        return [
+            self::STATUS_NEW => 'Новое',
+            self::STATUS_CANCELED => 'Отменено',
+            self::STATUS_IN_WORK => 'В работе',
+            self::STATUS_PERFORMED => 'Выполнено',
+            self::STATUS_FAILED => 'Провалено',
         ];
     }
 
@@ -170,28 +188,10 @@ class Task extends \yii\db\ActiveRecord
      * {@inheritdoc}
      * @return TaskQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new TaskQuery(get_called_class());
     }
-
-    /**
-     * Функция выборки параметров задания
-     * @param int $id - task_id (id задания)
-     * 
-     * @return array - результат выборки
-     */
-    public function selectTask(int $id)
-    {
-        $task = Task::find()
-            ->with('category', 'executor')
-            ->where(['task_id' => $id])
-            ->one();
-
-        if (!$task) {
-            throw new NotFoundHttpException();
-        }
-
-        return $task;
-    }
+    */
 }

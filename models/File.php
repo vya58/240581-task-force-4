@@ -63,8 +63,10 @@ class File extends \yii\db\ActiveRecord
      * {@inheritdoc}
      * @return FileQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new FileQuery(get_called_class());
     }
+    */
 }

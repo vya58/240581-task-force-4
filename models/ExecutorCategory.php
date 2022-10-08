@@ -74,8 +74,11 @@ class ExecutorCategory extends \yii\db\ActiveRecord
      * {@inheritdoc}
      * @return ExecutorCategoryQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new ExecutorCategoryQuery(get_called_class());
     }
+    */
+    /*
 }

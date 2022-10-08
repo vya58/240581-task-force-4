@@ -25,23 +25,23 @@ $this->title = 'Новое'; ?>
         <p class="map-address">Новый арбат, 23, к. 1</p>
     </div>
     <h4 class="head-regular">Отклики на задание</h4>
-    <?php foreach ($challengersInformation as $challengerInformation) : ?>
+    <?php foreach ($task->responds as $respond) : ?>
         <div class="response-card">
-            <img class="customer-photo" src="<?= Html::encode($challengerInformation['executor_avatar']) ?>" width="146" height="156" alt="Фото заказчиков">
+            <img class="customer-photo" src="<?= Html::encode($respond->executor->executor_avatar) ?>" width="146" height="156" alt="Фото заказчиков">
             <div class="feedback-wrapper">
-                <a href="<?= Url::to(['/user/view', 'id' => $challengerInformation['executor_id']]) ?>" class="link link--block link--big"><?= Html::encode($challengerInformation['executor_name']) ?></a>
+                <a href="<?= Url::to(['/user/view', 'id' => $respond->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($respond->executor->executor_name) ?></a>
                 <div class="response-wrapper">
                     <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                    <p class="reviews"><?= Html::encode($challengerInformation['countTasks']) ?></p>
+                    <p class="reviews"><?= Html::encode($respond->executor->tasksCount) ?></p>
                 </div>
                 <p class="response-message">
-                    <?= Html::encode($challengerInformation['promising_message']) ?>
+                    <?= Html::encode($respond->promising_message) ?>
                 </p>
 
             </div>
             <div class="feedback-wrapper">
-                <p class="info-text"><span class="current-time"><?= Yii::$app->formatter->asRelativeTime($challengerInformation['date_add']) ?> </span>назад</p>
-                <p class="price price--small"><?= Html::encode($challengerInformation['price']) ?></p>
+                <p class="info-text"><span class="current-time"><?= Yii::$app->formatter->asRelativeTime($respond->date_add) ?> </span>назад</p>
+                <p class="price price--small"><?= Html::encode($respond->challenger_price) ?></p>
             </div>
             <div class="button-popup">
                 <a href="#" class="button button--blue button--small">Принять</a>

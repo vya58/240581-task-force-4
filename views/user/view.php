@@ -17,7 +17,7 @@ $this->title = 'Профиль'; ?>
             <img class="card-photo" src="<?= Html::encode($executor->executor_avatar) ?>" width="191" height="190" alt="Фото пользователя">
             <div class="card-rate">
                 <div class="stars-rating big"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                <span class="current-rate"><?= Html::encode($executor->executor_rating) ?></span>
+                <span class="current-rate"><?= Html::encode($executorRating) ?></span>
             </div>
         </div>
         <p class="user-description">
@@ -30,21 +30,23 @@ $this->title = 'Профиль'; ?>
             <ul class="special-list">
                 <?php foreach ($executorCategories as $executorCategory) : ?>
                     <li class="special-item">
-                        <a href="#" class="link link--regular"><?= $executorCategory ?></a>
+                        <a href="#" class="link link--regular"><?= $executorCategory->category_name ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
         <div class="bio">
             <p class="head-info">Био</p>
-            <p class="bio-info"><span class="country-info">Россия</span>, <span class="town-info"><?= Html::encode($city->city_name) ?></span>, <span class="age-info"><?= Yii::$app->i18n->format('{n, plural, =0{} =1{# год} one{# год} few{# лет} many{# год} other{# лет}}', ['n' => $executor->age], 'ru_RU') ?></p>
+            <p class="bio-info"><span class="country-info">Россия</span>, <span class="town-info"><?= Html::encode($city->city_name) ?></span>, <span class="age-info"><?= Yii::$app->i18n->format('{n, plural, =0{} =1{# год} one{# год} few{# лет} many{# год} other{# лет}}', ['n' => $executorAge], 'ru_RU') ?></p>
         </div>
     </div>
     <h4 class="head-regular">Отзывы заказчиков</h4>
 
     <?php foreach ($executorTasks as $executorTask) : ?>
         <div class="response-card">
-            <img class="customer-photo" src="<?= Html::encode($customersInformation[$executorTask->customer_id]['customer_avatar']) ?>" width="120" height="127" alt="Фото заказчиков">
+            <?php $taskCustomer = Task::find()->with('customer')->where(['customer_id' =>$executorTask->customer_id])->one() ?>
+            
+            <img class="customer-photo" src="<?= Html::encode($taskCustomer->customer->customer_avatar) ?>" width="120" height="127" alt="Фото заказчиков">
             <div class="feedback-wrapper">
                 <p class="feedback"><?= Html::encode($executorTask->review) ?></p>
                 <p class="task">Задание «
@@ -69,26 +71,26 @@ $this->title = 'Профиль'; ?>
         <h4 class="head-card">Статистика исполнителя</h4>
         <dl class="black-list">
             <dt>Всего заказов</dt>
-            <dd><?= Html::encode($executor->count_tasks) ?> выполнено, <?= Html::encode($executorInformation['countFail']) ?> провалено</dd>
+            <dd><?= Html::encode($executor->tasksCount) ?> выполнено, <?= Html::encode($executor->failTasksCount) ?> провалено</dd>
             <dt>Место в рейтинге</dt>
-            <dd>25 место</dd>
+            <dd><?= Html::encode($executor->executor_rating) ?> место</dd>
             <dt>Дата регистрации</dt>
-            <dd><?= Html::encode($executorInformation['registretionDate']) ?></dd>
+            <dd><?= Html::encode($executor->executor_date_add) ?></dd>
             <dt>Статус</dt>
-            <dd><?= Html::encode($executorInformation['status']) ?></dd>
+            <dd><?= Html::encode($executor->executor_status) ?></dd>
         </dl>
     </div>
     <div class="right-card white">
         <h4 class="head-card">Контакты</h4>
         <ul class="enumeration-list">
             <li class="enumeration-item">
-                <a href="#" class="link link--block link--phone"><?= Html::encode($executorInformation['phone']) ?></a>
+                <a href="#" class="link link--block link--phone"><?= Html::encode($executor->executor_phone) ?></a>
             </li>
             <li class="enumeration-item">
-                <a href="#" class="link link--block link--email"><?= Html::encode($executorInformation['email']) ?></a>
+                <a href="#" class="link link--block link--email"><?= Html::encode($executor->executor_email) ?></a>
             </li>
             <li class="enumeration-item">
-                <a href="#" class="link link--block link--tg"><?= Html::encode($executorInformation['telegram']) ?></a>
+                <a href="#" class="link link--block link--tg"><?= Html::encode($executor->executor_telegram) ?></a>
             </li>
         </ul>
     </div>

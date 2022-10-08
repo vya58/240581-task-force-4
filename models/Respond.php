@@ -84,8 +84,10 @@ class Respond extends \yii\db\ActiveRecord
      * {@inheritdoc}
      * @return RespondQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new RespondQuery(get_called_class());
     }
+    */
 }
