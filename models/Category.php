@@ -14,6 +14,8 @@ use Yii;
  * @property ExecutorCategory[] $executorCategories
  * @property Executor[] $executors
  * @property Task[] $tasks
+ * @property Category[] $allCategories
+ * @property Category[] $categories
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -66,8 +68,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public function getExecutors()
     {
-        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])
-            ->viaTable('executor_category', ['category_id' => 'category_id']);
+        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])->viaTable('executor_category', ['category_id' => 'category_id']);
     }
 
     /**
@@ -84,8 +85,34 @@ class Category extends \yii\db\ActiveRecord
      * {@inheritdoc}
      * @return CategoryQuery the active query used by this AR class.
      */
+    /*
     public static function find()
     {
         return new CategoryQuery(get_called_class());
+    }
+*/
+     /**
+     * {@inheritdoc}
+     * @return Category[]|array
+     */
+    public static function getAllCategories()
+    {
+        return Category::find()
+            ->select('category_name')
+            ->indexBy('category_id')
+            ->column();
+    }
+
+    /**
+     * {@inheritdoc}
+     * @return Category[]|array
+     */
+    public static function getCategories(array $ids)
+    {
+        return Category::find()
+            ->select('category_name')
+            ->where(['in', 'category_id', $ids])
+            ->indexBy('category_id')
+            ->column();
     }
 }

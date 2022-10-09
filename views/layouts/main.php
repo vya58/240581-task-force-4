@@ -4,6 +4,7 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
+use \yii\helpers\Url;
 use app\widgets\Alert;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
@@ -40,7 +41,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
             <div class="nav-wrapper">
                 <ul class="nav-list">
                     <li class="list-item list-item--active">
-                        <a class="link link--nav">Новое</a>
+                        <a href="<?= Url::to('/index.php?r=tasks') ?>" class="link link--nav">Новое</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="link link--nav">Мои задания</a>
@@ -55,7 +56,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
             </div>
         </nav>
         <div class="user-block">
-            <a href="#">
+            <a href="">
                 <img class="user-photo" src="img/man-glasses.png" width="55" height="55" alt="Аватар">
             </a>
             <div class="user-menu">

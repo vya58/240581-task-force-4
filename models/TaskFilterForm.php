@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use app\models\Task;
 use yii\base\Model;
 
 /**
@@ -13,6 +13,8 @@ use yii\base\Model;
  * @property bool $distantWork
  * @property bool $noResponse
  * @property string|int $period
+ * 
+ * @property NewTasks[] newTasks
  */
 class TaskFilterForm extends Model
 {
@@ -69,10 +71,11 @@ class TaskFilterForm extends Model
     }
 
     /**
+     * Функция выборки параметров нового задания
      * 
      * @return array - результат выборки
      */
-    public function selectTasks(): array
+    public function getNewTasks(): array
     {
         $query = Task::find()
             ->filterWhere([
