@@ -38,6 +38,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
             <a href='#' class="header-logo">
                 <img class="logo-image" src="img/logotype.png" width=227 height=60 alt="taskforce">
             </a>
+            <?php if (!Yii::$app->user->isGuest): ?>
             <div class="nav-wrapper">
                 <ul class="nav-list">
                     <li class="list-item list-item--active">
@@ -54,7 +55,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
                     </li>
                 </ul>
             </div>
+            <?php endif; ?>
         </nav>
+        <?php if (!Yii::$app->user->isGuest): ?>
         <div class="user-block">
             <a href="">
                 <img class="user-photo" src="img/man-glasses.png" width="55" height="55" alt="Аватар">
@@ -76,10 +79,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </header>
-    <main class="container main-content">
+    <div class="container">
         <?= $content ?>
-    </main>
+    </div>
 
     <?php $this->endBody() ?>
 </body>

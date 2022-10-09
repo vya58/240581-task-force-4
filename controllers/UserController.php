@@ -40,15 +40,13 @@ class UserController extends \yii\web\Controller
 
         $executorAge = CalculateHelper::calculateAge($executor->executor_birthday);
 
-        $executorRating = CalculateHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
+        $executorRatingPosition = CalculateHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
 
         $executor->executor_date_add = FormatDataHelper::formatData($executor->executor_date_add);
 
         $executor->executor_status = Executor::getStatusMap()[$executor->executor_status];
 
         $executor->executor_phone = FormatDataHelper::formatPhone($executor->executor_phone);
-
-        $executorRating = $executor->rating;
 
         return $this->render(
             'view',
@@ -59,8 +57,7 @@ class UserController extends \yii\web\Controller
                 'executorTasks' => $executorTasks,
                 'taskCustomers' => $taskCustomers,
                 'executorAge' => $executorAge,
-                'executorRating' => $executorRating,
-                'executorRating' => $executorRating,
+                'executorRatingPosition' => $executorRatingPosition,
             ]
         );
     }

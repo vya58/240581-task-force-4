@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\db\Expression;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 use app\models\Task;
 
 /**
@@ -35,7 +37,7 @@ use app\models\Task;
  * @property int CountGrade $countGrade
  * @property int|null Rating $rating
  */
-class Executor extends \yii\db\ActiveRecord
+class Executor extends ActiveRecord implements IdentityInterface
 {
     public const STATUS_FREE = 'Free';
     public const STATUS_BUSY = 'Busy';
@@ -54,7 +56,7 @@ class Executor extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['city_id', 'count_tasks'], 'integer'],
+            [['city_id'], 'integer'],
             [['executor_name', 'executor_email', 'executor_password', 'executor_date_add'], 'required'],
             [['executor_date_add', 'executor_birthday'], 'safe'],
             [['personal_information'], 'string'],
@@ -226,4 +228,74 @@ class Executor extends \yii\db\ActiveRecord
         return new ExecutorQuery(get_called_class());
     }
     */
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    /*
+    public static function findByUsername($username)
+    {
+        foreach (self::$users as $user) {
+            if (strcasecmp($user['username'], $username) === 0) {
+                return new static($user);
+            }
+        }
+
+        return null;
+    }
+*/
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return $this->password === $password;
+    }
 }

@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Task;
-use app\models\TaskfilterForm;
+use app\models\forms\TaskfilterForm;
 use app\models\Category;
 use app\models\helpers\FormatDataHelper;
 use yii\web\NotFoundHttpException;
