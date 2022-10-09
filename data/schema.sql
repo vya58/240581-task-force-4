@@ -67,7 +67,7 @@ CREATE TABLE task (
     task_deadline DATETIME,
     grade INT,
     review VARCHAR(255),
-    review_data_create DATETIME NOT NULL,
+    review_data_create DATETIME,
     FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
     FOREIGN KEY (executor_id) REFERENCES executor (executor_id),
     FOREIGN KEY (category_id) REFERENCES category (category_id),

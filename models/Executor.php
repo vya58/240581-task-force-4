@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Expression;
+use app\models\Task;
 
 /**
  * This is the model class for table "executor".
@@ -28,9 +30,10 @@ use Yii;
  * @property Respond[] $responds
  * @property Task[] $tasks
  * @property Task[] $tasks0
- * @property int tasksCount
- * @property int sumGrade
- * @property int countGrade
+ * @property int TasksCount $tasksCount
+ * @property int SumGrade $sumGrade
+ * @property int CountGrade $countGrade
+ * @property int|null Rating $rating
  */
 class Executor extends \yii\db\ActiveRecord
 {
@@ -185,6 +188,33 @@ class Executor extends \yii\db\ActiveRecord
     {
         return $this->getTasks()->where(['not in', 'grade', [null]])->count();
     }
+
+    public function getAverageGrade(): float
+    {
+        return $this->getTasks()
+            ->where(['IN', 'task_status', [Task::STATUS_PERFORMED, Task::STATUS_FAILED]])
+            ->average('grade');
+    }
+
+    public function getRating(): ?int
+    {
+        $data = Executor::find()
+            ->alias('e')
+            ->leftJoin(Task::tableName() . ' t', 't.executor_id = e.executor_id')
+            ->where(['IN', 't.task_status', [Task::STATUS_PERFORMED, Task::STATUS_FAILED]])
+            ->groupby(['e.executor_id'])
+            ->having(new Expression('AVG(t.grade) >= :grade', [':grade' => $this->getAverageGrade()]))
+            ->orderBy(['AVG(t.grade)' => SORT_DESC])
+            ->all();
+
+        for ($i = count($data) - 1; $i >= 0; $i--) {
+            if ($data[$i]->executor_id === $this->executor_id) {
+                return $i + 1;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * {@inheritdoc}

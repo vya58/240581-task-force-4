@@ -73,7 +73,7 @@ $this->title = 'Профиль'; ?>
             <dt>Всего заказов</dt>
             <dd><?= Html::encode($executor->tasksCount) ?> выполнено, <?= Html::encode($executor->failTasksCount) ?> провалено</dd>
             <dt>Место в рейтинге</dt>
-            <dd><?= Html::encode($executor->executor_rating) ?> место</dd>
+            <dd><?= Html::encode($executorRating) ?> место</dd>
             <dt>Дата регистрации</dt>
             <dd><?= Html::encode($executor->executor_date_add) ?></dd>
             <dt>Статус</dt>

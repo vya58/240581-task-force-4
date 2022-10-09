@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Executor;
 use app\models\Task;
+use app\models\helpers\CalculateHelper;
 use app\models\helpers\FormatDataHelper;
 use yii\web\NotFoundHttpException;
 
@@ -37,16 +38,18 @@ class UserController extends \yii\web\Controller
             ->where(['executor_id' => $id])
             ->all();
 
-        $executorAge = FormatDataHelper::calculateAge($executor->executor_birthday);
+        $executorAge = CalculateHelper::calculateAge($executor->executor_birthday);
 
-        $executorRating = FormatDataHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
+        $executorRating = CalculateHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
 
         $executor->executor_date_add = FormatDataHelper::formatData($executor->executor_date_add);
 
         $executor->executor_status = Executor::getStatusMap()[$executor->executor_status];
 
         $executor->executor_phone = FormatDataHelper::formatPhone($executor->executor_phone);
-        
+
+        $executorRating = $executor->rating;
+
         return $this->render(
             'view',
             [
@@ -56,6 +59,7 @@ class UserController extends \yii\web\Controller
                 'executorTasks' => $executorTasks,
                 'taskCustomers' => $taskCustomers,
                 'executorAge' => $executorAge,
+                'executorRating' => $executorRating,
                 'executorRating' => $executorRating,
             ]
         );
