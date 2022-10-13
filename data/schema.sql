@@ -1,4 +1,4 @@
-CREATE DATABASE task_force
+CREATE DATABASE tf_db
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
 
@@ -15,40 +15,36 @@ CREATE TABLE city (
     city_longitude VARCHAR(255)
 );
 
-CREATE TABLE customer (
-    customer_id INT PRIMARY KEY AUTO_INCREMENT,
-    customer_name VARCHAR(50) NOT NULL,
-    customer_email VARCHAR(255) NOT NULL UNIQUE,
-    customer_password CHAR(255) NOT NULL,
-    customer_avatar VARCHAR(255) UNIQUE,
-    customer_date_add DATE NOT NULL
-);
-
-CREATE TABLE executor (
-    executor_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE user (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password CHAR(255) NOT NULL,
+    avatar VARCHAR(255) UNIQUE,
+    date_add DATETIME NOT NULL DEFAULT NOW(),
+    user_role VARCHAR(45) NOT NULL,
     city_id INT,
-    executor_name VARCHAR(50) NOT NULL,
-    executor_email VARCHAR(255) NOT NULL UNIQUE,
-    executor_password CHAR(255) NOT NULL,
-    executor_avatar VARCHAR(255) UNIQUE,
-    executor_date_add DATETIME NOT NULL,
-    executor_phone VARCHAR(11) UNIQUE,
-    executor_telegram VARCHAR(64) UNIQUE,
+    phone VARCHAR(11) UNIQUE,
+    telegram VARCHAR(64) UNIQUE,
     personal_information TEXT,
-    executor_rating INT UNSIGNED,
-    executor_status VARCHAR(10),
-    executor_birthday DATE,
+    rating INT UNSIGNED,
+    status VARCHAR(10),
+    birthday DATE,
     FOREIGN KEY (city_id) REFERENCES city (city_id)
 );
 
-CREATE TABLE executor_category (
+
+
+CREATE TABLE user_category (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    executor_id INT NOT NULL,
+    user_id INT NOT NULL,
     category_id INT NOT NULL,
-    FOREIGN KEY (executor_id) REFERENCES executor (executor_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE,
-    UNIQUE KEY relation_row_unique (category_id, executor_id)
+    UNIQUE KEY relation_row_unique (category_id, user_id)
 );
+
+
 
 CREATE TABLE task (
     task_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -68,8 +64,8 @@ CREATE TABLE task (
     grade INT,
     review VARCHAR(255),
     review_data_create DATETIME,
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
-    FOREIGN KEY (executor_id) REFERENCES executor (executor_id),
+    FOREIGN KEY (customer_id) REFERENCES user (user_id),
+    FOREIGN KEY (executor_id) REFERENCES user (user_id),
     FOREIGN KEY (category_id) REFERENCES category (category_id),
     FOREIGN KEY (city_id) REFERENCES city (city_id)
 );
@@ -87,9 +83,9 @@ CREATE TABLE respond (
     task_id INT NOT NULL,
     accepted TINYINT DEFAULT 0,
     challenger_price INT UNSIGNED,
-    date_add DATETIME NOT NULL,
+    date_add DATETIME NOT NULL DEFAULT NOW(),
     promising_message VARCHAR(255),
-    FOREIGN KEY (executor_id) REFERENCES executor (executor_id) ON DELETE CASCADE,
+    FOREIGN KEY (executor_id) REFERENCES user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (task_id) REFERENCES task (task_id) ON DELETE CASCADE,
     UNIQUE KEY relation_row_unique (task_id, executor_id)
 );

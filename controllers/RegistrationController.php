@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use Yii;
 use app\models\forms\RegistrationForm;
-use TaskForce\exceptions\DataSaveException;
 use yii\filters\AccessControl;
 
 class RegistrationController extends \yii\web\Controller
@@ -29,19 +28,22 @@ class RegistrationController extends \yii\web\Controller
     public function actionIndex()
     {
         $registrationForm = new RegistrationForm();
+
         if (Yii::$app->request->getIsPost()) {
             $registrationForm->load(Yii::$app->request->post());
-            
-            if ($registrationForm->validate()) {
-                $registrationForm->createExecutor();
-                return $this->goHome();
-            }
-            
         }
+
+        if ($registrationForm->validate()) {
+
+            $registrationForm->createUser($registrationForm->isExecutor);
+
+            return $this->goHome();
+        }
+
         return $this->render(
             'index',
             [
-                'registerForm' => $registrationForm,
+                'registrationForm' => $registrationForm,
             ]
         );
     }

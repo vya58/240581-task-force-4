@@ -5,30 +5,34 @@ namespace app\models\forms;
 use Yii;
 use yii\base\Model;
 use app\models\City;
-use app\models\Executor;
 use app\models\User;
-use DateTime;
 
 class RegistrationForm extends Model
 {
-    public string $name;
-    public string $email;
-    public string $city;
-    public string $password;
-    public string $passwordRepeat;
+    public string $name = '';
+    public string $email = '';
+    public string $city = '';
+    public string $password = '';
+    public string $passwordRepeat = '';
     public bool $isExecutor = false;
 
     public function rules(): array
     {
         return [
-            [['name', 'email', 'city', 'password', 'passwordRepeat', 'isExecutor'], 'required'],
+            [['name', 'email', 'password', 'passwordRepeat', 'isExecutor'], 'required'],
+
+            [['city'], 'required', 'when' => function ($model) {
+                return $this->isExecutor === true;
+            }],
             [['name', 'email'], 'string', 'max' => 255],
             [['password', 'passwordRepeat'], 'string', 'min' => 6, 'max' => 64],
             [['passwordRepeat'], 'compare', 'compareAttribute' => 'password'],
             [['email'], 'email'],
-            [['email'], 'unique', 'targetClass' => Executor::class, 'targetAttribute' => ['email' => 'executor_email'], 'message' => 'Пользователь с таким e-mail уже существует'],
+            [['email'], 'unique', 'targetClass' => User::class, 'targetAttribute' => ['email' => 'email'], 'message' => 'Пользователь с таким e-mail уже существует'],
+            [['city'], 'exist', 'when' => function ($model) {
+                return $this->isExecutor === true;
+            }, 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'city_id']],
             [['isExecutor'], 'boolean'],
-            [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'city_id']],
         ];
     }
 
@@ -44,26 +48,19 @@ class RegistrationForm extends Model
         ];
     }
 
-    public function loadToUser()
+    public function createUser($role)
     {
-        $user = new User;
+        $user = new User();
+        $user->name = $this->name;
         $user->email = $this->email;
+        $user->user_role = User::ROLE_CUCTOMER;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-        $user->login = $this->login;
-        $user->city_id = $this->cityId;
 
-        return $user;
-    }
+        if ($role) {
+            $user->user_role = User::ROLE_EXECUTOR;
+        }
 
-    public function createExecutor()
-    {
-        $executor = new Executor();
-        $executor->executor_name = $this->name;
-        $executor->executor_email = $this->email;
-        $executor->city_id = $this->city;
-        $executor->executor_password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-        $executor->executor_date_add = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd');
-
-        $executor->save();
+        $user->city_id = $this->city;
+        $user->save();
     }
 }

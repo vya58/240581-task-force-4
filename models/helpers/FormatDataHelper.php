@@ -15,10 +15,10 @@ class FormatDataHelper
      *
      * @return string - дата в формате: ХХ месяца ХХХХ, 00:00
      */
-    public static function formatData($data)
+    public static function formatData($data = null): ?string
     {
-        if (!$data) {
-            return $data;
+        if (null === $data) {
+            return null;
         }
 
         $data = strtotime($data);
@@ -56,11 +56,15 @@ class FormatDataHelper
      *
      * @return string $res - номер телефона в формате "+7 (xxx) xxx-xx-xx"
      */
-    public static function formatPhone($phone)
+    public static function formatPhone($phone = null): ?string
     {
+        if(null === $phone) {
+            return null;
+        }
+
         $phone = trim($phone);
 
-        $res = preg_replace(
+        $result = preg_replace(
             array(
                 '/[\+]?([7|8])[-|\s]?\([-|\s]?(\d{3})[-|\s]?\)[-|\s]?(\d{3})[-|\s]?(\d{2})[-|\s]?(\d{2})/',
                 '/[\+]?([7|8])[-|\s]?(\d{3})[-|\s]?(\d{3})[-|\s]?(\d{2})[-|\s]?(\d{2})/',
@@ -80,6 +84,6 @@ class FormatDataHelper
             $phone
         );
 
-        return $res;
+        return $result;
     }
 }

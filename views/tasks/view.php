@@ -28,12 +28,12 @@ $this->title = 'Новое'; ?>
         <h4 class="head-regular">Отклики на задание</h4>
         <?php foreach ($task->responds as $respond) : ?>
             <div class="response-card">
-                <img class="customer-photo" src="<?= Html::encode($respond->executor->executor_avatar) ?>" width="146" height="156" alt="Фото заказчиков">
+                <img class="customer-photo" src="<?= Html::encode($respond->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
                 <div class="feedback-wrapper">
-                    <a href="<?= Url::to(['/user/view', 'id' => $respond->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($respond->executor->executor_name) ?></a>
+                    <a href="<?= Url::to(['/user/view', 'id' => $respond->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($respond->executor->name) ?></a>
                     <div class="response-wrapper">
-                        <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $respond->executor->rating]) ?></div>
-                        <p class="reviews"><?= Html::encode($respond->executor->tasksCount) ?></p>
+                        <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $respond->executor->averageGrade]) ?></div>
+                        <p class="reviews"><?= Html::encode($respond->executor->getCountGrade()) ?> отзыва</p>
                     </div>
                     <p class="response-message">
                         <?= Html::encode($respond->promising_message) ?>
@@ -41,7 +41,7 @@ $this->title = 'Новое'; ?>
 
                 </div>
                 <div class="feedback-wrapper">
-                    <p class="info-text"><span class="current-time"><?= Yii::$app->formatter->asRelativeTime($respond->date_add) ?> </span>назад</p>
+                    <p class="info-text"><span class="current-time"><?= isset($respond->date_add) ? Yii::$app->formatter->asRelativeTime($respond->date_add) : '' ?> </span>назад</p>
                     <p class="price price--small"><?= Html::encode($respond->challenger_price) ?></p>
                 </div>
                 <div class="button-popup">

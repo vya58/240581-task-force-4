@@ -12,8 +12,8 @@ use Yii;
  * @property string|null $city_latitude
  * @property string|null $city_longitude
  *
- * @property Executor[] $executors
  * @property Task[] $tasks
+ * @property User[] $users
  */
 class City extends \yii\db\ActiveRecord
 {
@@ -51,19 +51,9 @@ class City extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Executors]].
-     *
-     * @return \yii\db\ActiveQuery|ExecutorQuery
-     */
-    public function getExecutors()
-    {
-        return $this->hasMany(Executor::class, ['city_id' => 'city_id']);
-    }
-
-    /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|TaskQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getTasks()
     {
@@ -71,13 +61,12 @@ class City extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
-     * @return CityQuery the active query used by this AR class.
+     * Gets query for [[Users]].
+     *
+     * @return \yii\db\ActiveQuery
      */
-    /*
-    public static function find()
+    public function getUsers()
     {
-        return new CityQuery(get_called_class());
+        return $this->hasMany(User::class, ['city_id' => 'city_id']);
     }
-    */
 }

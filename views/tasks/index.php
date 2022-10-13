@@ -9,7 +9,6 @@ use \yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\forms\TaskfilterForm;
 
-
 $this->title = 'Новое'; ?>
 <main class="container main-content">
     <div class="left-column">
@@ -75,7 +74,7 @@ $this->title = 'Новое'; ?>
         <?php endif; ?>
     </div>
 
-    </div>
+    
     <div class="right-column">
         <div class="right-card black">
             <div class="search-form">
@@ -164,5 +163,5 @@ $this->title = 'Новое'; ?>
             </div>
         </div>
     </div>
-    </div>
+    
 </main>

@@ -15,7 +15,7 @@ use Yii;
  * @property string $date_add
  * @property string|null $promising_message
  *
- * @property Executor $executor
+ * @property User $executor
  * @property Task $task
  */
 class Respond extends \yii\db\ActiveRecord
@@ -34,12 +34,12 @@ class Respond extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['executor_id', 'task_id', 'date_add'], 'required'],
+            [['executor_id', 'task_id'], 'required'],
             [['executor_id', 'task_id', 'accepted', 'challenger_price'], 'integer'],
             [['date_add'], 'safe'],
             [['promising_message'], 'string', 'max' => 255],
             [['task_id', 'executor_id'], 'unique', 'targetAttribute' => ['task_id', 'executor_id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'user_id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
         ];
     }
@@ -63,31 +63,20 @@ class Respond extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Executor]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getExecutor()
     {
-        return $this->hasOne(Executor::class, ['executor_id' => 'executor_id']);
+        return $this->hasOne(User::class, ['user_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[Task]].
      *
-     * @return \yii\db\ActiveQuery|TaskQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getTask()
     {
         return $this->hasOne(Task::class, ['task_id' => 'task_id']);
     }
-
-    /**
-     * {@inheritdoc}
-     * @return RespondQuery the active query used by this AR class.
-     */
-    /*
-    public static function find()
-    {
-        return new RespondQuery(get_called_class());
-    }
-    */
 }
