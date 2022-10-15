@@ -29,9 +29,9 @@ use app\models\Task;
  * @property Category[] $categories
  * @property City $city
  * @property Respond[] $responds
- * @property Task[] $tasks
- * @property Task[] $tasks0
- * @property Task[] $tasks1
+ * @property Task[] $customerTasks
+ * @property Task[] $executorTasks
+ * @property Task[] $respondedTasks
  * @property UserCategory[] $userCategories
  * @property int TasksCount $tasksCount
  * @property int FailTasksCount $failTasksCount
@@ -164,17 +164,17 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks()
+    public function getCustomerTasks()
     {
         return $this->hasMany(Task::class, ['customer_id' => 'user_id']);
     }
 
     /**
-     * Gets query for [[Tasks0]].
+     * Gets query for [[executorTasks]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks0()
+    public function getExecutorTasks()
     {
         return $this->hasMany(Task::class, ['executor_id' => 'user_id']);
     }
@@ -184,7 +184,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTasks1()
+    public function getRespondedTasks()
     {
         return $this->hasMany(Task::class, ['task_id' => 'task_id'])->viaTable('respond', ['executor_id' => 'user_id']);
     }
@@ -201,27 +201,27 @@ class User extends \yii\db\ActiveRecord
 
     public function getExecutorTasksCount(): int
     {
-        return $this->getTasks0()->count();
+        return $this->getExecutorTasks()->count();
     }
 
     public function getFailTasksCount(): int
     {
-        return $this->getTasks0()->where(['task_status' => Task::STATUS_FAILED])->count();
+        return $this->getExecutorTasks()->where(['task_status' => Task::STATUS_FAILED])->count();
     }
 
     public function getSumGrade(): ?int
     {
-        return $this->getTasks0()->sum('grade');
+        return $this->getExecutorTasks()->sum('grade');
     }
 
     public function getCountGrade(): int
     {
-        return $this->getTasks0()->where(['not in', 'grade', [null]])->count();
+        return $this->getExecutorTasks()->where(['not in', 'grade', [null]])->count();
     }
 
     public function getAverageGrade()
     {
-        return $this->getTasks0()
+        return $this->getExecutorTasks()
             ->where(['IN', 'task_status', [Task::STATUS_PERFORMED, Task::STATUS_FAILED]])
             ->average('grade');
     }
@@ -243,7 +243,6 @@ class User extends \yii\db\ActiveRecord
                 return $i + 1;
             }
         }
-
         return null;
     }
 }

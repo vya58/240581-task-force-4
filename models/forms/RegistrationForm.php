@@ -48,7 +48,7 @@ class RegistrationForm extends Model
         ];
     }
 
-    public function createUser($role)
+    public function createUser()
     {
         $user = new User();
         $user->name = $this->name;
@@ -56,7 +56,7 @@ class RegistrationForm extends Model
         $user->user_role = User::ROLE_CUCTOMER;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
 
-        if ($role) {
+        if ($this-> isExecutor) {
             $user->user_role = User::ROLE_EXECUTOR;
         }
 

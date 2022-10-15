@@ -35,7 +35,7 @@ class RegistrationController extends \yii\web\Controller
 
         if ($registrationForm->validate()) {
 
-            $registrationForm->createUser($registrationForm->isExecutor);
+            $registrationForm->createUser();
 
             return $this->goHome();
         }

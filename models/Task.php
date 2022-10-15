@@ -29,7 +29,7 @@ use Yii;
  * @property City $city
  * @property User $customer
  * @property User $executor
- * @property User[] $executors
+ * @property User[] $respondedExecutors
  * @property File[] $files
  * @property Respond[] $responds
  */
@@ -157,7 +157,7 @@ class Task extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getExecutors()
+    public function getRespondedExecutors()
     {
         return $this->hasMany(User::class, ['user_id' => 'executor_id'])->viaTable('respond', ['task_id' => 'task_id']);
     }

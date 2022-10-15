@@ -19,11 +19,12 @@ class UserController extends \yii\web\Controller
     public function actionView(int $id)
     {
         $executor = User::find()
-            ->with('city', 'categories', 'tasks0')
+            ->with('city', 'categories', 'executorTasks')
             ->where(['user_id' => $id])
+            ->andWhere(['user_role' => User::ROLE_EXECUTOR])
             ->one();
 
-        if (!$executor || User::ROLE_CUCTOMER === $executor->user_role) {
+        if (!$executor) {
             throw new NotFoundHttpException();
         }
 
@@ -31,7 +32,7 @@ class UserController extends \yii\web\Controller
 
         $executorCategories = $executor->categories;
 
-        $executorTasks = $executor->tasks;
+        $executorTasks = $executor->executorTasks;
 
         $taskCustomers = Task::find()
             ->with('customer')
