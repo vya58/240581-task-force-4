@@ -31,8 +31,6 @@ class LoginController extends Controller
                         'roles' => ['?'],
 
                     ],
-
-
                 ]
             ]
         ];

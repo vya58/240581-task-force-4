@@ -37,7 +37,7 @@ class RegistrationController extends \yii\web\Controller
         }
 
         if ($registrationForm->validate() && $registrationForm->createUser()) {
-            
+
             return $this->redirect(['login/index']);
         }
 
