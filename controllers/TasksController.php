@@ -9,7 +9,7 @@ use app\models\Task;
 use app\models\forms\TaskfilterForm;
 use yii\web\NotFoundHttpException;
 
-class TasksController extends \yii\web\Controller
+class TasksController extends SecuredController
 {
     /**
      * Страница со списком заданий

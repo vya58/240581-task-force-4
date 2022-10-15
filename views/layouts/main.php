@@ -10,6 +10,7 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use app\models\User;
 
 AppAsset::register($this);
 
@@ -35,14 +36,14 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     <?php $this->beginBody() ?>
     <header class="page-header">
         <nav class="main-nav">
-            <a href='#' class="header-logo">
-                <img class="logo-image" src="img/logotype.png" width=227 height=60 alt="taskforce">
+            <a href='<?= Yii::$app->urlManager->createUrl('tasks/index') ?>' class="header-logo">
+                <img class="logo-image" src="<?=Yii::$app->request->baseUrl; ?>/img/logotype.png" width=227 height=60 alt="taskforce">
             </a>
             <?php if (!Yii::$app->user->isGuest): ?>
             <div class="nav-wrapper">
                 <ul class="nav-list">
                     <li class="list-item list-item--active">
-                        <a href="<?= Url::to('/index.php?r=tasks') ?>" class="link link--nav">Новое</a>
+                        <a href="<?= Yii::$app->urlManager->createUrl('tasks/index') ?>" class="link link--nav">Новое</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="link link--nav">Мои задания</a>
@@ -60,10 +61,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
         <?php if (!Yii::$app->user->isGuest): ?>
         <div class="user-block">
             <a href="">
-                <img class="user-photo" src="img/man-glasses.png" width="55" height="55" alt="Аватар">
+                <img class="user-photo" src="<?=Yii::$app->request->baseUrl; ?>/img/man-glasses.png" width="55" height="55" alt="Аватар">
             </a>
             <div class="user-menu">
-                <p class="user-name">Василий</p>
+                <p class="user-name"><?= Html::encode(User::findOne(['user_id' => (Yii::$app->user->id)])->name) ?></p>
                 <div class="popup-head">
                     <ul class="popup-menu">
                         <li class="menu-item">
@@ -73,7 +74,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
                             <a href="#" class="link">Связаться с нами</a>
                         </li>
                         <li class="menu-item">
-                            <a href="#" class="link">Выход из системы</a>
+                            <a href="<?= Yii::$app->urlManager->createUrl('user/logout') ?>" class="link">Выход из системы</a>
                         </li>
                     </ul>
                 </div>
