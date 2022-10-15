@@ -36,3 +36,4 @@ tests/_support/_generated
 /.vagrant
 error.log
 access.log
+config/db.php

@@ -11,11 +11,9 @@ use Yii;
  * @property string $category_name
  * @property string $icon
  *
- * @property ExecutorCategory[] $executorCategories
- * @property Executor[] $executors
  * @property Task[] $tasks
- * @property Category[] $allCategories
- * @property Category[] $categories
+ * @property UserCategory[] $userCategories
+ * @property User[] $users
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -52,26 +50,6 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[ExecutorCategories]].
-     *
-     * @return \yii\db\ActiveQuery|ExecutorCategoryQuery
-     */
-    public function getExecutorCategories()
-    {
-        return $this->hasMany(ExecutorCategory::class, ['category_id' => 'category_id']);
-    }
-
-    /**
-     * Gets query for [[Executors]].
-     *
-     * @return \yii\db\ActiveQuery|ExecutorQuery
-     */
-    public function getExecutors()
-    {
-        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])->viaTable('executor_category', ['category_id' => 'category_id']);
-    }
-
-    /**
      * Gets query for [[Tasks]].
      *
      * @return \yii\db\ActiveQuery|TaskQuery
@@ -82,15 +60,26 @@ class Category extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
-     * @return CategoryQuery the active query used by this AR class.
+     * Gets query for [[UserCategories]].
+     *
+     * @return \yii\db\ActiveQuery|UserCategoryQuery
      */
-    /*
-    public static function find()
+    public function getUserCategories()
     {
-        return new CategoryQuery(get_called_class());
+        return $this->hasMany(UserCategory::class, ['category_id' => 'category_id']);
     }
-*/
+
+    /**
+     * Gets query for [[Users]].
+     *
+     * @return \yii\db\ActiveQuery|UserQuery
+     */
+    public function getUsers()
+    {
+        return $this->hasMany(User::class, ['user_id' => 'user_id'])->viaTable('user_category', ['category_id' => 'category_id']);
+    }
+
+    
      /**
      * {@inheritdoc}
      * @return Category[]|array

@@ -44,16 +44,24 @@ $config = [
         ],
         'db' => $db,
         
-        /*
+      /* 
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            //'enableStrictParsing' => false,
+            'enableStrictParsing' => false,
             'rules' => [
-                
+               
+                '//' => '/',
+                'registration' => 'registration/index',
+                'tasks' => 'tasks/index',
+               
+               // 'contacts/status/' => 'contacts/filter',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>'
             ],
+            
         ],
-        */
+       */
     ],
     'params' => $params,
 ];

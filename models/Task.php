@@ -3,8 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\web\NotFoundHttpException;
-
 
 /**
  * This is the model class for table "task".
@@ -25,17 +23,15 @@ use yii\web\NotFoundHttpException;
  * @property string|null $task_deadline
  * @property int|null $grade
  * @property string|null $review
- * @property string|null $review_date_create
+ * @property string|null $review_data_create
  *
  * @property Category $category
  * @property City $city
- * @property Customer $customer
- * @property Executor $executor
- * @property ExecutorRanking $executorRanking
- * @property Executor[] $executors
+ * @property User $customer
+ * @property User $executor
+ * @property User[] $respondedExecutors
  * @property File[] $files
  * @property Respond[] $responds
- * @property StatusMap[] $statusMap
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -61,13 +57,14 @@ class Task extends \yii\db\ActiveRecord
         return [
             [['customer_id', 'category_id', 'task_name', 'task_essence', 'task_details', 'task_date_create'], 'required'],
             [['customer_id', 'executor_id', 'category_id', 'city_id', 'task_budget', 'grade'], 'integer'],
-            [['task_date_create', 'task_deadline', 'review_date_create'], 'safe'],
+            [['task_details'], 'string'],
+            [['task_date_create', 'task_deadline', 'review_data_create'], 'safe'],
             [['task_name'], 'string', 'max' => 50],
             [['task_essence'], 'string', 'max' => 80],
-            [['task_details', 'task_latitude', 'task_longitude', 'review'], 'string', 'max' => 255],
+            [['task_latitude', 'task_longitude', 'review'], 'string', 'max' => 255],
             [['task_status'], 'string', 'max' => 10],
-            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::class, 'targetAttribute' => ['customer_id' => 'customer_id']],
-            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Executor::class, 'targetAttribute' => ['executor_id' => 'executor_id']],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['customer_id' => 'user_id']],
+            [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'user_id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'category_id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'city_id']],
         ];
@@ -118,7 +115,7 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Category]].
      *
-     * @return \yii\db\ActiveQuery|CategoryQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getCategory()
     {
@@ -128,7 +125,7 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[City]].
      *
-     * @return \yii\db\ActiveQuery|CityQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getCity()
     {
@@ -138,37 +135,37 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Customer]].
      *
-     * @return \yii\db\ActiveQuery|CustomerQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getCustomer()
     {
-        return $this->hasOne(Customer::class, ['customer_id' => 'customer_id']);
+        return $this->hasOne(User::class, ['user_id' => 'customer_id']);
     }
 
     /**
      * Gets query for [[Executor]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getExecutor()
     {
-        return $this->hasOne(Executor::class, ['executor_id' => 'executor_id']);
+        return $this->hasOne(User::class, ['user_id' => 'executor_id']);
     }
 
     /**
      * Gets query for [[Executors]].
      *
-     * @return \yii\db\ActiveQuery|ExecutorQuery
+     * @return \yii\db\ActiveQuery
      */
-    public function getExecutors()
+    public function getRespondedExecutors()
     {
-        return $this->hasMany(Executor::class, ['executor_id' => 'executor_id'])->viaTable('respond', ['task_id' => 'task_id']);
+        return $this->hasMany(User::class, ['user_id' => 'executor_id'])->viaTable('respond', ['task_id' => 'task_id']);
     }
 
     /**
      * Gets query for [[Files]].
      *
-     * @return \yii\db\ActiveQuery|FileQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getFiles()
     {
@@ -178,21 +175,10 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Responds]].
      *
-     * @return \yii\db\ActiveQuery|RespondQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getResponds()
     {
         return $this->hasMany(Respond::class, ['task_id' => 'task_id']);
     }
-
-    /**
-     * {@inheritdoc}
-     * @return TaskQuery the active query used by this AR class.
-     */
-    /*
-    public static function find()
-    {
-        return new TaskQuery(get_called_class());
-    }
-    */
 }

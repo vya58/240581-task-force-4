@@ -52,21 +52,10 @@ class File extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Task]].
      *
-     * @return \yii\db\ActiveQuery|TaskQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getTask()
     {
         return $this->hasOne(Task::class, ['task_id' => 'task_id']);
     }
-
-    /**
-     * {@inheritdoc}
-     * @return FileQuery the active query used by this AR class.
-     */
-    /*
-    public static function find()
-    {
-        return new FileQuery(get_called_class());
-    }
-    */
 }

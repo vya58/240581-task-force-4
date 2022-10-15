@@ -2,8 +2,8 @@
 
 namespace app\controllers;
 
-use app\models\Executor;
 use app\models\Task;
+use app\models\User;
 use app\models\helpers\CalculateHelper;
 use app\models\helpers\FormatDataHelper;
 use yii\web\NotFoundHttpException;
@@ -18,9 +18,10 @@ class UserController extends \yii\web\Controller
 
     public function actionView(int $id)
     {
-        $executor = Executor::find()
-            ->with('city', 'categories', 'tasks')
-            ->where(['executor_id' => $id])
+        $executor = User::find()
+            ->with('city', 'categories', 'executorTasks')
+            ->where(['user_id' => $id])
+            ->andWhere(['user_role' => User::ROLE_EXECUTOR])
             ->one();
 
         if (!$executor) {
@@ -31,24 +32,22 @@ class UserController extends \yii\web\Controller
 
         $executorCategories = $executor->categories;
 
-        $executorTasks = $executor->tasks;
+        $executorTasks = $executor->executorTasks;
 
         $taskCustomers = Task::find()
             ->with('customer')
             ->where(['executor_id' => $id])
             ->all();
 
-        $executorAge = CalculateHelper::calculateAge($executor->executor_birthday);
+        $executorAge = CalculateHelper::calculateAge($executor->birthday);
 
-        $executorRating = CalculateHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
+        $executorRatingPosition = CalculateHelper::calculateRating($executor->sumGrade, $executor->countGrade, $executor->failTasksCount);
 
-        $executor->executor_date_add = FormatDataHelper::formatData($executor->executor_date_add);
+        $executor->date_add = FormatDataHelper::formatData($executor->date_add);
 
-        $executor->executor_status = Executor::getStatusMap()[$executor->executor_status];
+        $executor->status = User::getExecutorStatusMap()[$executor->status];
 
-        $executor->executor_phone = FormatDataHelper::formatPhone($executor->executor_phone);
-
-        $executorRating = $executor->rating;
+        $executor->phone = FormatDataHelper::formatPhone($executor->phone);
 
         return $this->render(
             'view',
@@ -59,8 +58,7 @@ class UserController extends \yii\web\Controller
                 'executorTasks' => $executorTasks,
                 'taskCustomers' => $taskCustomers,
                 'executorAge' => $executorAge,
-                'executorRating' => $executorRating,
-                'executorRating' => $executorRating,
+                'executorRatingPosition' => $executorRatingPosition,
             ]
         );
     }

@@ -13,7 +13,7 @@ class CalculateHelper
      *
      * @return int $age - возраст
      */
-    public static function calculateAge($birthday = null)
+    public static function calculateAge($birthday = null): int
     {
         if (!$birthday) {
             return 0;
@@ -23,7 +23,7 @@ class CalculateHelper
         if (date('md', $birthday_timestamp) > date('md')) {
             $age--;
         }
-        //echo "Возраст: " . $age;
+        
         return $age;
     }
 
@@ -43,7 +43,7 @@ class CalculateHelper
      *
      * @return int - рейтинг пользователя
      */
-    public static function calculateRating($sumGrade, $countGrade, $countFail)
+    public static function calculateRating($sumGrade, $countGrade, $countFail): float
     {
         if (!$sumGrade) {
             return 0;
