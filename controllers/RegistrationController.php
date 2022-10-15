@@ -33,10 +33,7 @@ class RegistrationController extends \yii\web\Controller
             $registrationForm->load(Yii::$app->request->post());
         }
 
-        if ($registrationForm->validate()) {
-
-            $registrationForm->createUser();
-
+        if ($registrationForm->validate() && $registrationForm->createUser()) {
             return $this->goHome();
         }
 

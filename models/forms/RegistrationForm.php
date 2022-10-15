@@ -48,19 +48,15 @@ class RegistrationForm extends Model
         ];
     }
 
-    public function createUser()
+    public function createUser(): bool
     {
         $user = new User();
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->user_role = User::ROLE_CUCTOMER;
+        $user->user_role = $this->isExecutor ? User::ROLE_EXECUTOR : User::ROLE_CUCTOMER;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-
-        if ($this-> isExecutor) {
-            $user->user_role = User::ROLE_EXECUTOR;
-        }
-
         $user->city_id = $this->city;
-        $user->save();
+        
+        return $user->save();
     }
 }
