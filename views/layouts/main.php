@@ -26,6 +26,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
 <html lang="ru">
 
 <head>
+    <base href="/">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?= Html::encode($this->title) ?></title>
@@ -36,14 +37,14 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     <?php $this->beginBody() ?>
     <header class="page-header">
         <nav class="main-nav">
-            <a href='<?= Yii::$app->urlManager->createUrl('tasks/index') ?>' class="header-logo">
+            <a href='<?= Yii::$app->urlManager->createUrl('tasks') ?>' class="header-logo">
                 <img class="logo-image" src="<?=Yii::$app->request->baseUrl; ?>/img/logotype.png" width=227 height=60 alt="taskforce">
             </a>
             <?php if (!Yii::$app->user->isGuest): ?>
             <div class="nav-wrapper">
                 <ul class="nav-list">
                     <li class="list-item list-item--active">
-                        <a href="<?= Yii::$app->urlManager->createUrl('tasks/index') ?>" class="link link--nav">Новое</a>
+                        <a href="<?= Yii::$app->urlManager->createUrl('tasks') ?>" class="link link--nav">Новое</a>
                     </li>
                     <li class="list-item">
                         <a href="#" class="link link--nav">Мои задания</a>

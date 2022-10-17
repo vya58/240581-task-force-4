@@ -6,6 +6,7 @@ use Yii;
 use app\models\helpers\FormatDataHelper;
 use app\models\Category;
 use app\models\Task;
+use app\models\User;
 use app\models\forms\TaskfilterForm;
 use yii\web\NotFoundHttpException;
 
@@ -43,6 +44,8 @@ class TasksController extends SecuredController
      */
     public function actionView(int $id)
     {
+        $user = Yii::$app->user->getIdentity();
+
         $task = Task::find()
             ->with('category', 'executor')
             ->where(['task_id' => $id])
@@ -50,6 +53,10 @@ class TasksController extends SecuredController
 
         if (!$task) {
             throw new NotFoundHttpException();
+        }
+
+        if (User::ROLE_CUCTOMER === $user->user_role && $task->customer->user_id !== $user->user_id) {
+            $this->redirect(['tasks/index']);
         }
 
         $task->task_status = Task::getStatusMap()['New'];

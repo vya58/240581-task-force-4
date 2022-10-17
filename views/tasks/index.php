@@ -18,9 +18,8 @@ $this->title = 'Новое'; ?>
                 <?php $category = $task->category; ?>
                 <div class="task-card">
                     <div class="header-task">
-                        <!-- Добавить ссылку на страницу задачи-->
                         <a href="<?= Url::to(
-                                        ['/tasks/view', 'id' => $task->task_id]
+                                        ['tasks/view', 'id' => $task->task_id]
                                     ) ?>" class="link link--block link--big">
                             <?= Html::encode($task->task_name) ?>
                         </a>
@@ -41,8 +40,9 @@ $this->title = 'Новое'; ?>
                         <p class="info-text category-text">
                             <?= Html::encode($category->category_name) ?>
                         </p>
-                        <!-- Добавить ссылку на страницу задачи-->
-                        <a href="#" class="button button--black">Смотреть Задание</a>
+                        <a href="<?= Url::to(
+                                        ['tasks/view', 'id' => $task->task_id]
+                                    ) ?>" class="button button--black">Смотреть Задание</a>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -74,7 +74,7 @@ $this->title = 'Новое'; ?>
         <?php endif; ?>
     </div>
 
-    
+
     <div class="right-column">
         <div class="right-card black">
             <div class="search-form">
@@ -163,5 +163,5 @@ $this->title = 'Новое'; ?>
             </div>
         </div>
     </div>
-    
+
 </main>
