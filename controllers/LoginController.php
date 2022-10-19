@@ -50,7 +50,7 @@ class LoginController extends Controller
         if (Yii::$app->request->getIsPost()) {
             $loginForm->load(Yii::$app->request->post());
 
-            if (Yii::$app->request->isAjax && $loginForm->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($loginForm);
             }
