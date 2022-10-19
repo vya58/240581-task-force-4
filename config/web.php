@@ -52,12 +52,9 @@ $config = [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-
-                //'//' => '/',
                 'login' => 'login/index',
                 'tasks/<id:\d+>' => 'tasks/view',
                 '/' => 'tasks/index',
-                // 'contacts/status/' => 'contacts/filter',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>'
             ],
