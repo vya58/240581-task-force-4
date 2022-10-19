@@ -8,6 +8,7 @@ $config = [
     'language' => 'ru-RU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    //'defaultRoute' => 'task',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -16,6 +17,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'HZ8DsX-WiiqUg580PzXQsIB6YVIQ3L4_',
+            'baseUrl' => '',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -43,25 +45,22 @@ $config = [
             ],
         ],
         'db' => $db,
-        
-      /* 
+
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-               
-                '//' => '/',
-                'registration' => 'registration/index',
-                'tasks' => 'tasks/index',
-               
-               // 'contacts/status/' => 'contacts/filter',
+                'login' => 'login/index',
+                'tasks/<id:\d+>' => 'tasks/view',
+                '/' => 'tasks/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>'
             ],
-            
+
         ],
-       */
+
     ],
     'params' => $params,
 ];

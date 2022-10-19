@@ -19,19 +19,13 @@ class RegistrationForm extends Model
     public function rules(): array
     {
         return [
-            [['name', 'email', 'password', 'passwordRepeat', 'isExecutor'], 'required'],
-
-            [['city'], 'required', 'when' => function ($model) {
-                return $this->isExecutor === true;
-            }],
+            [['name', 'email', 'password', 'passwordRepeat', 'isExecutor', 'city'], 'required'],
             [['name', 'email'], 'string', 'max' => 255],
             [['password', 'passwordRepeat'], 'string', 'min' => 6, 'max' => 64],
             [['passwordRepeat'], 'compare', 'compareAttribute' => 'password'],
             [['email'], 'email'],
             [['email'], 'unique', 'targetClass' => User::class, 'targetAttribute' => ['email' => 'email'], 'message' => 'Пользователь с таким e-mail уже существует'],
-            [['city'], 'exist', 'when' => function ($model) {
-                return $this->isExecutor === true;
-            }, 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'city_id']],
+            [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'city_id']],
             [['isExecutor'], 'boolean'],
         ];
     }
@@ -56,7 +50,7 @@ class RegistrationForm extends Model
         $user->user_role = $this->isExecutor ? User::ROLE_EXECUTOR : User::ROLE_CUCTOMER;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
         $user->city_id = $this->city;
-        
+
         return $user->save();
     }
 }

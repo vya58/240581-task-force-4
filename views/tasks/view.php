@@ -30,7 +30,7 @@ $this->title = 'Новое'; ?>
             <div class="response-card">
                 <img class="customer-photo" src="<?= Html::encode($respond->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
                 <div class="feedback-wrapper">
-                    <a href="<?= Url::to(['/user/view', 'id' => $respond->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($respond->executor->name) ?></a>
+                    <a href="<?= Url::to(['user/view', 'id' => $respond->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($respond->executor->name) ?></a>
                     <div class="response-wrapper">
                         <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $respond->executor->averageGrade]) ?></div>
                         <p class="reviews"><?= Html::encode($respond->executor->getCountGrade()) ?> отзыва</p>

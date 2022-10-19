@@ -13,6 +13,9 @@ class RegistrationController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'denyCallback' => function () {
+                    return $this->redirect(['tasks/index']);
+                },
                 'only' => ['index'],
                 'rules' => [
                     [
@@ -34,7 +37,8 @@ class RegistrationController extends \yii\web\Controller
         }
 
         if ($registrationForm->validate() && $registrationForm->createUser()) {
-            return $this->goHome();
+
+            return $this->redirect(['login/index']);
         }
 
         return $this->render(

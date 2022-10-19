@@ -6,7 +6,7 @@
 
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use app\models\RegistrationForm;
+use app\models\forms\RegistrationForm;
 use app\models\City;
 
 
@@ -22,7 +22,6 @@ $this->title = 'Регистрация';
             <?php $form = ActiveForm::begin([
                 'id' => 'registration-form',
                 'method' => 'post',
-                'action' => ['registration/index'],
             ]); ?>
             <h3 class="head-main head-task">Регистрация нового пользователя</h3>
             <?= $form->field($registrationForm, 'name', ['options' => ['class' => 'form-group']]) ?>

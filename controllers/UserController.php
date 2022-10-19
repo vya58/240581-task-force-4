@@ -2,13 +2,14 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Task;
 use app\models\User;
 use app\models\helpers\CalculateHelper;
 use app\models\helpers\FormatDataHelper;
 use yii\web\NotFoundHttpException;
 
-class UserController extends \yii\web\Controller
+class UserController extends SecuredController
 {
     /**
      * Страница просмотра профиля исполнителя
@@ -61,5 +62,10 @@ class UserController extends \yii\web\Controller
                 'executorRatingPosition' => $executorRatingPosition,
             ]
         );
+    }
+
+    public function actionLogout() {
+        Yii::$app->user->logout();
+        return Yii::$app->response->redirect(['login']);
     }
 }

@@ -39,7 +39,7 @@ use app\models\Task;
  * @property int AverageGrade $averageGrade
  * @property int Rating $rating
  */
-class User extends \yii\db\ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
     // Статусы исполнителя
     public const STATUS_FREE = 'free';
@@ -47,6 +47,33 @@ class User extends \yii\db\ActiveRecord
 
     public const ROLE_CUCTOMER = 'customer';
     public const ROLE_EXECUTOR = 'executor';
+
+    public $password_repeat;
+
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        // TODO: Implement findIdentityByAccessToken() method.
+    }
+
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    public function getAuthKey()
+    {
+        // TODO: Implement getAuthKey() method.
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        // TODO: Implement validateAuthKey() method.
+    }
 
     /**
      * {@inheritdoc}
@@ -63,7 +90,7 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'email', 'password', 'user_role'], 'required'],
-            [['date_add', 'birthday'], 'safe'],
+            [['date_add', 'birthday', 'password_repeat'], 'safe'],
             [['city_id', 'rating'], 'integer'],
             [['personal_information'], 'string'],
             [['name'], 'string', 'max' => 50],
@@ -72,12 +99,21 @@ class User extends \yii\db\ActiveRecord
             [['telegram'], 'string', 'max' => 64],
             [['status'], 'string', 'max' => 10],
             [['user_role'], 'string', 'max' => 45],
+            [
+                'phone', 'match', 'pattern' => '/^[\d]{11}/i',
+                'message' => 'Номер телефона должен состоять из 11 цифр'
+            ],
             [['email'], 'unique'],
             [['avatar'], 'unique'],
             [['phone'], 'unique'],
             [['telegram'], 'unique'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'city_id']],
         ];
+    }
+
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password);
     }
 
     /**
@@ -90,6 +126,7 @@ class User extends \yii\db\ActiveRecord
             'name' => 'Имя пользователя',
             'email' => 'Email пользователя',
             'password' => 'Пароль пользователя',
+            'password_repeat' => 'Повтор пароля',
             'avatar' => 'Аватар пользователя',
             'date_add' => 'Дата регитрации пользователя',
             'city_id' => 'ID города',
@@ -99,7 +136,7 @@ class User extends \yii\db\ActiveRecord
             'executor_rating' => 'Рейтинг исполнителя',
             'executor_status' => 'Статус исполнителя',
             'executor_birthday' => 'День рождения исполнителя',
-            'user_role' => 'Роль пльзователя',
+            'user_role' => 'Роль пользователя',
         ];
     }
 
