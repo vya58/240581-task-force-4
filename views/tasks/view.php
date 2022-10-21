@@ -68,14 +68,12 @@ $this->title = 'Новое'; ?>
         <div class="right-card white file-card">
             <h4 class="head-card">Файлы задания</h4>
             <ul class="enumeration-list">
-                <li class="enumeration-item">
-                    <a href="#" class="link link--block link--clip">my_picture.jpg</a>
-                    <p class="file-size">356 Кб</p>
-                </li>
-                <li class="enumeration-item">
-                    <a href="#" class="link link--block link--clip">information.docx</a>
-                    <p class="file-size">12 Кб</p>
-                </li>
+                <?php foreach ($files as $file) : ?>
+                    <li class="enumeration-item">
+                        <?= Html::a(Html::encode($file->task_file_base_name), ['tasks/download', 'path' => $file->task_file_name], ['class' => 'link link--block link--clip']) ?>
+                        <p class="file-size"><?= Yii::$app->formatter->asShortSize(filesize('../web/uploads/' . $file->task_file_name)); ?></p>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>

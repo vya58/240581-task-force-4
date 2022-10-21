@@ -74,6 +74,7 @@ CREATE TABLE file (
     file_id INT PRIMARY KEY AUTO_INCREMENT,
     task_id INT,
     task_file_name VARCHAR(255) NOT NULL UNIQUE,
+    task_file_base_name VARCHAR(255) NOT NULL,
     FOREIGN KEY (task_id) REFERENCES task (task_id)
 );
 

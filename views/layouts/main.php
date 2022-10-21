@@ -38,49 +38,51 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     <header class="page-header">
         <nav class="main-nav">
             <a href='<?= Yii::$app->urlManager->createUrl('tasks') ?>' class="header-logo">
-                <img class="logo-image" src="<?=Yii::$app->request->baseUrl; ?>/img/logotype.png" width=227 height=60 alt="taskforce">
+                <img class="logo-image" src="<?= Yii::$app->request->baseUrl; ?>/img/logotype.png" width=227 height=60 alt="taskforce">
             </a>
-            <?php if (!Yii::$app->user->isGuest): ?>
-            <div class="nav-wrapper">
-                <ul class="nav-list">
-                    <li class="list-item list-item--active">
-                        <a href="<?= Yii::$app->urlManager->createUrl('tasks') ?>" class="link link--nav">Новое</a>
-                    </li>
-                    <li class="list-item">
-                        <a href="#" class="link link--nav">Мои задания</a>
-                    </li>
-                    <li class="list-item">
-                        <a href="#" class="link link--nav">Создать задание</a>
-                    </li>
-                    <li class="list-item">
-                        <a href="#" class="link link--nav">Настройки</a>
-                    </li>
-                </ul>
-            </div>
-            <?php endif; ?>
-        </nav>
-        <?php if (!Yii::$app->user->isGuest): ?>
-        <div class="user-block">
-            <a href="">
-                <img class="user-photo" src="<?=Yii::$app->request->baseUrl; ?>/img/man-glasses.png" width="55" height="55" alt="Аватар">
-            </a>
-            <div class="user-menu">
-                <p class="user-name"><?= Html::encode(User::findOne(['user_id' => (Yii::$app->user->id)])->name) ?></p>
-                <div class="popup-head">
-                    <ul class="popup-menu">
-                        <li class="menu-item">
-                            <a href="#" class="link">Настройки</a>
+            <?php if (!Yii::$app->user->isGuest) : ?>
+                <div class="nav-wrapper">
+                    <ul class="nav-list">
+                        <li class="list-item list-item--active">
+                            <a href="<?= Yii::$app->urlManager->createUrl('tasks') ?>" class="link link--nav">Новое</a>
                         </li>
-                        <li class="menu-item">
-                            <a href="#" class="link">Связаться с нами</a>
+                        <li class="list-item">
+                            <a href="#" class="link link--nav">Мои задания</a>
                         </li>
-                        <li class="menu-item">
-                            <a href="<?= Yii::$app->urlManager->createUrl('user/logout') ?>" class="link">Выход из системы</a>
+                        <?php if (Yii::$app->user->getIdentity()->user_role === User::ROLE_CUCTOMER) : ?>
+                            <li class="list-item">
+                                <a href="<?= Yii::$app->urlManager->createUrl('tasks/create') ?>" class="link link--nav">Создать задание</a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="list-item">
+                            <a href="#" class="link link--nav">Настройки</a>
                         </li>
                     </ul>
                 </div>
+            <?php endif; ?>
+        </nav>
+        <?php if (!Yii::$app->user->isGuest) : ?>
+            <div class="user-block">
+                <a href="">
+                    <img class="user-photo" src="<?= Yii::$app->request->baseUrl; ?>/img/man-glasses.png" width="55" height="55" alt="Аватар">
+                </a>
+                <div class="user-menu">
+                    <p class="user-name"><?= Html::encode(User::findOne(['user_id' => (Yii::$app->user->id)])->name) ?></p>
+                    <div class="popup-head">
+                        <ul class="popup-menu">
+                            <li class="menu-item">
+                                <a href="#" class="link">Настройки</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#" class="link">Связаться с нами</a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="<?= Yii::$app->urlManager->createUrl('user/logout') ?>" class="link">Выход из системы</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
         <?php endif; ?>
     </header>
     <div class="container">

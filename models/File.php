@@ -10,6 +10,7 @@ use Yii;
  * @property int $file_id
  * @property int|null $task_id
  * @property string $task_file_name
+ * @property string $task_file_base_name
  *
  * @property Task $task
  */
@@ -31,8 +32,8 @@ class File extends \yii\db\ActiveRecord
         return [
             [['task_id'], 'integer'],
             [['task_file_name'], 'required'],
-            [['task_file_name'], 'string', 'max' => 255],
             [['task_file_name'], 'unique'],
+            [['task_file_name', 'task_file_base_name'], 'string', 'max' => 255],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
         ];
     }
@@ -46,6 +47,7 @@ class File extends \yii\db\ActiveRecord
             'file_id' => 'ID файла',
             'task_id' => 'ID задания',
             'task_file_name' => 'Файл задания',
+            'task_file_base_name' => 'Публичное имя файла задания',
         ];
     }
 

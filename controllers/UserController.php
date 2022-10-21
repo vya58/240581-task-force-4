@@ -64,7 +64,8 @@ class UserController extends SecuredController
         );
     }
 
-    public function actionLogout() {
+    public function actionLogout()
+    {
         Yii::$app->user->logout();
         return Yii::$app->response->redirect(['login']);
     }

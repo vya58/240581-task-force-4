@@ -78,6 +78,7 @@ class TaskFilterForm extends Model
     public function getNewTasks(): array
     {
         $query = Task::find()
+            ->with('category')
             ->filterWhere([
                 'task_status' => Task::STATUS_NEW,
                 'category_id' => $this->categories,

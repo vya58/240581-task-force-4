@@ -37,3 +37,4 @@ tests/_support/_generated
 error.log
 access.log
 config/db.php
+web/uploads/*
