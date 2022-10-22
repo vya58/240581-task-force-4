@@ -3,7 +3,7 @@
 return [
     'class' => 'yii\db\Connection',
     //'dsn' => 'mysql:host=task_force_db;dbname=task_force',
-    'dsn' => 'mysql:host=task_force_db;dbname=tf_db',
+    'dsn' => 'mysql:host=localhost;dbname=tf_bd',
     'username' => 'root',
     'password' => 'root',
     'charset' => 'utf8',

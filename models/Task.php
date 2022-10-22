@@ -55,12 +55,12 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'category_id', 'task_name', 'task_essence', 'task_details', 'task_date_create'], 'required'],
+            [['customer_id', 'category_id', 'task_name', 'task_essence', 'task_details'], 'required'],
             [['customer_id', 'executor_id', 'category_id', 'city_id', 'task_budget', 'grade'], 'integer'],
-            [['task_details'], 'string'],
             [['task_date_create', 'task_deadline', 'review_data_create'], 'safe'],
             [['task_name'], 'string', 'max' => 50],
             [['task_essence'], 'string', 'max' => 80],
+            [['task_details'], 'string'],
             [['task_latitude', 'task_longitude', 'review'], 'string', 'max' => 255],
             [['task_status'], 'string', 'max' => 10],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['customer_id' => 'user_id']],

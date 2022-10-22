@@ -45,7 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
     public const STATUS_FREE = 'free';
     public const STATUS_BUSY = 'busy';
 
-    public const ROLE_CUCTOMER = 'customer';
+    public const ROLE_CUSTOMER = 'customer';
     public const ROLE_EXECUTOR = 'executor';
 
     public $password_repeat;
@@ -161,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getUserRoleMap(): array
     {
         return [
-            self::ROLE_CUCTOMER => 'Заказчик',
+            self::ROLE_CUSTOMER => 'Заказчик',
             self::ROLE_EXECUTOR => 'Исполнитель',
         ];
     }
