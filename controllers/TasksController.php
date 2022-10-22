@@ -90,15 +90,15 @@ class TasksController extends SecuredController
             ->where(['task_id' => $id])
             ->one();
 
-        $files = $task->files;
-
         if (!$task) {
             throw new NotFoundHttpException();
         }
 
-        if (User::ROLE_CUCTOMER === $user->user_role && $task->customer->user_id !== $user->user_id) {
+        if (User::ROLE_CUSTOMER === $user->user_role && $task->customer->user_id !== $user->user_id) {
             $this->redirect(['tasks/index']);
         }
+
+        $files = $task->files;
 
         $task->task_status = Task::getStatusMap()['New'];
 
@@ -129,7 +129,7 @@ class TasksController extends SecuredController
     {
         $user = Yii::$app->user->getIdentity();
 
-        if (User::ROLE_EXECUTOR === $user->user_role) {
+        if (User::ROLE_CUSTOMER !== $user->user_role) {
             $this->redirect(['tasks/index']);
         }
 

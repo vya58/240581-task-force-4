@@ -43,7 +43,7 @@ class TaskCreateForm extends Model
             ['taskDetails', 'string', 'min' => 10],
             [['taskDeadline'], 'date', 'when' => function ($form) {
                 return strtotime($form->taskDeadline) < time();
-            }, 'message' => 'Дата рождения должна быть не меньше текущей даты'],
+            }, 'message' => 'Дата выполнения задания не может быть раньше текущей даты'],
             ['category', 'exist', 'targetClass' => Category::class, 'targetAttribute' => ['category' => 'category_id']],
             ['taskBudget', 'integer', 'min' => 0],
             [['files'], 'file', 'skipOnEmpty' => true, 'maxFiles' => 10],
@@ -62,7 +62,10 @@ class TaskCreateForm extends Model
         $task->task_deadline = $this->taskDeadline;
         $task->task_budget = $this->taskBudget;
         $task->customer_id = Yii::$app->user->id;
-        $task->save();
+
+        if (!$task->save()) {
+            throw new DataSaveException('Ошибка сохранения задания');
+        }
 
         return  $task;
     }
@@ -74,7 +77,7 @@ class TaskCreateForm extends Model
                 // Базовое имя будет использоваться для публичного отображения имени файла в удобочитаемом формате на усмотрение пользователя
                 $addedFileBaseName = $file->baseName;
                 // Уникальное именя файла в БД 
-                $addedFileName = time() . $addedFileBaseName . '.' . $file->extension;
+                $addedFileName = md5(microtime(true)) . '.' . $file->extension;
                 $file->saveAs('@app/web/uploads/' . $addedFileName);
                 $addedFile = new File();
                 $addedFile->task_id = $taskId;
@@ -86,8 +89,7 @@ class TaskCreateForm extends Model
                 }
             }
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }

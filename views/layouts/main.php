@@ -49,7 +49,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
                         <li class="list-item">
                             <a href="#" class="link link--nav">Мои задания</a>
                         </li>
-                        <?php if (Yii::$app->user->getIdentity()->user_role === User::ROLE_CUCTOMER) : ?>
+                        <?php if (Yii::$app->user->getIdentity()->user_role === User::ROLE_CUSTOMER) : ?>
                             <li class="list-item">
                                 <a href="<?= Yii::$app->urlManager->createUrl('tasks/create') ?>" class="link link--nav">Создать задание</a>
                             </li>

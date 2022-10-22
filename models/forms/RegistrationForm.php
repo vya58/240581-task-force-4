@@ -47,7 +47,7 @@ class RegistrationForm extends Model
         $user = new User();
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->user_role = $this->isExecutor ? User::ROLE_EXECUTOR : User::ROLE_CUCTOMER;
+        $user->user_role = $this->isExecutor ? User::ROLE_EXECUTOR : User::ROLE_CUSTOMER;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
         $user->city_id = $this->city;
 
