@@ -3,6 +3,11 @@
 namespace app\models;
 
 use Yii;
+use app\models\actions\ActionCancel;
+use app\models\actions\ActionRespond;
+use app\models\actions\ActionComplete;
+use app\models\actions\ActionRefuse;
+use app\models\exceptions\TaskException;
 
 /**
  * This is the model class for table "task".
@@ -35,11 +40,18 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    // Статусы задания
     public const STATUS_NEW = 'New';
     public const STATUS_CANCELED = 'Canceled';
     public const STATUS_IN_WORK = 'InWork';
     public const STATUS_PERFORMED = 'Performed';
     public const STATUS_FAILED = 'Failed';
+
+    // Действия над заданием
+    private const ACTION_CANCEL = 'actionCancel';
+    private const ACTION_RESPOND = 'actionRespond';
+    private const ACTION_COMPLETE = 'actionComplete';
+    private const ACTION_REFUSE = 'actionRefuse';
 
     /**
      * {@inheritdoc}
@@ -97,10 +109,52 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
+     * Функция возвращения  статуса, в которой перейдёт задание после выполнения указанного действия
+     * @param string $action - применяемое к заданию действие
+     * 
+     * @return string - следующй статус задания либо null
+     */
+    public function getNextStatus(string $action): string
+    {
+        $map = [
+            self::ACTION_CANCEL => self::STATUS_CANCELED,
+            self::ACTION_RESPOND => self::STATUS_IN_WORK,
+            self::ACTION_COMPLETE => self::STATUS_PERFORMED,
+            self::ACTION_REFUSE => self::STATUS_FAILED,
+        ];
+
+        if (!isset($map[$action])) {
+            throw new TaskException("'{$action}' - Неверное имя действия!");
+        }
+        return $map[$action] ?? null;
+    }
+
+    /**
+     * Функция возвращения доступных действий для задания в зависимости от каегории актора
+     * @param int $userId - id пользователя
+     * 
+     * @return object - доступное пользователю действие с заданием или null
+     */
+    public function getAvailableActions($user): ?object
+    {
+        if ($user->user_id !== $this->customer_id && $user->user_role !== User::ROLE_EXECUTOR) {
+            return null;
+        }
+
+        if ($this->task_status === self::STATUS_NEW && ActionCancel::checkRights($user->user_id, $this->customer_id)) return new ActionCancel();
+        if ($this->task_status === self::STATUS_NEW && ActionRespond::checkRights($user->user_id, $this->customer_id)) return new ActionRespond();
+        if ($this->task_status === self::STATUS_IN_WORK && ActionComplete::checkRights($user->user_id, $this->customer_id, $this->executor_id)) return new ActionComplete();
+        if ($this->task_status === self::STATUS_IN_WORK && ActionRefuse::checkRights($user->user_id, $this->customer_id, $this->executor_id)) return new ActionRefuse();
+
+        return null;
+    }
+
+    /**
      * Функция возвращения "карты" статусов задания
      * 
      * @return array - массив со статусами заданий
      */
+
     public static function getStatusMap(): array
     {
         return [

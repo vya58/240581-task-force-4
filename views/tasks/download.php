@@ -1,5 +1,5 @@
 <?php
 
-echo Yii::$app->response->sendFile('../web/uploads/' . $path)->send();
+echo Yii::$app->response->sendFile(Yii::getAlias('@webroot/uploads/') . $path)->send();
 
 ?>

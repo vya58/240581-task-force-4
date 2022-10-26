@@ -35,7 +35,6 @@ class LoginForm extends Model
         if (null === $this->_user) {
             $this->_user = User::findOne(['email' => $this->email]);
         }
-
         return $this->_user;
     }
 }

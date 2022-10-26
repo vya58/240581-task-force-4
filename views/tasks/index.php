@@ -18,11 +18,9 @@ $this->title = 'Новое'; ?>
                 <?php $category = $task->category; ?>
                 <div class="task-card">
                     <div class="header-task">
-                        <a href="<?= Url::to(
-                                        ['tasks/view', 'id' => $task->task_id]
-                                    ) ?>" class="link link--block link--big">
-                            <?= Html::encode($task->task_name) ?>
-                        </a>
+                        <?= Html::a(Html::encode($task->task_name), Yii::$app->urlManager->createUrl(
+                            ['tasks/view', 'id' => $task->task_id]
+                        ), ['class' => "link link--block link--big"]); ?>
                         <p class="price price--task"><?= Html::encode($task->task_budget) ?> ₽</p>
                     </div>
                     <p class="info-text">
@@ -78,88 +76,24 @@ $this->title = 'Новое'; ?>
     <div class="right-column">
         <div class="right-card black">
             <div class="search-form">
-                <?php
-                $form = ActiveForm::begin(
-                    [
-                        'method' => 'get',
-                        'action' => ['tasks/index'],
-                    ]
-                ); ?>
+                <?php $form = ActiveForm::begin([
+                    'method' => 'get',
+                    'action' => ['tasks/index'],
+                ]); ?>
 
                 <h4 class="head-card">Категории</h4>
-                <?= $form
-                    ->field(
-                        $tasksFilter,
-                        'categories',
-                        [
-                            'template' => '{input}',
-                            'options' => ['class' => 'form-group'],
-                        ]
-                    )
-                    ->checkboxList(
-                        $categories,
-                        [
-                            'class' => 'checkbox-wrapper',
-                            'itemOptions' => [
-                                'labelOptions' => ['class' => 'control-label'],
-                            ],
-                        ]
-                    );
-                ?>
+                <?= $form->field($tasksFilter, 'categories', ['template' => '{input}', 'options' => ['class' => 'form-group']])->checkboxList($categories, ['class' => 'checkbox-wrapper', 'itemOptions' => ['labelOptions' => ['class' => 'control-label']]]) ?>
 
                 <h4 class="head-card">Дополнительно</h4>
-                <?= $form
-                    ->field(
-                        $tasksFilter,
-                        'distantWork',
-                        [
-                            'template' => '{input}',
-                            'options' => ['class' => 'form-group'],
-                        ]
-                    )
-                    ->checkbox(
-                        ['labelOptions' => ['class' => 'control-label']],
-                    );
-                ?>
+                <?= $form->field($tasksFilter, 'distantWork', ['template' => '{input}', 'options' => ['class' => 'form-group']])->checkbox(['labelOptions' => ['class' => 'control-label']]) ?>
 
-                <?= $form
-                    ->field(
-                        $tasksFilter,
-                        'noResponse',
-                        [
-                            'template' => '{input}',
-                            'options' => ['class' => 'form-group'],
-                        ]
-                    )
-                    ->checkbox(
-                        ['labelOptions' => ['class' => 'control-label']],
-                    );
-                ?>
+                <?= $form->field($tasksFilter, 'noResponse', ['template' => '{input}', 'options' => ['class' => 'form-group']])->checkbox(['labelOptions' => ['class' => 'control-label']]) ?>
 
                 <h4 class="head-card">Период</h4>
-                <?= $form
-                    ->field(
-                        $tasksFilter,
-                        'period',
-                        [
-                            'template' => '{input}',
-                            'options' => ['class' => 'form-group'],
-                        ]
-                    )
-                    ->dropDownList(TaskFilterForm::TASK_PERIOD);
-                ?>
+                <?= $form->field($tasksFilter, 'period', ['template' => '{input}', 'options' => ['class' => 'form-group']])->dropDownList(TaskFilterForm::TASK_PERIOD) ?>
 
-                <?= Html::tag('input', 'Искать', [
-                    'type' => 'submit',
-                    'class' => [
-                        'button',
-                        'button--blue'
-                    ],
-                    'value' => 'Искать'
-                ])
-                ?>
-                <?php
-                ActiveForm::end(); ?>
+                <?= Html::tag('input', 'Искать', ['type' => 'submit', 'class' => ['button', 'button--blue'], 'value' => 'Искать']) ?>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>

@@ -66,7 +66,6 @@ class TaskCreateForm extends Model
         if (!$task->save()) {
             throw new DataSaveException('Ошибка сохранения задания');
         }
-
         return  $task;
     }
 
@@ -91,5 +90,22 @@ class TaskCreateForm extends Model
             return true;
         }
         return false;
+    }
+
+    public function makeTransaction($taskAddForm)
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+
+                try {
+                    $task = $taskAddForm->addTask();
+                    $taskAddForm->uploadFiles($task->task_id);
+                    $transaction->commit();
+
+                    return Yii::$app->response->redirect(['tasks/view', 'id' => $task->task_id]);
+                } catch (DataSaveException $e) {
+                    $transaction->rollback();
+
+                    throw new DataSaveException('Ошибка создания задания', $e);
+                }
     }
 }

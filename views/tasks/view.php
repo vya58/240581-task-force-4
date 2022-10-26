@@ -5,7 +5,11 @@
  */
 
 use yii\helpers\Html;
-use \yii\helpers\Url;
+use yii\helpers\Url;
+use app\models\Respond;
+use app\models\Task;
+use app\models\User;
+use app\widgets\ButtonPopupWidget;
 use app\widgets\ExecutorStarsWidget;
 
 $this->title = 'Новое'; ?>
@@ -17,39 +21,46 @@ $this->title = 'Новое'; ?>
             <p class="price price--big"><?= Html::encode($task->task_budget) ?> ₽</p>
         </div>
         <p class="task-description"><?= Html::encode($task->task_details) ?></p>
-        <a href="#" class="button button--blue action-btn" data-action="act_response">Откликнуться на задание</a>
-        <a href="#" class="button button--orange action-btn" data-action="refusal">Отказаться от задания</a>
-        <a href="#" class="button button--pink action-btn" data-action="completion">Завершить задание</a>
+        <?php if ($showAvailableAction) : ?>
+            <?= Html::a(Html::encode($availableAction->getActionName()), $availableAction->getLink($task), ['class' => "button button--{$availableAction->getStyleClass()} action-btn", 'data-action' => $availableAction->getDataAction()]); ?>
+        <?php endif; ?>
         <div class="task-map">
             <img class="map" src="img/map.png" width="725" height="346" alt="Новый арбат, 23, к. 1">
             <p class="map-address town">Москва</p>
             <p class="map-address">Новый арбат, 23, к. 1</p>
         </div>
-        <h4 class="head-regular">Отклики на задание</h4>
-        <?php foreach ($task->responds as $respond) : ?>
-            <div class="response-card">
-                <img class="customer-photo" src="<?= Html::encode($respond->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
-                <div class="feedback-wrapper">
-                    <a href="<?= Url::to(['user/view', 'id' => $respond->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($respond->executor->name) ?></a>
-                    <div class="response-wrapper">
-                        <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $respond->executor->averageGrade]) ?></div>
-                        <p class="reviews"><?= Html::encode($respond->executor->getCountGrade()) ?> отзыва</p>
-                    </div>
-                    <p class="response-message">
-                        <?= Html::encode($respond->promising_message) ?>
-                    </p>
+        <?php if ($user->user_id === $task->customer_id || $user->user_role === User::ROLE_EXECUTOR) : ?>
+            <h4 class="head-regular">Отклики на задание</h4>
+            <?php foreach ($task->responds as $response) : ?>
+                <?php if ($user->user_id === $task->customer_id || $user->user_id === $response->executor_id) : ?>
+                    <div class="response-card">
+                        <img class="customer-photo" src="<?= Html::encode($response->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
+                        <div class="feedback-wrapper">
+                            <a href="<?= Yii::$app->urlManager->createUrl(['user/view', 'id' => $response->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($response->executor->name) ?></a>
+                            <div class="response-wrapper">
+                                <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $response->executor->averageGrade]) ?></div>
+                                <p class="reviews"><?= Html::encode($response->executor->getCountGrade()) ?> отзыва</p>
+                            </div>
+                            <p class="response-message">
+                                <?= Html::encode($response->promising_message) ?>
+                            </p>
 
-                </div>
-                <div class="feedback-wrapper">
-                    <p class="info-text"><span class="current-time"><?= isset($respond->date_add) ? Yii::$app->formatter->asRelativeTime($respond->date_add) : '' ?> </span>назад</p>
-                    <p class="price price--small"><?= Html::encode($respond->challenger_price) ?></p>
-                </div>
-                <div class="button-popup">
-                    <a href="#" class="button button--blue button--small">Принять</a>
-                    <a href="#" class="button button--orange button--small">Отказать</a>
-                </div>
-            </div>
-        <?php endforeach; ?>
+                        </div>
+                        <div class="feedback-wrapper">
+                            <p class="info-text"><span class="current-time"><?= isset($response->date_add) ? Yii::$app->formatter->asRelativeTime($response->date_add) : '' ?> </span>назад</p>
+                            <p class="price price--small"><?= Html::encode($response->challenger_price) ?></p>
+                        </div>
+                        <?php if ($user->user_id === $task->customer_id && Respond::STATUS_REJECTED !== $response->accepted && Task::STATUS_NEW === $task->task_status) : ?>
+                            <div class="button-popup">
+
+                                <?= ButtonPopupWidget::widget(['response' => $response]) ?>
+
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
     <div class="right-column">
         <div class="right-card black info-card">
@@ -62,7 +73,7 @@ $this->title = 'Новое'; ?>
                 <dt>Срок выполнения</dt>
                 <dd><?= Html::encode($deadline) ?></dd>
                 <dt>Статус</dt>
-                <dd><?= Html::encode($task->task_status) ?></dd>
+                <dd><?= Html::encode(Task::getStatusMap()[$task->task_status]) ?></dd>
             </dl>
         </div>
         <div class="right-card white file-card">
@@ -71,74 +82,14 @@ $this->title = 'Новое'; ?>
                 <?php foreach ($files as $file) : ?>
                     <li class="enumeration-item">
                         <?= Html::a(Html::encode($file->task_file_base_name), ['tasks/download', 'path' => $file->task_file_name], ['class' => 'link link--block link--clip']) ?>
-                        <p class="file-size"><?= Yii::$app->formatter->asShortSize(filesize('../web/uploads/' . $file->task_file_name)); ?></p>
+                        <p class="file-size"><?= Yii::$app->formatter->asShortSize(filesize(Yii::getAlias('@webroot/uploads/') . $file->task_file_name)); ?></p>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
     </div>
 
-    <section class="pop-up pop-up--refusal pop-up--close">
-        <div class="pop-up--wrapper">
-            <h4>Отказ от задания</h4>
-            <p class="pop-up-text">
-                <b>Внимание!</b><br>
-                Вы собираетесь отказаться от выполнения этого задания.<br>
-                Это действие плохо скажется на вашем рейтинге и увеличит счетчик проваленных заданий.
-            </p>
-            <a class="button button--pop-up button--orange">Отказаться</a>
-            <div class="button-container">
-                <button class="button--close" type="button">Закрыть окно</button>
-            </div>
-        </div>
-    </section>
-    <section class="pop-up pop-up--completion pop-up--close">
-        <div class="pop-up--wrapper">
-            <h4>Завершение задания</h4>
-            <p class="pop-up-text">
-                Вы собираетесь отметить это задание как выполненное.
-                Пожалуйста, оставьте отзыв об исполнителе и отметьте отдельно, если возникли проблемы.
-            </p>
-            <div class="completion-form pop-up--form regular-form">
-                <form>
-                    <div class="form-group">
-                        <label class="control-label" for="completion-comment">Ваш комментарий</label>
-                        <textarea id="completion-comment"></textarea>
-                    </div>
-                    <p class="completion-head control-label">Оценка работы</p>
-                    <div class="stars-rating big active-stars"><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span><span>&nbsp;</span></div>
-                    <input type="submit" class="button button--pop-up button--blue" value="Завершить">
-                </form>
-            </div>
-            <div class="button-container">
-                <button class="button--close" type="button">Закрыть окно</button>
-            </div>
-        </div>
-    </section>
-    <section class="pop-up pop-up--act_response pop-up--close">
-        <div class="pop-up--wrapper">
-            <h4>Добавление отклика к заданию</h4>
-            <p class="pop-up-text">
-                Вы собираетесь оставить свой отклик к этому заданию.
-                Пожалуйста, укажите стоимость работы и добавьте комментарий, если необходимо.
-            </p>
-            <div class="addition-form pop-up--form regular-form">
-                <form>
-                    <div class="form-group">
-                        <label class="control-label" for="addition-comment">Ваш комментарий</label>
-                        <textarea id="addition-comment"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label" for="addition-price">Стоимость</label>
-                        <input id="addition-price" type="text">
-                    </div>
-                    <input type="submit" class="button button--pop-up button--blue" value="Завершить">
-                </form>
-            </div>
-            <div class="button-container">
-                <button class="button--close" type="button">Закрыть окно</button>
-            </div>
-        </div>
-    </section>
-    <div class="overlay"></div>
+    <?php echo $this->render('respond', ['task' => $task, 'responseForm' => $responseForm]); ?>
+    <?php echo $this->render('complete', ['task' => $task, 'completeForm' => $completeForm]); ?>
+    <?php echo $this->render('refuse', ['task' => $task]); ?>
 </main>

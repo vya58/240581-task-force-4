@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 use app\models\forms\RegistrationForm;
 use app\models\City;
 
-
 $this->title = 'Регистрация';
 
 /** @var yii\web\View $this */
