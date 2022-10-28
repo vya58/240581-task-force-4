@@ -45,6 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
     public const STATUS_FREE = 'free';
     public const STATUS_BUSY = 'busy';
 
+    // Роли пользователя
     public const ROLE_CUSTOMER = 'customer';
     public const ROLE_EXECUTOR = 'executor';
 

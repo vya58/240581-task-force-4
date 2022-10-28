@@ -58,15 +58,7 @@ class TaskFilterForm extends Model
     public function rules(): array
     {
         return [
-            [
-                [
-                    'categories',
-                    'distantWork',
-                    'noResponse',
-                    'period',
-                ],
-                'safe'
-            ]
+            [['categories', 'distantWork', 'noResponse', 'period'], 'safe'],
         ];
     }
 

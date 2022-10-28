@@ -79,8 +79,7 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(User::class, ['user_id' => 'user_id'])->viaTable('user_category', ['category_id' => 'category_id']);
     }
 
-    
-     /**
+    /**
      * {@inheritdoc}
      * @return Category[]|array
      */

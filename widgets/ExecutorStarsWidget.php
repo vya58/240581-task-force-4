@@ -4,6 +4,11 @@ namespace app\widgets;
 use yii\base\Widget;
 use yii\helpers\Html;
 
+/**
+ * Отрисовывает оценку исполнителю в звёздах
+ *
+ * @return string - Возвращает кнопку с параметрами, заданными в объекте.
+ */
 class ExecutorStarsWidget extends Widget
 {
     public $rating;

@@ -28,7 +28,7 @@ CREATE TABLE user (
     telegram VARCHAR(64) UNIQUE,
     personal_information TEXT,
     rating INT UNSIGNED,
-    status VARCHAR(10),
+    status VARCHAR(10) NOT NULL DEFAULT 'free',
     birthday DATE,
     FOREIGN KEY (city_id) REFERENCES city (city_id)
 );
@@ -63,7 +63,7 @@ CREATE TABLE task (
     task_deadline DATETIME,
     grade INT,
     review VARCHAR(255),
-    review_data_create DATETIME,
+    date_completion DATETIME,
     FOREIGN KEY (customer_id) REFERENCES user (user_id),
     FOREIGN KEY (executor_id) REFERENCES user (user_id),
     FOREIGN KEY (category_id) REFERENCES category (category_id),
@@ -82,7 +82,7 @@ CREATE TABLE respond (
     respond_id INT PRIMARY KEY AUTO_INCREMENT,
     executor_id INT NOT NULL,
     task_id INT NOT NULL,
-    accepted TINYINT DEFAULT 0,
+    accepted VARCHAR(10) DEFAULT NULL,
     challenger_price INT UNSIGNED,
     date_add DATETIME NOT NULL DEFAULT NOW(),
     promising_message VARCHAR(255),

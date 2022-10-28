@@ -6,9 +6,9 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'language' => 'ru-RU',
+    'homeUrl' => '/tasks',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    //'defaultRoute' => 'task',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -17,7 +17,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'HZ8DsX-WiiqUg580PzXQsIB6YVIQ3L4_',
-            'baseUrl' => '',
+            //'baseUrl' => '',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -53,14 +53,14 @@ $config = [
             'enableStrictParsing' => false,
             'rules' => [
                 'login' => 'login/index',
-                'tasks/<id:\d+>' => 'tasks/view',
                 '/' => 'tasks/index',
+                'tasks/view/<id:\d+>' => 'tasks/view',
+                //'tasks/<id:\d+>' => 'tasks/respond',
+                'tasks/<id:\d+>' => 'tasks/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>'
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
-
         ],
-
     ],
     'params' => $params,
 ];

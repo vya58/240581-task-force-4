@@ -88,7 +88,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     <div class="container">
         <?= $content ?>
     </div>
-
+    <script src="js/main.js"></script>
+    <script src="js/starRating.js"></script>
     <?php $this->endBody() ?>
 </body>
 
