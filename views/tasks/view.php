@@ -27,7 +27,7 @@ $this->title = 'Новое'; ?>
         <?php endif; ?>
         <?php if (isset($task->task_latitude, $task->task_longitude)) : ?>
             <div class="task-map">
-                <?= MapWidget::widget(['task' => $task]); ?>
+                <?= MapWidget::widget(['task' => $task]) ?>
             </div>
         <?php endif; ?>
         <?php if ($user->user_id === $task->customer_id || $user->user_role === User::ROLE_EXECUTOR) : ?>

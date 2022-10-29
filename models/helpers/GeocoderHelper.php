@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use GuzzleHttp\Client;
 use TaskForce\exceptions\GeocoderException;
 
-class GeocoderHelper extends Model
+class GeocoderHelper
 {
     const GEOCODER_RESPONSE_OK = 200;
     const GEOCODER_COORDINATE_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.Point.pos';
