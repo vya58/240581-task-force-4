@@ -37,21 +37,21 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     <?php $this->beginBody() ?>
     <header class="page-header">
         <nav class="main-nav">
-            <a href='<?= Yii::$app->urlManager->createUrl('tasks') ?>' class="header-logo">
+            <a href='<?= Url::to('tasks') ?>' class="header-logo">
                 <img class="logo-image" src="<?= Yii::$app->request->baseUrl; ?>/img/logotype.png" width=227 height=60 alt="taskforce">
             </a>
             <?php if (!Yii::$app->user->isGuest) : ?>
                 <div class="nav-wrapper">
                     <ul class="nav-list">
                         <li class="list-item list-item--active">
-                            <a href="<?= Yii::$app->urlManager->createUrl('tasks') ?>" class="link link--nav">Новое</a>
+                            <a href="<?= Url::to('tasks') ?>" class="link link--nav">Новое</a>
                         </li>
                         <li class="list-item">
                             <a href="#" class="link link--nav">Мои задания</a>
                         </li>
                         <?php if (Yii::$app->user->getIdentity()->user_role === User::ROLE_CUSTOMER) : ?>
                             <li class="list-item">
-                                <a href="<?= Yii::$app->urlManager->createUrl('tasks/create') ?>" class="link link--nav">Создать задание</a>
+                                <a href="<?= Url::to('tasks/create') ?>" class="link link--nav">Создать задание</a>
                             </li>
                         <?php endif; ?>
                         <li class="list-item">
@@ -77,7 +77,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
                                 <a href="#" class="link">Связаться с нами</a>
                             </li>
                             <li class="menu-item">
-                                <a href="<?= Yii::$app->urlManager->createUrl('user/logout') ?>" class="link">Выход из системы</a>
+                                <a href="<?= Url::to('user/logout') ?>" class="link">Выход из системы</a>
                             </li>
                         </ul>
                     </div>
@@ -90,6 +90,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     </div>
     <script src="js/main.js"></script>
     <script src="js/starRating.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&lang=ru_RU" type="text/javascript"></script>
+    <script src="js/yandexMap.js" type="text/javascript"></script>
     <?php $this->endBody() ?>
 </body>
 

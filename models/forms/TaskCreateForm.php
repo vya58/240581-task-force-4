@@ -3,6 +3,7 @@
 namespace app\models\forms;
 
 use Yii;
+use app\models\helpers\GeocoderHelper;
 use TaskForce\exceptions\DataSaveException;
 use yii\base\Model;
 use app\models\Category;
@@ -15,7 +16,7 @@ class TaskCreateForm extends Model
     public $taskEssence;
     public $taskDetails;
     public $category;
-    // public $location;
+    public $location;
     public $taskBudget;
     public $taskDeadline;
     public $files;
@@ -27,7 +28,7 @@ class TaskCreateForm extends Model
             'taskEssence' => 'Мне нужно',
             'taskDetails' => 'Подробности задания',
             'category' => 'Категория задания',
-            //'location' => 'Локация',
+            'location' => 'Локация',
             'taskBudget' => 'Бюджет',
             'taskDeadline' => 'Срок исполнения',
             'files' => 'Файлы',
@@ -45,6 +46,7 @@ class TaskCreateForm extends Model
                 return strtotime($form->taskDeadline) < time();
             }, 'message' => 'Дата выполнения задания не может быть раньше текущей даты'],
             ['category', 'exist', 'targetClass' => Category::class, 'targetAttribute' => ['category' => 'category_id']],
+            ['location', 'string'],
             ['taskBudget', 'integer', 'min' => 0],
             [['files'], 'file', 'skipOnEmpty' => true, 'maxFiles' => 10],
         ];
@@ -59,6 +61,14 @@ class TaskCreateForm extends Model
         $task->task_essence = $this->taskEssence;
         $task->task_details = $this->taskDetails;
         $task->category_id = $this->category;
+
+        if ($this->location) {
+            $coordinates = GeocoderHelper::getCoordinates($this->location);
+            $task->task_longitude = $coordinates[GeocoderHelper::GEOCODE_LONGITUDE_KEY];
+            $task->task_latitude = $coordinates[GeocoderHelper::GEOCODE_LATITUDE_KEY];
+        }
+
+        $task->city_id = Yii::$app->user->identity->city_id;
         $task->task_deadline = $this->taskDeadline;
         $task->task_budget = $this->taskBudget;
         $task->customer_id = Yii::$app->user->id;
@@ -96,16 +106,16 @@ class TaskCreateForm extends Model
     {
         $transaction = Yii::$app->db->beginTransaction();
 
-                try {
-                    $task = $taskAddForm->addTask();
-                    $taskAddForm->uploadFiles($task->task_id);
-                    $transaction->commit();
+        try {
+            $task = $taskAddForm->addTask();
+            $taskAddForm->uploadFiles($task->task_id);
+            $transaction->commit();
 
-                    return Yii::$app->response->redirect(['tasks/view', 'id' => $task->task_id]);
-                } catch (DataSaveException $e) {
-                    $transaction->rollback();
+            return Yii::$app->response->redirect(['tasks/view', 'id' => $task->task_id]);
+        } catch (DataSaveException $e) {
+            $transaction->rollback();
 
-                    throw new DataSaveException('Ошибка создания задания', $e);
-                }
+            throw new DataSaveException('Ошибка создания задания', $e);
+        }
     }
 }

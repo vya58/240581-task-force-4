@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use Yii;
+use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
+use yii\web\Response;
 use app\models\helpers\FormatDataHelper;
 use app\models\Category;
 use app\models\Respond;
@@ -13,9 +16,6 @@ use app\models\forms\TaskfilterForm;
 use app\models\forms\RespondForm;
 use app\models\forms\CompleteForm;
 use TaskForce\exceptions\DataSaveException;
-use yii\web\NotFoundHttpException;
-use yii\web\UploadedFile;
-use yii\web\Response;
 
 class TasksController extends SecuredController
 {
@@ -60,7 +60,7 @@ class TasksController extends SecuredController
      */
     public function actionView(int $id): Response|string
     {
-        $user = Yii::$app->user->getIdentity();
+        $user = Yii::$app->user->identity;
 
         $responseForm = new RespondForm();
         $completeForm = new CompleteForm();
@@ -74,7 +74,7 @@ class TasksController extends SecuredController
             throw new NotFoundHttpException();
         }
 
-        if (User::ROLE_CUSTOMER === $user->user_role && $task->customer->user_id !== $user->user_id) {
+        if (User::ROLE_CUSTOMER === $user->user_role && $task->customer->user_id !== $user->id) {
             return $this->goHome();
         }
 
@@ -86,7 +86,7 @@ class TasksController extends SecuredController
 
         $category = $task->category;
 
-        if ($user->user_role === User::ROLE_CUSTOMER && $task->customer->user_id !== $user->user_id) {
+        if ($user->user_role === User::ROLE_CUSTOMER && $task->customer->user_id !== $user->id) {
             return $this->goHome();
         }
 
@@ -98,9 +98,9 @@ class TasksController extends SecuredController
         }
 
         $availableAction = $task->getAvailableActions($user);
-       
+
         // Исключение возможности исполнителю добавить ещё один отклик на тоже задание
-        if ($availableAction && Respond::getResponse($user->user_id, $task->task_id) && 'actionRespond' === $availableAction->getInternalName()) {
+        if ($availableAction && Respond::getResponse($user->id, $task->task_id) && 'actionRespond' === $availableAction->getInternalName()) {
             $showAvailableAction = false;
         }
 
@@ -128,14 +128,13 @@ class TasksController extends SecuredController
      */
     public function actionCreate()
     {
-        $user = Yii::$app->user->getIdentity();
+        $user = Yii::$app->user->identity;
 
         if (User::ROLE_CUSTOMER !== $user->user_role) {
             return $this->goHome();
         }
         $taskAddForm = new TaskCreateForm();
 
-        $taskAddForm = new TaskCreateForm();
         if (Yii::$app->request->getIsPost()) {
 
             $taskAddForm->load(Yii::$app->request->post());

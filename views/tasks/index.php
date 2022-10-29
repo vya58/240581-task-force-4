@@ -18,9 +18,7 @@ $this->title = 'Новое'; ?>
                 <?php $category = $task->category; ?>
                 <div class="task-card">
                     <div class="header-task">
-                        <?= Html::a(Html::encode($task->task_name), Yii::$app->urlManager->createUrl(
-                            ['tasks/view', 'id' => $task->task_id]
-                        ), ['class' => "link link--block link--big"]); ?>
+                        <?= Html::a(Html::encode($task->task_name), Url::to(['tasks/view', 'id' => $task->task_id]), ['class' => "link link--block link--big"]); ?>
                         <p class="price price--task"><?= Html::encode($task->task_budget) ?> ₽</p>
                     </div>
                     <p class="info-text">
@@ -71,7 +69,6 @@ $this->title = 'Новое'; ?>
             </div>
         <?php endif; ?>
     </div>
-
 
     <div class="right-column">
         <div class="right-card black">

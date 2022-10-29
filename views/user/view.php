@@ -52,7 +52,7 @@ $this->title = 'Профиль'; ?>
                 <div class="feedback-wrapper">
                     <p class="feedback"><?= Html::encode($executorTask->review) ?></p>
                     <p class="task">Задание «
-                        <a href="<?= Url::to(['/tasks/view', 'id' => $executorTask->task_id]) ?>" class="link link--small">
+                        <a href="<?= Url::to(['tasks/view', 'id' => $executorTask->task_id]) ?>" class="link link--small">
                             <?= Html::encode($executorTask->task_name) ?></a>»
                         <?php if (Task::STATUS_FAILED === $executorTask->task_status) : ?>
                             <?= 'не' ?>
