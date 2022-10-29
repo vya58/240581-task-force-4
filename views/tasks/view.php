@@ -11,24 +11,25 @@ use app\models\Task;
 use app\models\User;
 use app\widgets\ButtonPopupWidget;
 use app\widgets\ExecutorStarsWidget;
+use app\widgets\MapWidget;
 
 $this->title = 'Новое'; ?>
 
 <main class="container main-content">
     <div class="left-column">
         <div class="head-wrapper">
-            <h3 class="head-main"><?= Html::encode($task->task_name) ?></h3>
+            <h3 class="head-main" data-name="<?= Html::encode($task->task_name) ?>"><?= Html::encode($task->task_name) ?></h3>
             <p class="price price--big"><?= Html::encode($task->task_budget) ?> ₽</p>
         </div>
         <p class="task-description"><?= Html::encode($task->task_details) ?></p>
         <?php if ($showAvailableAction) : ?>
             <?= Html::a(Html::encode($availableAction->getActionName()), $availableAction->getLink($task), ['class' => "button button--{$availableAction->getStyleClass()} action-btn", 'data-action' => $availableAction->getDataAction()]); ?>
         <?php endif; ?>
-        <div class="task-map">
-            <img class="map" src="img/map.png" width="725" height="346" alt="Новый арбат, 23, к. 1">
-            <p class="map-address town">Москва</p>
-            <p class="map-address">Новый арбат, 23, к. 1</p>
-        </div>
+        <?php if (isset($task->task_latitude, $task->task_longitude)) : ?>
+            <div class="task-map">
+                <?= MapWidget::widget(['task' => $task]); ?>
+            </div>
+        <?php endif; ?>
         <?php if ($user->user_id === $task->customer_id || $user->user_role === User::ROLE_EXECUTOR) : ?>
             <h4 class="head-regular">Отклики на задание</h4>
             <?php foreach ($task->responds as $response) : ?>
@@ -36,7 +37,7 @@ $this->title = 'Новое'; ?>
                     <div class="response-card">
                         <img class="customer-photo" src="<?= Html::encode($response->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
                         <div class="feedback-wrapper">
-                            <a href="<?= Yii::$app->urlManager->createUrl(['user/view', 'id' => $response->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($response->executor->name) ?></a>
+                            <a href="<?= Url::to(['user/view', 'id' => $response->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($response->executor->name) ?></a>
                             <div class="response-wrapper">
                                 <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $response->executor->averageGrade]) ?></div>
                                 <p class="reviews"><?= Html::encode($response->executor->getCountGrade()) ?> отзыва</p>
@@ -52,9 +53,7 @@ $this->title = 'Новое'; ?>
                         </div>
                         <?php if ($user->user_id === $task->customer_id && Respond::STATUS_REJECTED !== $response->accepted && Task::STATUS_NEW === $task->task_status) : ?>
                             <div class="button-popup">
-
                                 <?= ButtonPopupWidget::widget(['response' => $response]) ?>
-
                             </div>
                         <?php endif; ?>
                     </div>

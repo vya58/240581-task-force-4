@@ -46,7 +46,6 @@ $config = [
         ],
         'db' => $db,
 
-
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -54,9 +53,6 @@ $config = [
             'rules' => [
                 'login' => 'login/index',
                 '/' => 'tasks/index',
-                'tasks/view/<id:\d+>' => 'tasks/view',
-                //'tasks/<id:\d+>' => 'tasks/respond',
-                'tasks/<id:\d+>' => 'tasks/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],

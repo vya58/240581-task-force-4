@@ -2,8 +2,6 @@
 
 namespace app\models\helpers;
 
-use Yii;
-
 class CalculateHelper
 {
     /**
@@ -23,10 +21,8 @@ class CalculateHelper
         if (date('md', $birthday_timestamp) > date('md')) {
             $age--;
         }
-        
         return $age;
     }
-
 
     /*Рейтинг пользователя считается по формуле:
 

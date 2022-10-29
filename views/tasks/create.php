@@ -17,23 +17,32 @@ use yii\widgets\ActiveForm;
             'options' => ['enctype' => 'multipart/form-data']
         ]); ?>
         <h3 class="head-main head-main">Публикация нового задания</h3>
-        <?= $form->field($taskAddForm, 'taskName', ['options' => ['class' => 'form-group control-label']]); ?>
-        <?= $form->field($taskAddForm, 'taskEssence', ['options' => ['class' => 'form-group control-label']]); ?>
-        <?= $form->field($taskAddForm, 'taskDetails', ['options' => ['class' => 'form-group control-label']])->textarea(); ?>
-        <?= $form->field($taskAddForm, 'category', ['options' => ['class' => 'head-card']])->dropDownList(ArrayHelper::map(
-            Category::find()->all(),
-            'category_id',
-            'category_name'
-        ), ['class' => 'form-group control-label']); ?>
         <div class="form-group">
-            <label class="control-label" for="location">Локация</label>
-            <input class="location-icon" id="location" type="text">
-            <span class="help-block">Error description is here</span>
+            <?= $form->field($taskAddForm, 'taskName', ['options' => ['class' => 'control-label']]); ?>
         </div>
-
+        <div class="form-group">
+            <?= $form->field($taskAddForm, 'taskEssence', ['options' => ['class' => 'control-label']]); ?>
+        </div>
+        <div class="form-group">
+            <?= $form->field($taskAddForm, 'taskDetails', ['options' => ['class' => 'control-label']])->textarea(); ?>
+        </div>
+        <div class="form-group">
+            <?= $form->field($taskAddForm, 'category', ['options' => ['class' => 'head-card']])->dropDownList(ArrayHelper::map(
+                Category::find()->all(),
+                'category_id',
+                'category_name'
+            ), ['class' => 'form-group control-label']); ?>
+        </div>
+        <div class="form-group">
+            <?= $form->field($taskAddForm, 'location')->textInput(['options' => ['class' => 'control-label']]) ?>
+        </div>
         <div class="half-wrapper">
-            <?= $form->field($taskAddForm, 'taskBudget', ['options' => ['class' => 'form-group control-label']])->input('taskBudget', ['class' => 'budget-icon']); ?>
-            <?= $form->field($taskAddForm, 'taskDeadline', ['options' => ['class' => 'form-group control-label']])->input('date'); ?>
+            <div class="form-group">
+                <?= $form->field($taskAddForm, 'taskBudget', ['options' => ['class' => 'control-label']])->input('taskBudget', ['class' => 'budget-icon']); ?>
+            </div>
+            <div class="form-group">
+                <?= $form->field($taskAddForm, 'taskDeadline', ['options' => ['class' => 'control-label']])->input('date'); ?>
+            </div>
         </div>
 
         <?= $form->field($taskAddForm, 'files[]')->fileInput(['multiple' => true, 'class' => 'new-file form-label', 'placeholder' => 'Добавить новый файл']); ?>
@@ -41,3 +50,4 @@ use yii\widgets\ActiveForm;
         <?php ActiveForm::end(); ?>
     </div>
 </main>
+<?php

@@ -5,6 +5,7 @@
 
 use app\assets\LandingAsset;
 use yii\bootstrap5\Html;
+use yii\helpers\Url;
 
 LandingAsset::register($this);
 ?>
@@ -59,7 +60,7 @@ LandingAsset::register($this);
                     <a href="#" class="header__account-enter open-modal" data-for="enter-form">
                         <span>Вход</span></a>
                     или
-                    <a href="<?= Yii::$app->urlManager->createUrl('registration') ?>" class="header__account-registration">
+                    <a href="<?= Url::to('registration') ?>" class="header__account-registration">
                         Регистрация
                     </a>
                 </div>

@@ -2,8 +2,6 @@
 
 namespace app\models\helpers;
 
-use Yii;
-
 class FormatDataHelper
 {
     //https://vitalik.ws/zametki/78-nazvanie-mesyaca-data-na-russkom-yazyke-s-pomoshyu-php.html
@@ -58,7 +56,7 @@ class FormatDataHelper
      */
     public static function formatPhone($phone = null): ?string
     {
-        if(null === $phone) {
+        if (null === $phone) {
             return null;
         }
 
@@ -83,7 +81,6 @@ class FormatDataHelper
             ),
             $phone
         );
-
         return $result;
     }
 }
