@@ -10,11 +10,11 @@ use TaskForce\exceptions\GeocoderException;
 class GeocoderHelper extends Model
 {
     const GEOCODER_RESPONSE_OK = 200;
-    const GEOCODE_COORDINATE_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.Point.pos';
+    const GEOCODER_COORDINATE_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.Point.pos';
     const GEOCODER_CITY_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.description';
     const GEOCODER_ADDRESS_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.name';
-    const GEOCODE_LONGITUDE_KEY = 0;
-    const GEOCODE_LATITUDE_KEY = 1;
+    const GEOCODER_LONGITUDE_KEY = 0;
+    const GEOCODER_LATITUDE_KEY = 1;
 
     private static function requestGeocoder(string $location): object
     {
