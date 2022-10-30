@@ -110,7 +110,6 @@ LandingAsset::register($this);
         </footer>
     </div>
     <div class="overlay"></div>
-    <script src="js/landing.js"></script>
     <?php $this->endBody() ?>
 </body>
 

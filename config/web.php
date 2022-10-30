@@ -1,5 +1,5 @@
 <?php
-
+$config = parse_ini_file('/OpenServ/domains/config/taskforce_config.ini', true);
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -18,6 +18,18 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'HZ8DsX-WiiqUg580PzXQsIB6YVIQ3L4_',
             //'baseUrl' => '',
+        ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'vkontakte' => [
+                    'class' => 'yii\authclient\clients\VKontakte',
+                    'clientId' => $config['vk_id'],
+                    'clientSecret' => $config['vk_key'],
+                    'returnUrl' => 'http://taskforce/login/auth?authclient=vkontakte',
+                    'scope' => 'email',
+                ],
+            ],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

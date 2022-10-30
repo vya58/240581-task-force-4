@@ -7,7 +7,14 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use app\models\forms\LoginForm;
+use app\models\User;
+use yii\authclient\AuthAction;
+use yii\authclient\ClientInterface;
+use yii\helpers\ArrayHelper;
+use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\widgets\ActiveForm;
+
 
 class LoginController extends Controller
 {
@@ -63,5 +70,35 @@ class LoginController extends Controller
             }
         }
         return $this->render('index', ['loginForm' => $loginForm]);
+    }
+
+    public function actions()
+    {
+        return [
+            'auth' => [
+                'class' => AuthAction::class,
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
+        ];
+    }
+
+    public function onAuthSuccess(ClientInterface $client)
+    {
+        $attributes = $client->getUserAttributes();
+        $email = ArrayHelper::getValue($attributes, 'email');
+
+        if (!$email) {
+            throw new BadRequestHttpException('Email отсутствует');
+        }
+
+        $user = User::findOne(['email' => $email]);
+
+        if (!$user) {
+            throw new NotFoundHttpException('Пользователь не найден');
+        }
+
+        Yii::$app->user->login($user);
+
+        return $this->goHome();
     }
 }
