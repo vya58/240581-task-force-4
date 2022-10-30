@@ -1,6 +1,7 @@
 <?php
 
 use yii\widgets\ActiveForm;
+use yii\authclient\widgets\AuthChoice;
 use app\models\forms\LoginForm;
 use \yii\helpers\Url;
 
@@ -116,4 +117,8 @@ use \yii\helpers\Url;
     <?php ActiveForm::end(); ?>
 
     <button class="form-modal-close" type="button">Закрыть</button>
+    <?= AuthChoice::widget([
+     'baseAuthUrl' => ['login/auth'],
+     'popupMode' => false,
+]) ?>
 </section>

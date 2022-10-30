@@ -11,6 +11,7 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 use app\models\User;
+use app\models\helpers\GeocoderHelper;
 
 AppAsset::register($this);
 
@@ -90,7 +91,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
     </div>
     <script src="js/main.js"></script>
     <script src="js/starRating.js"></script>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=<?= Html::encode(Yii::$app->params['geocoderKey']) ?>&lang=ru_RU" type="text/javascript"></script>
     <script src="js/yandexMap.js" type="text/javascript"></script>
     <?php $this->endBody() ?>
 </body>

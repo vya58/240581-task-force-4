@@ -64,8 +64,8 @@ class TaskCreateForm extends Model
 
         if ($this->location) {
             $coordinates = GeocoderHelper::getCoordinates($this->location);
-            $task->task_longitude = $coordinates[GeocoderHelper::GEOCODE_LONGITUDE_KEY];
-            $task->task_latitude = $coordinates[GeocoderHelper::GEOCODE_LATITUDE_KEY];
+            $task->task_longitude = $coordinates[GeocoderHelper::GEOCODER_LONGITUDE_KEY];
+            $task->task_latitude = $coordinates[GeocoderHelper::GEOCODER_LATITUDE_KEY];
         }
 
         $task->city_id = Yii::$app->user->identity->city_id;

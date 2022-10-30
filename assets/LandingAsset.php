@@ -17,7 +17,9 @@ class LandingAsset extends AssetBundle
     public $css = [
         'css/landing.css',
     ];
-    public $js = [];
+    public $js = [
+        'js/landing.js',
+    ];
     public $depends = [
         'yii\web\YiiAsset'
     ];

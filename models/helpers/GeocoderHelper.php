@@ -2,7 +2,7 @@
 
 namespace app\models\helpers;
 
-use yii\base\Model;
+use Yii;
 use yii\helpers\ArrayHelper;
 use GuzzleHttp\Client;
 use TaskForce\exceptions\GeocoderException;
@@ -10,20 +10,24 @@ use TaskForce\exceptions\GeocoderException;
 class GeocoderHelper
 {
     const GEOCODER_RESPONSE_OK = 200;
+    const GEOCODER_BASE_URL = 'https://geocode-maps.yandex.ru/';
     const GEOCODER_COORDINATE_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.Point.pos';
     const GEOCODER_CITY_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.description';
     const GEOCODER_ADDRESS_KEY = 'response.GeoObjectCollection.featureMember.0.GeoObject.name';
     const GEOCODER_LONGITUDE_KEY = 0;
     const GEOCODER_LATITUDE_KEY = 1;
 
+    public string $apiKey;
+    public string $baseUri;
+
     private static function requestGeocoder(string $location): object
     {
         $client = new Client([
-            'base_uri' => 'https://geocode-maps.yandex.ru/'
+            'base_uri' => self::GEOCODER_BASE_URL,
         ]);
 
         $query = [
-            'apikey' => 'e666f398-c983-4bde-8f14-e3fec900592a',
+            'apikey' => Yii::$app->params['geocoderKey'],
             'geocode' => $location,
             'format' => 'json',
         ];
@@ -42,7 +46,7 @@ class GeocoderHelper
 
         $responseResult = json_decode($body);
 
-        $coordinates = ArrayHelper::getValue($responseResult, self::GEOCODE_COORDINATE_KEY);
+        $coordinates = ArrayHelper::getValue($responseResult, self::GEOCODER_COORDINATE_KEY);
 
         return explode(' ', $coordinates);
     }
