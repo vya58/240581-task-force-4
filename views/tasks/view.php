@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\File;
 use app\models\Respond;
 use app\models\Task;
 use app\models\User;
@@ -13,7 +14,7 @@ use app\widgets\ButtonPopupWidget;
 use app\widgets\ExecutorStarsWidget;
 use app\widgets\MapWidget;
 
-$this->title = 'Новое'; ?>
+?>
 
 <main class="container main-content">
     <div class="left-column">
@@ -30,12 +31,12 @@ $this->title = 'Новое'; ?>
                 <?= MapWidget::widget(['task' => $task]) ?>
             </div>
         <?php endif; ?>
-        <?php if ($user->user_id === $task->customer_id || $user->user_role === User::ROLE_EXECUTOR) : ?>
+        <?php if ($user->user_id === $task->customer_id || Yii::$app->user->can('executor')) : ?>
             <h4 class="head-regular">Отклики на задание</h4>
             <?php foreach ($task->responds as $response) : ?>
                 <?php if ($user->user_id === $task->customer_id || $user->user_id === $response->executor_id) : ?>
                     <div class="response-card">
-                        <img class="customer-photo" src="<?= Html::encode($response->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
+                        <img class="customer-photo" src="<?= Html::encode(User::USER_AVATAR_UPLOAD_PATH . $response->executor->avatar) ?>" width="146" height="156" alt="Фото заказчиков">
                         <div class="feedback-wrapper">
                             <a href="<?= Url::to(['user/view', 'id' => $response->executor_id]) ?>" class="link link--block link--big"><?= Html::encode($response->executor->name) ?></a>
                             <div class="response-wrapper">
@@ -81,14 +82,14 @@ $this->title = 'Новое'; ?>
                 <?php foreach ($files as $file) : ?>
                     <li class="enumeration-item">
                         <?= Html::a(Html::encode($file->task_file_base_name), ['tasks/download', 'path' => $file->task_file_name], ['class' => 'link link--block link--clip']) ?>
-                        <p class="file-size"><?= Yii::$app->formatter->asShortSize(filesize(Yii::getAlias('@webroot/uploads/') . $file->task_file_name)); ?></p>
+                        <p class="file-size"><?= Yii::$app->formatter->asShortSize(filesize(Yii::getAlias(File::USER_FILE_UPLOAD_PATH) . $file->task_file_name)); ?></p>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
     </div>
 
-    <?php echo $this->render('respond', ['task' => $task, 'responseForm' => $responseForm]); ?>
-    <?php echo $this->render('complete', ['task' => $task, 'completeForm' => $completeForm]); ?>
-    <?php echo $this->render('refuse', ['task' => $task]); ?>
+    <?= $this->render('respond', ['task' => $task, 'responseForm' => $responseForm]); ?>
+    <?= $this->render('complete', ['task' => $task, 'completeForm' => $completeForm]); ?>
+    <?= $this->render('refuse', ['task' => $task]); ?>
 </main>

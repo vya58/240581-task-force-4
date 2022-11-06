@@ -3,11 +3,13 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use app\models\actions\ActionCancel;
 use app\models\actions\ActionRespond;
 use app\models\actions\ActionComplete;
 use app\models\actions\ActionRefuse;
 use app\models\exceptions\TaskException;
+
 
 /**
  * This is the model class for table "task".
@@ -53,6 +55,11 @@ class Task extends \yii\db\ActiveRecord
     private const ACTION_COMPLETE = 'actionComplete';
     private const ACTION_REFUSE = 'actionRefuse';
 
+    public const MAX_LENGTH_TASKNAME = 50;
+    public const MAX_LENGTH_TASKESSENSE = 80;
+
+    private const MAX_LENGTH_TASKSTATUS = 10;
+
     /**
      * {@inheritdoc}
      */
@@ -70,11 +77,11 @@ class Task extends \yii\db\ActiveRecord
             [['customer_id', 'category_id', 'task_name', 'task_essence', 'task_details'], 'required'],
             [['customer_id', 'executor_id', 'category_id', 'city_id', 'task_budget', 'grade'], 'integer'],
             [['task_date_create', 'task_deadline', 'review_data_create'], 'safe'],
-            [['task_name'], 'string', 'max' => 50],
-            [['task_essence'], 'string', 'max' => 80],
+            [['task_name'], 'string', 'max' => self::MAX_LENGTH_TASKNAME],
+            [['task_essence'], 'string', 'max' => self::MAX_LENGTH_TASKESSENSE],
             [['task_details'], 'string'],
-            [['task_latitude', 'task_longitude', 'review'], 'string', 'max' => 255],
-            [['task_status'], 'string', 'max' => 10],
+            [['task_latitude', 'task_longitude', 'review'], 'string', 'max' => City::MAX_LENGTH_COORDINATES],
+            [['task_status'], 'string', 'max' => self::MAX_LENGTH_TASKSTATUS],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['customer_id' => 'user_id']],
             [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'user_id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'category_id']],
@@ -137,7 +144,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getAvailableActions($user): ?object
     {
-        if ($user->user_id !== $this->customer_id && $user->user_role !== User::ROLE_EXECUTOR) {
+        if (!Yii::$app->user->can('executor') && !Yii::$app->user->can('customer')) {
             return null;
         }
 
@@ -234,5 +241,19 @@ class Task extends \yii\db\ActiveRecord
     public function getResponds()
     {
         return $this->hasMany(Respond::class, ['task_id' => 'task_id']);
+    }
+
+    public static function getMyTasks(string $taskStatus, int $user_id): ActiveQuery
+    {
+        return Task::find()
+            ->where(['or', ['customer_id' => $user_id], ['executor_id' => $user_id]])
+            ->andWhere(['task_status' => $taskStatus]);
+    }
+
+    public static function getMyClosedTasks(int $user_id): ActiveQuery
+    {
+        return Task::find()
+            ->where(['or', ['customer_id' => $user_id], ['executor_id' => $user_id]])
+            ->andWhere(['not in', 'task_status', ['task_status' => Task::STATUS_NEW,  Task::STATUS_IN_WORK]]);
     }
 }

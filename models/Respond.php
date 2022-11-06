@@ -6,6 +6,7 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use TaskForce\exceptions\DataSaveException;
 
+
 /**
  * This is the model class for table "respond".
  *
@@ -30,6 +31,9 @@ class Respond extends \yii\db\ActiveRecord
     private const ACTION_REJECT = 'actionReject';
     private const ACTION_ACCEPT = 'actionAccept';
 
+    private const MAX_LENGTH_ACCEPTED = 10;
+    private const MAX_PROMISING_MESSAGE = 255;
+
     /**
      * {@inheritdoc}
      */
@@ -47,8 +51,8 @@ class Respond extends \yii\db\ActiveRecord
             [['executor_id', 'task_id'], 'required'],
             [['executor_id', 'task_id', 'challenger_price'], 'integer'],
             [['date_add'], 'safe'],
-            [['accepted'], 'string', 'max' => 10],
-            [['promising_message'], 'string', 'max' => 255],
+            [['accepted'], 'string', 'max' => self::MAX_LENGTH_ACCEPTED],
+            [['promising_message'], 'string', 'max' => self::MAX_PROMISING_MESSAGE],
             [['executor_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['executor_id' => 'user_id']],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
         ];

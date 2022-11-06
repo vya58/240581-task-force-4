@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var TaskAddForm $taskAddForm */
+
 ?>
 <main class="main-content main-content--center container">
     <div class="add-task-form regular-form">

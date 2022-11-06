@@ -24,12 +24,15 @@ CREATE TABLE user (
     date_add DATETIME NOT NULL DEFAULT NOW(),
     user_role VARCHAR(45) NOT NULL,
     city_id INT,
-    phone VARCHAR(11) UNIQUE,
-    telegram VARCHAR(64) UNIQUE,
+    phone VARCHAR(11) UNIQUE DEFAULT NULL,
+    telegram VARCHAR(64) UNIQUE DEFAULT NULL,
     personal_information TEXT,
     rating INT UNSIGNED,
     status VARCHAR(10) NOT NULL DEFAULT 'free',
     birthday DATE,
+    /* Столбец "user_role" удалён в миграции m221106_141708_drop_column_user_role_from_user_table */
+    user_role VARCHAR(45) DEFAULT NULL,
+    show_contacts INT(10) DEFAULT NULL,
     FOREIGN KEY (city_id) REFERENCES city (city_id)
 );
 

@@ -16,12 +16,16 @@ class RegistrationForm extends Model
     public string $passwordRepeat = '';
     public bool $isExecutor = false;
 
+    public const MIN_LENGTH_PASSWORD = 6;
+    public const MAX_LENGTH_PASSWORD = 64;
+
     public function rules(): array
     {
         return [
             [['name', 'email', 'password', 'passwordRepeat', 'isExecutor', 'city'], 'required'],
-            [['name', 'email'], 'string', 'max' => 255],
-            [['password', 'passwordRepeat'], 'string', 'min' => 6, 'max' => 64],
+            [['name'], 'string', 'max' => User::MAX_LENGTH_USERNAME],
+            [['email'], 'string', 'max' => User::MAX_LENGTH_FILD],
+            [['password', 'passwordRepeat'], 'string', 'min' => self::MIN_LENGTH_PASSWORD, 'max' => self::MAX_LENGTH_PASSWORD],
             [['passwordRepeat'], 'compare', 'compareAttribute' => 'password'],
             [['email'], 'email'],
             [['email'], 'unique', 'targetClass' => User::class, 'targetAttribute' => ['email' => 'email'], 'message' => 'Пользователь с таким e-mail уже существует'],
@@ -47,10 +51,20 @@ class RegistrationForm extends Model
         $user = new User();
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->user_role = $this->isExecutor ? User::ROLE_EXECUTOR : User::ROLE_CUSTOMER;
         $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
         $user->city_id = $this->city;
 
-        return $user->save();
+        if ($user->save()) {
+            $auth = Yii::$app->authManager;
+            $userRole = $auth->getRole(User::ROLE_CUSTOMER);
+
+            if ($this->isExecutor) {
+                $userRole = $auth->getRole(User::ROLE_EXECUTOR);
+            }
+
+            $auth->assign($userRole, $user->getId());
+            return true;
+        }
+        return false;
     }
 }
