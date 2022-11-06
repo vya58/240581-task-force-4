@@ -31,49 +31,47 @@ use app\widgets\ExecutorStarsWidget;
                 </p>
             <?php endif; ?>
         </div>
-        <?php if (Yii::$app->user->can(User::ROLE_EXECUTOR)) : ?>
-            <div class="specialization-bio">
-                <div class="specialization">
-                    <p class="head-info">Специализации</p>
-                    <ul class="special-list">
-                        <?php foreach ($executorCategories as $executorCategory) : ?>
-                            <li class="special-item">
-                                <a href="<?= Url::to(['tasks/index', 'category' => Html::encode($executorCategory->category_id)]) ?>" class="link link--regular"><?= $executorCategory->category_name ?></a>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <div class="bio">
-                    <p class="head-info">Био</p>
-                    <p class="bio-info"><span class="country-info">Россия</span>, <span class="town-info"><?= isset($city->city_name) ?  Html::encode($city->city_name) : ''; ?></span>, <span class="age-info"><?= Yii::$app->i18n->format('{n, plural, =0{} =1{# год} one{# год} few{# лет} many{# год} other{# лет}}', ['n' => $userAge], 'ru_RU') ?></p>
-                </div>
+        <div class="specialization-bio">
+            <div class="specialization">
+                <p class="head-info">Специализации</p>
+                <ul class="special-list">
+                    <?php foreach ($executorCategories as $executorCategory) : ?>
+                        <li class="special-item">
+                            <a href="<?= Url::to(['tasks/index', 'category' => Html::encode($executorCategory->category_id)]) ?>" class="link link--regular"><?= $executorCategory->category_name ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
-            <?php if ($executorAverageGrade) : ?>
-                <h4 class="head-regular">Отзывы заказчиков</h4>
-                <?php foreach ($executorTasks as $executorTask) : ?>
-                    <div class="response-card">
-                        <?php $taskCustomer = Task::find()->with('customer')->where(['customer_id' => $executorTask->customer_id])->one() ?>
+            <div class="bio">
+                <p class="head-info">Био</p>
+                <p class="bio-info"><span class="country-info">Россия</span>, <span class="town-info"><?= isset($city->city_name) ?  Html::encode($city->city_name) : ''; ?></span>, <span class="age-info"><?= Yii::$app->i18n->format('{n, plural, =0{} =1{# год} one{# год} few{# лет} many{# год} other{# лет}}', ['n' => $userAge], 'ru_RU') ?></p>
+            </div>
+        </div>
+        <?php if ($executorAverageGrade) : ?>
+            <h4 class="head-regular">Отзывы заказчиков</h4>
+            <?php foreach ($executorTasks as $executorTask) : ?>
+                <div class="response-card">
+                    <?php $taskCustomer = Task::find()->with('customer')->where(['customer_id' => $executorTask->customer_id])->one() ?>
 
-                        <img class="customer-photo" src="<?= Html::encode($taskCustomer->customer->avatar) ?>" width="120" height="127" alt="Фото заказчиков">
-                        <div class="feedback-wrapper">
-                            <p class="feedback"><?= Html::encode($executorTask->review) ?></p>
-                            <p class="task">Задание «
-                                <a href="<?= Url::to(['tasks/view', 'id' => $executorTask->task_id]) ?>" class="link link--small">
-                                    <?= Html::encode($executorTask->task_name) ?></a>»
-                                <?php if (Task::STATUS_FAILED === $executorTask->task_status) : ?>
-                                    <?= 'не' ?>
-                                    </a>
-                                <?php endif ?>
-                                выполнено
-                            </p>
-                        </div>
-                        <div class="feedback-wrapper">
-                            <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $executorTask->grade]) ?></div>
-                            <p class="info-text"><span class="current-time"><?= isset($executorTask->review_date_create) ? Yii::$app->formatter->asRelativeTime($executorTask->review_date_create) : '' ?></p>
-                        </div>
+                    <img class="customer-photo" src="<?= Html::encode($taskCustomer->customer->avatar) ?>" width="120" height="127" alt="Фото заказчиков">
+                    <div class="feedback-wrapper">
+                        <p class="feedback"><?= Html::encode($executorTask->review) ?></p>
+                        <p class="task">Задание «
+                            <a href="<?= Url::to(['tasks/view', 'id' => $executorTask->task_id]) ?>" class="link link--small">
+                                <?= Html::encode($executorTask->task_name) ?></a>»
+                            <?php if (Task::STATUS_FAILED === $executorTask->task_status) : ?>
+                                <?= 'не' ?>
+                                </a>
+                            <?php endif ?>
+                            выполнено
+                        </p>
                     </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <div class="feedback-wrapper">
+                        <div class="stars-rating small"><?= ExecutorStarsWidget::widget(['rating' => $executorTask->grade]) ?></div>
+                        <p class="info-text"><span class="current-time"><?= isset($executorTask->review_date_create) ? Yii::$app->formatter->asRelativeTime($executorTask->review_date_create) : '' ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
     </div>
     <div class="right-column">

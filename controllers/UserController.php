@@ -69,6 +69,7 @@ class UserController extends SecuredController
         }
 
         $executorAverageGrade = round($user->getAverageGrade(), 1, PHP_ROUND_HALF_UP);
+
         $executorRatingPosition = $user->getRating();
         $user->status = User::getExecutorStatusMap()[$user->status];
         $user->date_add = FormatDataHelper::formatData($user->date_add);
