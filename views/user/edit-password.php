@@ -26,7 +26,9 @@ use app\widgets\UserProfileMenuWidget;
         <?= $form->field($securitySettingsForm, 'currentPassword', ['options' => ['class' => 'half-wrapper form-group control-label']])->passwordInput() ?>
         <?= $form->field($securitySettingsForm, 'newPassword', ['options' => ['class' => 'half-wrapper form-group control-label']])->passwordInput() ?>
         <?= $form->field($securitySettingsForm, 'newPasswordRepeat', ['options' => ['class' => 'half-wrapper form-group control-label']])->passwordInput() ?>
-        <?= $form->field($securitySettingsForm, 'showContacts', ['options' => ['class' => 'form-group']])->checkbox(['class' => 'control-label checkbox-label']) ?>
+        <?php if (Yii::$app->user->can('executor')) : ?>
+            <?= $form->field($securitySettingsForm, 'showContacts', ['options' => ['class' => 'form-group']])->checkbox(['class' => 'control-label checkbox-label']) ?>
+        <?php endif; ?>
 
         <input type="submit" class="button button--blue" value="Сохранить">
         <?php ActiveForm::end(); ?>

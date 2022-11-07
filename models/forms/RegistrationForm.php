@@ -26,7 +26,7 @@ class RegistrationForm extends Model
             [['name'], 'string', 'max' => User::MAX_LENGTH_USERNAME],
             [['email'], 'string', 'max' => User::MAX_LENGTH_FILD],
             [['password', 'passwordRepeat'], 'string', 'min' => self::MIN_LENGTH_PASSWORD, 'max' => self::MAX_LENGTH_PASSWORD],
-            [['passwordRepeat'], 'compare', 'compareAttribute' => 'password'],
+            [['passwordRepeat'], 'compare', 'compareAttribute' => 'password', 'message'=>"Пароли не совпадают"],
             [['email'], 'email'],
             [['email'], 'unique', 'targetClass' => User::class, 'targetAttribute' => ['email' => 'email'], 'message' => 'Пользователь с таким e-mail уже существует'],
             [['city'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city' => 'city_id']],

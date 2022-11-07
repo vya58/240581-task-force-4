@@ -85,7 +85,7 @@ class EditProfileForm extends Model
             $user->phone = $this->phone;
         }
 
-        if ($this->phone === '') {
+        if ($this->telegram === '') {
             $user->telegram = null;
         } else {
             $user->telegram = $this->telegram;

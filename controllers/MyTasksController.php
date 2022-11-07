@@ -6,6 +6,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use app\models\Task;
 use app\models\User;
+use yii\db\Expression;
 
 
 class MyTasksController extends SecuredController
@@ -74,7 +75,7 @@ class MyTasksController extends SecuredController
         if (Yii::$app->user->can(User::ROLE_EXECUTOR)) {
             $this->setMeta('Мои просроченные задания');
 
-            $query->andWhere(['<', 'task_deadline', date("Y-m-d H:i:s")]);
+            $query->andWhere('task_deadline < :timestamp', ['timestamp' => new Expression('NOW()')]);
         }
 
         $dataProvider = new ActiveDataProvider([
