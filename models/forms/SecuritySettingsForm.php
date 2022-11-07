@@ -21,7 +21,7 @@ class SecuritySettingsForm extends Model
             [['currentPassword'], 'required'],
             [['currentPassword', 'newPassword', 'newPasswordRepeat'], 'string', 'min' => RegistrationForm::MIN_LENGTH_PASSWORD, 'max' => RegistrationForm::MAX_LENGTH_PASSWORD],
             [['currentPassword'], 'validatePassword'],
-            [['newPasswordRepeat'], 'compare', 'compareAttribute' => 'newPassword', 'skipOnEmpty' => false, 'message'=>"Пароли не совпадают"],
+            [['newPasswordRepeat'], 'compare', 'compareAttribute' => 'newPassword', 'skipOnEmpty' => false, 'message' => "Пароли не совпадают"],
             [['showContacts'], 'boolean'],
         ];
     }
@@ -55,9 +55,7 @@ class SecuritySettingsForm extends Model
             $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->newPassword);
         }
 
-        if ($this->showContacts) {
-            $user->show_contacts = $this->showContacts ? User::HIDE_CONTACTS : User::SHOW_CONTACTS;
-        }
+        $user->show_contacts = $this->showContacts ? User::HIDE_CONTACTS : User::SHOW_CONTACTS;
 
         return $user->save();
     }
