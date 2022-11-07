@@ -31,7 +31,7 @@ use app\widgets\UserProfileMenuWidget;
             <?= $form->field($editProfileForm, 'phone')->input('tel', ['labelOptions' => ['class' => 'control-label']]) ?>
             <?= $form->field($editProfileForm, 'telegram')->textInput(['labelOptions' => ['class' => 'control-label']]) ?>
         </div>
-        <?php if (Yii::$app->user->can('executor')) : ?>
+        <?php if (Yii::$app->user->can(User::ROLE_EXECUTOR)) : ?>
             <?= $form->field($editProfileForm, 'personalInformation')->textarea(['labelOptions' => ['class' => 'control-label']]) ?>
             <div class="form-group">
                 <?= $form->field($editProfileForm, 'categories')->checkboxList($categories, [

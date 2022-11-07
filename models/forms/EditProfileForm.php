@@ -8,7 +8,7 @@ use app\models\Category;
 use app\models\UserCategory;
 use app\models\User;
 use app\models\exceptions\FileExistException;
-use TaskForce\exceptions\DataSaveException;
+use app\models\exceptions\DataSaveException;
 
 class EditProfileForm extends Model
 {

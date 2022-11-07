@@ -69,7 +69,6 @@ class UserController extends SecuredController
         }
 
         $executorAverageGrade = round($user->getAverageGrade(), 1, PHP_ROUND_HALF_UP);
-
         $executorRatingPosition = $user->getRating();
         $user->status = User::getExecutorStatusMap()[$user->status];
         $user->date_add = FormatDataHelper::formatData($user->date_add);
@@ -122,11 +121,6 @@ class UserController extends SecuredController
     {
         $this->setMeta('Настройки безопасности');
 
-        $addActiveClass = [
-            'myProfile' => null,
-            'security' => 'side-menu-item--active',
-        ];
-
         $securitySettingsForm = new SecuritySettingsForm();
 
         if (Yii::$app->request->getIsPost()) {
@@ -138,6 +132,6 @@ class UserController extends SecuredController
                 return $this->redirect(['view', 'id' => Yii::$app->user->id]);
             }
         }
-        return $this->render('edit-password', ['securitySettingsForm' => $securitySettingsForm, 'addActiveClass' => $addActiveClass]);
+        return $this->render('edit-password', ['securitySettingsForm' => $securitySettingsForm]);
     }
 }

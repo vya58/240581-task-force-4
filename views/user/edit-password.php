@@ -5,7 +5,7 @@
  */
 
 use yii\widgets\ActiveForm;
-use \yii\helpers\Url;
+use app\models\User;
 use app\widgets\UserProfileMenuWidget;
 
 /** @var yii\web\View $this */
@@ -26,7 +26,7 @@ use app\widgets\UserProfileMenuWidget;
         <?= $form->field($securitySettingsForm, 'currentPassword', ['options' => ['class' => 'half-wrapper form-group control-label']])->passwordInput() ?>
         <?= $form->field($securitySettingsForm, 'newPassword', ['options' => ['class' => 'half-wrapper form-group control-label']])->passwordInput() ?>
         <?= $form->field($securitySettingsForm, 'newPasswordRepeat', ['options' => ['class' => 'half-wrapper form-group control-label']])->passwordInput() ?>
-        <?php if (Yii::$app->user->can('executor')) : ?>
+        <?php if (Yii::$app->user->can(User::ROLE_EXECUTOR)) : ?>
             <?= $form->field($securitySettingsForm, 'showContacts', ['options' => ['class' => 'form-group']])->checkbox(['class' => 'control-label checkbox-label']) ?>
         <?php endif; ?>
 
