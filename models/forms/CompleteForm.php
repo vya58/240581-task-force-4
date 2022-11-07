@@ -4,7 +4,7 @@ namespace app\models\forms;
 
 use yii\base\Model;
 use app\models\Task;
-use TaskForce\exceptions\DataSaveException;
+use app\models\exceptions\DataSaveException;
 
 class CompleteForm extends Model
 {

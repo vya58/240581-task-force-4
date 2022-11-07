@@ -4,7 +4,7 @@ namespace app\models\forms;
 
 use Yii;
 use app\models\helpers\GeocoderHelper;
-use TaskForce\exceptions\DataSaveException;
+use app\models\exceptions\DataSaveException;
 use yii\base\Model;
 use app\models\Category;
 use app\models\File;

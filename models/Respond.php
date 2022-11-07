@@ -4,7 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\NotFoundHttpException;
-use TaskForce\exceptions\DataSaveException;
+use app\models\exceptions\DataSaveException;
 
 
 /**
