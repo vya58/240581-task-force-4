@@ -21,7 +21,7 @@ class SecuritySettingsForm extends Model
             [['currentPassword'], 'required'],
             [['currentPassword', 'newPassword', 'newPasswordRepeat'], 'string', 'min' => RegistrationForm::MIN_LENGTH_PASSWORD, 'max' => RegistrationForm::MAX_LENGTH_PASSWORD],
             [['currentPassword'], 'validatePassword'],
-            [['newPasswordRepeat'], 'compare', 'compareAttribute' => 'newPassword', 'skipOnEmpty' => false, 'message' => "Пароли не совпадают"],
+            [['newPasswordRepeat'], 'compare', 'compareAttribute' => 'newPassword', 'skipOnEmpty' => false, 'message' => 'Пароли не совпадают'],
             [['showContacts'], 'boolean'],
         ];
     }
