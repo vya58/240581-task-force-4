@@ -39,7 +39,6 @@ function calculateAge($birthday = null)
     if (date('md', $birthday_timestamp) > date('md')) {
         $age--;
     }
-    //echo "Возраст: " . $age;
     return $age;
 }
 
@@ -81,7 +80,7 @@ function formatData($data)
     }
 
     $data = strtotime($data);
-    
+
     //список месяцев с названиями для замены
     $_monthsList = array(
         ".01." => "января", ".02." => "февраля",

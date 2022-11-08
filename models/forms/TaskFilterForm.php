@@ -4,6 +4,7 @@ namespace app\models\forms;
 
 use app\models\Task;
 use yii\base\Model;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for task filter form.
@@ -65,9 +66,9 @@ class TaskFilterForm extends Model
     /**
      * Функция выборки параметров нового задания
      * 
-     * @return array - результат выборки
+     * @return  - результат выборки
      */
-    public function getNewTasks(): array
+    public function getNewTasks(): ActiveQuery
     {
         $query = Task::find()
             ->with('category')
@@ -97,7 +98,6 @@ class TaskFilterForm extends Model
 
         return $query->orderBy(
             ['task_date_create' => SORT_DESC],
-        )
-            ->all();
+        );
     }
 }

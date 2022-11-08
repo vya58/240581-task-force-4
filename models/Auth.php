@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 
+
 /**
  * This is the model class for table "auth".
  *
@@ -16,6 +17,8 @@ use Yii;
  */
 class Auth extends \yii\db\ActiveRecord
 {
+    private const MAX_LENGTH_SOURSE = 255;
+
     /**
      * {@inheritdoc}
      */
@@ -32,7 +35,7 @@ class Auth extends \yii\db\ActiveRecord
         return [
             [['user_id', 'source', 'source_id'], 'required'],
             [['user_id'], 'integer'],
-            [['source', 'source_id'], 'string', 'max' => 255],
+            [['source', 'source_id'], 'string', 'max' => self::MAX_LENGTH_SOURSE],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'user_id']],
         ];
     }
@@ -58,14 +61,5 @@ class Auth extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['user_id' => 'user_id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return AuthQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new AuthQuery(get_called_class());
     }
 }

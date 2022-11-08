@@ -52,6 +52,7 @@ class LoginController extends Controller
     public function actionIndex()
     {
         $this->layout = 'landing';
+
         $loginForm = new LoginForm();
 
         if (Yii::$app->request->getIsPost()) {
