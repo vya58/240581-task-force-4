@@ -6,6 +6,7 @@ use app\models\forms\RespondForm;
 /** @var yii\web\View $this */
 /** @var RespondForm $model */
 /** @var ActiveForm $form */
+
 ?>
 
 <section class="pop-up pop-up--act_response pop-up--close">

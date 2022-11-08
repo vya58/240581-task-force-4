@@ -17,6 +17,10 @@ use Yii;
  */
 class City extends \yii\db\ActiveRecord
 {
+    public const MAX_LENGTH_COORDINATES = 255;
+
+    private const MAX_LENGTH_CITY_NAME = 50;
+
     /**
      * {@inheritdoc}
      */
@@ -32,8 +36,8 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             [['city_name'], 'required'],
-            [['city_name'], 'string', 'max' => 50],
-            [['city_latitude', 'city_longitude'], 'string', 'max' => 255],
+            [['city_name'], 'string', 'max' => self::MAX_LENGTH_CITY_NAME],
+            [['city_latitude', 'city_longitude'], 'string', 'max' => self::MAX_LENGTH_COORDINATES],
         ];
     }
 

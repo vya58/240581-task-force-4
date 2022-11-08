@@ -7,4 +7,7 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'geocoderKey' => $config['geocoder_key'],
+
+    // Количество выводимых старниц при пагинации
+    'pageSize' => 5,
 ];

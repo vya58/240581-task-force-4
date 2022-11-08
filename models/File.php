@@ -16,6 +16,10 @@ use Yii;
  */
 class File extends \yii\db\ActiveRecord
 {
+    public const USER_FILE_UPLOAD_PATH = '@webroot/uploads/user-files/';
+
+    private const MAX_LENGTH_FILENAME = 255;
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +37,7 @@ class File extends \yii\db\ActiveRecord
             [['task_id'], 'integer'],
             [['task_file_name'], 'required'],
             [['task_file_name'], 'unique'],
-            [['task_file_name', 'task_file_base_name'], 'string', 'max' => 255],
+            [['task_file_name', 'task_file_base_name'], 'string', 'max' => self::MAX_LENGTH_FILENAME],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'task_id']],
         ];
     }

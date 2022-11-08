@@ -30,6 +30,8 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionIndex()
     {
+        $this->view->title = 'Регистрация';
+
         $registrationForm = new RegistrationForm();
 
         if (Yii::$app->request->getIsPost()) {

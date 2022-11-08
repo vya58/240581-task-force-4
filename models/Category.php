@@ -17,6 +17,8 @@ use Yii;
  */
 class Category extends \yii\db\ActiveRecord
 {
+    private const MAX_LENGTH_CATEGORY_NAME = 30;
+    private const MAX_LENGTH_ICON = 10;
     /**
      * {@inheritdoc}
      */
@@ -32,8 +34,8 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['category_name', 'icon'], 'required'],
-            [['category_name'], 'string', 'max' => 30],
-            [['icon'], 'string', 'max' => 10],
+            [['category_name'], 'string', 'max' => self::MAX_LENGTH_CATEGORY_NAME],
+            [['icon'], 'string', 'max' => self::MAX_LENGTH_ICON],
         ];
     }
 
@@ -87,19 +89,6 @@ class Category extends \yii\db\ActiveRecord
     {
         return Category::find()
             ->select('category_name')
-            ->indexBy('category_id')
-            ->column();
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return Category[]|array
-     */
-    public static function getCategories(array $ids)
-    {
-        return Category::find()
-            ->select('category_name')
-            ->where(['in', 'category_id', $ids])
             ->indexBy('category_id')
             ->column();
     }

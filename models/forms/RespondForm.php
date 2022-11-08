@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use app\models\Respond;
 use app\models\Task;
-use TaskForce\exceptions\DataSaveException;
+use app\models\exceptions\DataSaveException;
 
 class RespondForm extends Model
 {
@@ -14,13 +14,14 @@ class RespondForm extends Model
     public $offerMessage;
     public $challengerPrice;
 
+    private const PRICE_VALUE = 0;
+
     public function rules()
     {
         return [
             [['taskId', 'offerMessage', 'challengerPrice'], 'required'],
             [['taskId'], 'exist', 'targetClass' => Task::class, 'targetAttribute' => ['taskId' => 'task_id']],
-            [['challengerPrice'], 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'number'],
-
+            [['challengerPrice'], 'compare', 'compareValue' => self::PRICE_VALUE, 'operator' => '>', 'type' => 'number'],
         ];
     }
 

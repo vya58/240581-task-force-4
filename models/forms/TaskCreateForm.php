@@ -4,7 +4,7 @@ namespace app\models\forms;
 
 use Yii;
 use app\models\helpers\GeocoderHelper;
-use TaskForce\exceptions\DataSaveException;
+use app\models\exceptions\DataSaveException;
 use yii\base\Model;
 use app\models\Category;
 use app\models\File;
@@ -20,6 +20,12 @@ class TaskCreateForm extends Model
     public $taskBudget;
     public $taskDeadline;
     public $files;
+
+    private const MIN_LENGTH_TASKNAME = 3;
+    private const MIN_LENGTH_TASKESSENSE = 10;
+    private const MIN_LENGTH_TASKDETAILS = 10;
+    private const MIN_VALUE_TASKBUDGET = 0;
+    private const MAX_COUNT_FILES = 10;
 
     public function attributeLabels()
     {
@@ -39,16 +45,16 @@ class TaskCreateForm extends Model
     {
         return [
             [['taskName', 'taskEssence', 'taskDetails', 'category'], 'required'],
-            ['taskName', 'string', 'min' => 3, 'max' => 50],
-            ['taskEssence', 'string', 'min' => 10, 'max' => 255],
-            ['taskDetails', 'string', 'min' => 10],
+            ['taskName', 'string', 'min' => self::MIN_LENGTH_TASKNAME, 'max' => Task::MAX_LENGTH_TASKNAME],
+            ['taskEssence', 'string', 'min' => self::MIN_LENGTH_TASKESSENSE, 'max' => Task::MAX_LENGTH_TASKESSENSE],
+            ['taskDetails', 'string', 'min' => self::MIN_LENGTH_TASKDETAILS],
             [['taskDeadline'], 'date', 'when' => function ($form) {
                 return strtotime($form->taskDeadline) < time();
             }, 'message' => 'Дата выполнения задания не может быть раньше текущей даты'],
             ['category', 'exist', 'targetClass' => Category::class, 'targetAttribute' => ['category' => 'category_id']],
             ['location', 'string'],
-            ['taskBudget', 'integer', 'min' => 0],
-            [['files'], 'file', 'skipOnEmpty' => true, 'maxFiles' => 10],
+            ['taskBudget', 'integer', 'min' => self::MIN_VALUE_TASKBUDGET],
+            [['files'], 'file', 'skipOnEmpty' => true, 'maxFiles' => self::MAX_COUNT_FILES],
         ];
     }
 
@@ -66,9 +72,9 @@ class TaskCreateForm extends Model
             $coordinates = GeocoderHelper::getCoordinates($this->location);
             $task->task_longitude = $coordinates[GeocoderHelper::GEOCODER_LONGITUDE_KEY];
             $task->task_latitude = $coordinates[GeocoderHelper::GEOCODER_LATITUDE_KEY];
+            $task->city_id = Yii::$app->user->identity->city_id;
         }
 
-        $task->city_id = Yii::$app->user->identity->city_id;
         $task->task_deadline = $this->taskDeadline;
         $task->task_budget = $this->taskBudget;
         $task->customer_id = Yii::$app->user->id;
@@ -85,9 +91,9 @@ class TaskCreateForm extends Model
             foreach ($this->files as $file) {
                 // Базовое имя будет использоваться для публичного отображения имени файла в удобочитаемом формате на усмотрение пользователя
                 $addedFileBaseName = $file->baseName;
-                // Уникальное именя файла в БД 
+                // Уникальное имя файла в БД 
                 $addedFileName = md5(microtime(true)) . '.' . $file->extension;
-                $file->saveAs('@app/web/uploads/' . $addedFileName);
+                $file->saveAs(File::USER_FILE_UPLOAD_PATH . $addedFileName);
                 $addedFile = new File();
                 $addedFile->task_id = $taskId;
                 $addedFile->task_file_name = $addedFileName;

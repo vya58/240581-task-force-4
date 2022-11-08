@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
@@ -24,5 +23,13 @@ abstract class SecuredController extends Controller
                 ],
             ]
         ];
+    }
+
+    protected function setMeta($title = null, $description = null, $keywords = null)
+    {
+        $this->view->title = $title;
+        $this->view->registerMetaTag(['name' => 'description', 'content' => $description]);
+        $this->view->registerMetaTag(['name' => 'keywords', 'content' => $keywords]);
+        $this->view->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
     }
 }

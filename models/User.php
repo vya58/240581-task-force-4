@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use app\models\Task;
 
+
 /**
  * This is the model class for table "user".
  *
@@ -41,6 +42,7 @@ use app\models\Task;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    public const USER_AVATAR_UPLOAD_PATH = '/uploads/avatars/';
     // Статусы исполнителя
     public const STATUS_FREE = 'free';
     public const STATUS_BUSY = 'busy';
@@ -49,6 +51,15 @@ class User extends ActiveRecord implements IdentityInterface
     public const ROLE_CUSTOMER = 'customer';
     public const ROLE_EXECUTOR = 'executor';
 
+    // Опции показа контактов
+    public const SHOW_CONTACTS = 1; // Показывать
+    public const HIDE_CONTACTS = 0; // Скрывать
+
+    public const MAX_LENGTH_USERNAME = 50;
+    public const MAX_LENGTH_FILD = 255;
+    public const PHONE_LENGTH = 11;
+    public const TELEGRAM_LENGTH = 64;
+    public const MAX_LENGTH_STATUS = 10;
     public $password_repeat;
 
     public static function findIdentity($id)
@@ -90,16 +101,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['name', 'email', 'password', 'user_role'], 'required'],
+            [['name', 'email', 'password'], 'required'],
             [['date_add', 'birthday', 'password_repeat'], 'safe'],
             [['city_id', 'rating'], 'integer'],
             [['personal_information'], 'string'],
-            [['name'], 'string', 'max' => 50],
-            [['email', 'password', 'avatar'], 'string', 'max' => 255],
-            [['phone'], 'string', 'max' => 11],
-            [['telegram'], 'string', 'max' => 64],
-            [['status'], 'string', 'max' => 10],
-            [['user_role'], 'string', 'max' => 45],
+            [['name'], 'string', 'max' => self::MAX_LENGTH_USERNAME],
+            [['email', 'password', 'avatar'], 'string', 'max' => self::MAX_LENGTH_FILD],
+            [['phone'], 'string', 'max' => self::PHONE_LENGTH],
+            [['telegram'], 'string', 'max' => self::TELEGRAM_LENGTH],
+            [['status'], 'string', 'max' => self::MAX_LENGTH_STATUS],
             [
                 'phone', 'match', 'pattern' => '/^[\d]{11}/i',
                 'message' => 'Номер телефона должен состоять из 11 цифр'
@@ -137,7 +147,6 @@ class User extends ActiveRecord implements IdentityInterface
             'executor_rating' => 'Рейтинг исполнителя',
             'executor_status' => 'Статус исполнителя',
             'executor_birthday' => 'День рождения исполнителя',
-            'user_role' => 'Роль пользователя',
         ];
     }
 
@@ -237,33 +246,68 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(UserCategory::class, ['user_id' => 'user_id']);
     }
 
+    /**
+     * Получение количества выполненных исполнителем заданий, включая проваленные
+     *
+     * @return int - количество выполненных исполнителем заданий, включая проваленные
+     */
     public function getExecutorTasksCount(): int
     {
         return $this->getExecutorTasks()->count();
     }
 
+    /**
+     * Получение количества проваленных исполнителем заданий
+     *
+     * @return int - количество проваленных исполнителем заданий
+     */
     public function getFailTasksCount(): int
     {
         return $this->getExecutorTasks()->where(['task_status' => Task::STATUS_FAILED])->count();
     }
 
+    /**
+     * Получение общей суммы оценок, полученных исполнителем за выполненные заданий
+     *
+     * @return int - Общая сумма оценок, полученных исполнителем за выполненные заданий
+     */
     public function getSumGrade(): ?int
     {
         return $this->getExecutorTasks()->sum('grade');
     }
 
+    /**
+     * Получение общего количества оценок, полученных исполнителем за выполненные заданий
+     *
+     * @return int - Общее количества оценок, полученных исполнителем за выполненные заданий
+     */
     public function getCountGrade(): int
     {
         return $this->getExecutorTasks()->where(['not in', 'grade', [null]])->count();
     }
 
-    public function getAverageGrade()
+    /**
+     * Получение средней оценки, полученных исполнителем за выполненные заданий с учётом проваленных
+     *
+     * @return float - Средняя оценка, полученная исполнителем за выполненные заданий с учётом проваленных
+     */
+    public function getAverageGrade(): float
     {
-        return $this->getExecutorTasks()
+        $average = $this->getExecutorTasks()
             ->where(['IN', 'task_status', [Task::STATUS_PERFORMED, Task::STATUS_FAILED]])
             ->average('grade');
+
+        if (!$average) {
+            return 0;
+        }
+        return $average;
     }
 
+    /**
+     * Получение рейтинга исполнителя среди других исполнителей
+     *
+     * @return int -  Рейтинг исполнителя
+     */
     public function getRating(): ?int
     {
         $data = User::find()
